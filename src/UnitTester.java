@@ -1,6 +1,9 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.File;
+import java.io.PrintWriter;
+
 import org.junit.Test;
 
 
@@ -23,18 +26,58 @@ public class UnitTester {
 	
 	@Test public void testPadding() throws Exception
 	{
+		// First produce a genome file
+		String chrName = "21";
+		String genomeSeq = "ACGTACGTACGTACGTACGT";
+		String genomeFn = "sample.fa";
+		
+		PrintWriter out = new PrintWriter(new File(genomeFn));
+		out.println(">"+chrName);
+		out.println(genomeSeq);
+		out.close();
+		
 		GenomeQuery gq = new GenomeQuery("sample.fa");
+		
+		// Now produce old VCF file
+		String oldVcf = "sample.vcf";
+		int oldPos = 10;
+		VcfEntry oldve = new VcfEntry(sampleEntry);
+		oldve.setChromosome(chrName);
+		oldve.setPos(oldPos);
+		
+		out = new PrintWriter(new File(oldVcf));
+		out.println(oldve);
+		out.close();
+		
+		// Now set up updated variant and add it to a map
+		String newAlt = "AAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+		int newPos = 12;
+		
 		NewSequenceMap nsm = new NewSequenceMap();
-		nsm.add("21:10:28581", "AAAAAAAAAAAAAAAAAAAAAAAAAAAA", 12);
-		VcfEditor ved = new VcfEditor("sample.vcf", "out.vcf", nsm, gq);
+		nsm.add("21:10:28581", newAlt, newPos);
+		
+		// Run the VCF editor
+		String newVcf = "out.vcf";
+		VcfEditor ved = new VcfEditor("sample.vcf", newVcf, nsm, gq);
 		ved.run();
 		
-		VcfEditor.VcfEntryIterator vei = new VcfEditor.VcfEntryIterator("out.vcf");
+		VcfEditor.VcfEntryIterator vei = new VcfEditor.VcfEntryIterator(newVcf);
+		int count = 0;
 		for(VcfEntry ve : vei)
 		{
-			System.out.println(ve.toString());
+			String neededBefore = genomeSeq.substring(newPos - VcfEditor.BEFORE - 1, newPos - 1);
+			String neededAfter = genomeSeq.substring(newPos - 1, newPos + VcfEditor.AFTER - 1);
+			assert(ve.getRef().equals(neededBefore + neededAfter));
+			assert(ve.getAlt().equals(neededBefore + newAlt + neededAfter));
+			count++;
 		}
 		
+		new File(genomeFn).delete();
+		new File(genomeFn + ".fai").delete();
+		new File(oldVcf).delete();
+		new File(newVcf).delete();
+		
+		assert(count == 1);
 	}
 	
 	@Test

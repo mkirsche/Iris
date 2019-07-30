@@ -24,7 +24,6 @@ public class GenomeQuery {
 	void testSamtoolsInstalled() throws Exception
 	{
 		String samtoolsTestCommand = samtoolsCommand;
-		System.out.println(samtoolsTestCommand);
 		Process child = Runtime.getRuntime().exec(samtoolsTestCommand);
         int seqExit = child.waitFor();
 		
@@ -40,7 +39,6 @@ public class GenomeQuery {
 	String genomeSubstring(String chr, long startPos, long endPos) throws Exception
 	{
 		String faidxCommand = String.format(samtoolsCommand + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
-		System.out.println(faidxCommand);
 		Process child = Runtime.getRuntime().exec(faidxCommand);
         InputStream seqStream = child.getInputStream();
 		Scanner seqInput = new Scanner(seqStream);
