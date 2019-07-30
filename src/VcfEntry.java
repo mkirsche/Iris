@@ -138,7 +138,7 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		String oldVal = getInfo(field);
 		String toReplace = field + '=' + oldVal;
 		String replacement = field + '=' + val;
-		tabTokens[7].replace(toReplace, replacement);
+		tabTokens[7] = tabTokens[7].replace(toReplace, replacement);
 	}
 	
 	public String getKey() throws Exception

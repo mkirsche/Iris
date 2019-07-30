@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /*
@@ -35,7 +36,7 @@ public class VcfEditor {
 		String chr = ve.getChromosome();
 		long pos = ve.getPos();
 		long start = pos - BEFORE;
-		long end = pos + AFTER;
+		long end = pos + AFTER - 1;
 		String res = gq.genomeSubstring(chr, start, end);
 		return res;
 	}
@@ -48,6 +49,43 @@ public class VcfEditor {
 		String beforeAfter = getBeforeAfter(ve);
 		ve.setRef(beforeAfter);
 		ve.setAlt(beforeAfter.substring(0, BEFORE) + ve.getAlt() + beforeAfter.substring(BEFORE));
+	}
+	
+	static class VcfEntryIterator implements Iterable<VcfEntry> 
+	{
+		Scanner input;
+		VcfEntryIterator(String fn) throws Exception
+		{
+			input = new Scanner(new FileInputStream(new File(fn)));
+		}
+
+		@Override
+		public Iterator<VcfEntry> iterator() {
+			
+			// TODO Auto-generated method stub
+			return new Iterator<VcfEntry>() {
+
+				@Override
+				public boolean hasNext() {
+					// TODO Auto-generated method stub
+					return input.hasNext();
+				}
+
+				@Override
+				public VcfEntry next() {
+					// TODO Auto-generated method stub
+					try {
+						return new VcfEntry(input.nextLine());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return null;
+					}
+				}
+				
+			};
+		}
+		
 	}
 	
 	void run() throws Exception

@@ -1,0 +1,6 @@
+*.fai
+bin/
+out.vcf
+.classpath
+.settings/
+.project

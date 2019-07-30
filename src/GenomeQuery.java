@@ -6,7 +6,7 @@ public class GenomeQuery {
 	String filename;
 	
 	// Assume that samtools is on the user's path
-	static String samtoolsCommand = "samtools";
+	static String samtoolsCommand = "/usr/local/bin/samtools";
 	
 	GenomeQuery(String filename) throws Exception
 	{
@@ -23,38 +23,24 @@ public class GenomeQuery {
 	 */
 	void testSamtoolsInstalled() throws Exception
 	{
-		String samtoolsTestCommand = "samtools > /dev/null 2>&1; echo $?";
+		String samtoolsTestCommand = samtoolsCommand;
+		System.out.println(samtoolsTestCommand);
 		Process child = Runtime.getRuntime().exec(samtoolsTestCommand);
-        InputStream seqStream = child.getInputStream();
-		Scanner seqInput = new Scanner(seqStream);
+        int seqExit = child.waitFor();
 		
 		// Make sure an exit code is output
-        if(!seqInput.hasNext())
+        // Exit code > 1 means the command failed, usually because samtools is not installed or on path
+        if(seqExit > 1)
         {
-        	seqInput.close();
-        	throw new Exception("samtools test did not produce an exit code: \"samtools > /dev/null 2>&1; echo $?\"");
-        }
-        String exitCodeString = seqInput.next();
-        seqInput.close();
-        
-        // Wrap in try-catch to make sure the command produced an integer exit code
-        try {
-        	int exitCode = Integer.parseInt(exitCodeString);
-        	
-        	// Non-zero means the command failed, usually because samtools is not installed or on path
-        	if(exitCode != 0)
-        	{
-        		throw new Exception("samtools produced non-zero exit code (" 
-        				+ exitCode + ") - perhaps it is not on your path: " + samtoolsCommand);
-        	}
-        } catch(Exception e) {
-        	throw new Exception("samtools exit code test produced non-integer output: " + exitCodeString);
+        	throw new Exception("samtools produced bado exit code (" 
+        			+ seqExit + ") - perhaps it is not on your path: " + samtoolsCommand);
         }
 	}
 	
 	String genomeSubstring(String chr, long startPos, long endPos) throws Exception
 	{
-		String faidxCommand = String.format("samtools faidx %s %s:%d-%d", filename, chr, startPos, endPos);
+		String faidxCommand = String.format(samtoolsCommand + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
+		System.out.println(faidxCommand);
 		Process child = Runtime.getRuntime().exec(faidxCommand);
         InputStream seqStream = child.getInputStream();
 		Scanner seqInput = new Scanner(seqStream);
