@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
@@ -23,6 +24,27 @@ public class UnitTester {
 			+ "RNAMES=SRR3212019.124574,SRR3212042.151583,SRR3212074.141721;"
 			+ "SUPTYPE=AL,SR;SVLEN=23;STRANDS=+-;RE=23;REF_strand=7,4;AF=0.676471\t" 
 			+ "GT:DR:DV 0/1:11:23";
+	
+	@Test public void testSuppReadMap() throws Exception
+	{
+		String vcfFile = "sreads.vcf";
+		VcfEntry ve = new VcfEntry(sampleEntry);
+		
+		PrintWriter out = new PrintWriter(new File(vcfFile));
+		out.println(ve);
+		out.close();
+		
+		SupportingReadMap srm = new SupportingReadMap(vcfFile);
+		String key = ve.getKey();
+		assert(srm.contains(key));
+		ArrayList<String> rnames = srm.get(key);
+		assert(rnames.size() == 3);
+		assert(rnames.get(0).equals("SRR3212019.124574"));
+		assert(rnames.get(1).equals("SRR3212042.151583"));
+		assert(rnames.get(2).equals("SRR3212074.141721"));
+		
+		new File(vcfFile).delete();
+	}
 	
 	@Test public void testPadding() throws Exception
 	{
@@ -61,12 +83,12 @@ public class UnitTester {
 		VcfEditor ved = new VcfEditor("sample.vcf", newVcf, nsm, gq);
 		ved.run();
 		
-		VcfEditor.VcfEntryIterator vei = new VcfEditor.VcfEntryIterator(newVcf);
+		VcfEntryIterator vei = new VcfEntryIterator(newVcf);
 		int count = 0;
 		for(VcfEntry ve : vei)
 		{
-			String neededBefore = genomeSeq.substring(newPos - VcfEditor.BEFORE - 1, newPos - 1);
-			String neededAfter = genomeSeq.substring(newPos - 1, newPos + VcfEditor.AFTER - 1);
+			String neededBefore = genomeSeq.substring(newPos - Settings.VCF_PADDING_BEFORE - 1, newPos - 1);
+			String neededAfter = genomeSeq.substring(newPos - 1, newPos + Settings.VCF_PADDING_AFTER - 1);
 			assert(ve.getRef().equals(neededBefore + neededAfter));
 			assert(ve.getAlt().equals(neededBefore + newAlt + neededAfter));
 			count++;
