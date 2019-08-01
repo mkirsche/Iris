@@ -25,7 +25,7 @@ class VcfEntryIterator implements Iterable<VcfEntry>
 				while(input.hasNext() && last == null)
 				{
 					String cur = input.nextLine();
-					if(cur.length() == 0 || cur.charAt(0) == '@')
+					if(cur.length() == 0 || cur.charAt(0) == '#')
 					{
 						continue;
 					}

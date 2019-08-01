@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /*
@@ -12,7 +13,7 @@ public class NewSequenceMap {
 		map = new HashMap<>();
 	}
 	
-	void add(String key, String seq, int pos)
+	void add(String key, String seq, long pos)
 	{
 		map.put(key, new UpdatedEntry(seq, pos));
 	}
@@ -38,6 +39,16 @@ public class NewSequenceMap {
 			return null;
 		}
 		return map.get(key).pos;
+	}
+	
+	static UpdatedEntry fromReadNames(String key, ArrayList<String> names) throws Exception
+	{
+		String seq = "";
+		int pos = -1;
+		
+		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
+		
+		return new UpdatedEntry(seq, pos);
 	}
 	
 	static class UpdatedEntry

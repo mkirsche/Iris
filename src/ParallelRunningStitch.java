@@ -1,0 +1,68 @@
+/*
+ * Managing the parallelization of computing consensus sequences/positions
+ */
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+public class ParallelRunningStitch {
+	SupportingReadMap readMap;
+	NewSequenceMap results;
+	int numThreads;
+	String[] keys;
+	
+	ConcurrentLinkedQueue<Integer> todo;
+	
+	ParallelRunningStitch(SupportingReadMap readMap, int numThreads)
+	{
+		this.readMap = readMap;
+		keys = readMap.keyArray();
+		this.numThreads = numThreads;
+		
+		todo = new ConcurrentLinkedQueue<Integer>();
+		for(int i = 0; i<keys.length; i++)
+		{
+			todo.add(i);
+		}
+		results = new NewSequenceMap();
+	}
+	
+	void run() throws Exception
+	{
+		Rayon[] threads = new Rayon[numThreads];
+		for(int i = 0; i<numThreads; i++)
+		{
+			threads[i] = new Rayon();
+			threads[i].run();
+		}
+		for(int i = 0; i<numThreads; i++)
+		{
+			threads[i].join();
+		}
+	}
+	
+	public class Rayon extends Thread {
+		
+		boolean done;
+
+		@Override
+		public void run() {
+			while(!todo.isEmpty()) {
+				Integer cur = todo.poll();
+				if(cur != null)
+				{
+					String variantKey = keys[cur];
+					ArrayList<String> readNames = readMap.get(variantKey);
+					NewSequenceMap.UpdatedEntry ue;
+					try {
+						ue = NewSequenceMap.fromReadNames(variantKey, readNames);
+						results.add(variantKey, ue.seq, ue.pos);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+		
+	}
+}

@@ -4,10 +4,18 @@
 public class Settings {
 	static int VCF_PADDING_BEFORE = 1;
 	static int VCF_PADDING_AFTER = 0;
-	static String VCF_FILE;
-	static String VCF_OUT_FILE;
-	static String GENOME_FILE;
-	static String READS_FILE;
+	static String VCF_FILE = "pbAll.sniffles.vcf";
+	static String VCF_OUT_FILE = "out.vcf";
+	static String GENOME_FILE = "base.fa";
+	static String READS_FILE = "pbAll.bam";
+	static int THREADS = 4;
+	static String SAMTOOLS_PATH = "/usr/local/bin/samtools";
+	static boolean CLEAN_INTERMEDIATE_FILES = true;
+	
+	static int FALCONSENSE_MIN_LEN = 500;
+	static int FALCONSENSE_MAX_READ_LEN = 123456789;
+	static int FALCONSENSE_MIN_OVL_LEN = 250;
+	static int FALCONSENSE_N_CORE = 2;
 	
 	static void usage()
 	{

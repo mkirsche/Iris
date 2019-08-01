@@ -6,7 +6,6 @@ public class GenomeQuery {
 	String filename;
 	
 	// Assume that samtools is on the user's path
-	static String samtoolsCommand = "/usr/local/bin/samtools";
 	
 	GenomeQuery(String filename) throws Exception
 	{
@@ -23,7 +22,7 @@ public class GenomeQuery {
 	 */
 	void testSamtoolsInstalled() throws Exception
 	{
-		String samtoolsTestCommand = samtoolsCommand;
+		String samtoolsTestCommand = Settings.SAMTOOLS_PATH;
 		Process child = Runtime.getRuntime().exec(samtoolsTestCommand);
         int seqExit = child.waitFor();
 		
@@ -32,13 +31,13 @@ public class GenomeQuery {
         if(seqExit > 1)
         {
         	throw new Exception("samtools produced bado exit code (" 
-        			+ seqExit + ") - perhaps it is not on your path: " + samtoolsCommand);
+        			+ seqExit + ") - perhaps it is not on your path: " + Settings.SAMTOOLS_PATH);
         }
 	}
 	
 	String genomeSubstring(String chr, long startPos, long endPos) throws Exception
 	{
-		String faidxCommand = String.format(samtoolsCommand + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
+		String faidxCommand = String.format(Settings.SAMTOOLS_PATH + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
 		Process child = Runtime.getRuntime().exec(faidxCommand);
         InputStream seqStream = child.getInputStream();
 		Scanner seqInput = new Scanner(seqStream);

@@ -146,6 +146,18 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		return getChromosome() + ":" + getPos() + ":" + getId();
 	}
 	
+	static String getChrFromKey(String key)
+	{
+		String[] tokens = key.split(":");
+		return tokens[0];
+	}
+	
+	static long getPosFromKey(String key)
+	{
+		String[] tokens = key.split(":");
+		return Long.parseLong(tokens[1]);
+	}
+	
 	@Override
 	public int compareTo(VcfEntry o) {
 		for(int i = 0; i<tabTokens.length && i < o.tabTokens.length; i++)

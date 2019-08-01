@@ -63,7 +63,7 @@ public class VcfEditor {
 			String line = input.nextLine();
 			
 			// Handle header line separately
-			if(line.charAt(0) == '@')
+			if(line.charAt(0) == '#')
 			{
 				// Just copy the header
 				out.println(line);
@@ -75,7 +75,7 @@ public class VcfEditor {
 				String key = ve.getKey();
 				
 				// If this variant is in the map, update its info according to the new sequence/position
-				if(nsm.containsKey(key))
+				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
 				{
 					// Make necessary replacements
 					String newSeq = nsm.getSeq(key);
