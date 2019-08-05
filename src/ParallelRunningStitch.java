@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ParallelRunningStitch {
+	GenomeQuery gq;
 	SupportingReadMap readMap;
 	NewSequenceMap results;
 	int numThreads;
@@ -12,8 +13,9 @@ public class ParallelRunningStitch {
 	
 	ConcurrentLinkedQueue<Integer> todo;
 	
-	ParallelRunningStitch(SupportingReadMap readMap, int numThreads)
+	ParallelRunningStitch(SupportingReadMap readMap, int numThreads, GenomeQuery gq)
 	{
+		this.gq = gq;
 		this.readMap = readMap;
 		keys = readMap.keyArray();
 		this.numThreads = numThreads;
@@ -54,7 +56,7 @@ public class ParallelRunningStitch {
 					ArrayList<String> readNames = readMap.get(variantKey);
 					NewSequenceMap.UpdatedEntry ue;
 					try {
-						ue = NewSequenceMap.fromReadNames(variantKey, readNames);
+						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
 						results.add(variantKey, ue.seq, ue.pos);
 					} catch (Exception e) {
 						e.printStackTrace();

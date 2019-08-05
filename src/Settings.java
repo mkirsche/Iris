@@ -12,10 +12,18 @@ public class Settings {
 	static String SAMTOOLS_PATH = "/usr/local/bin/samtools";
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	
+	static double FALCONSENSE_MIN_IDT = 0.7;
 	static int FALCONSENSE_MIN_LEN = 500;
-	static int FALCONSENSE_MAX_READ_LEN = 123456789;
+	static int FALCONSENSE_MAX_READ_LEN = 123_456_789;
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
+	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 2;
+	static String FALCONSENSE_PATH = "/usr/local/bin/falcon_sense";
+	
+	static int GENOME_REGION_BUFFER = 100_000;
+	
+	static String NGMLR_PATH = "/usr/local/bin/ngmlr";
+	static int NGMLR_THREADS = 4;
 	
 	static void usage()
 	{

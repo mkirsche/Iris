@@ -41,13 +41,14 @@ public class NewSequenceMap {
 		return map.get(key).pos;
 	}
 	
-	static UpdatedEntry fromReadNames(String key, ArrayList<String> names) throws Exception
+	static UpdatedEntry fromReadNames(String key, ArrayList<String> names, GenomeQuery gq) throws Exception
 	{
 		String seq = "";
 		int pos = -1;
 		
 		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
-		
+		ArrayList<String> consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
+		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
 		return new UpdatedEntry(seq, pos);
 	}
 	

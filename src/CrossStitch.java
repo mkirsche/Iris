@@ -4,12 +4,12 @@ public static void main(String[] args) throws Exception
 	Logger.init("log.out");
 	Settings.parseArgs(args);
 	SupportingReadMap srm = new SupportingReadMap(Settings.VCF_FILE);
+	GenomeQuery gq = new GenomeQuery(Settings.GENOME_FILE);
 	
-	ParallelRunningStitch prs = new ParallelRunningStitch(srm, Settings.THREADS);
+	ParallelRunningStitch prs = new ParallelRunningStitch(srm, Settings.THREADS, gq);
 	prs.run();
 	
 	NewSequenceMap nsm = prs.results;
-	GenomeQuery gq = new GenomeQuery(Settings.GENOME_FILE);
 	
 	VcfEditor ved = new VcfEditor(Settings.VCF_FILE, Settings.VCF_OUT_FILE, nsm, gq);
 	ved.run();
