@@ -25,6 +25,9 @@ public class Settings {
 	static String NGMLR_PATH = "/usr/local/bin/ngmlr";
 	static int NGMLR_THREADS = 4;
 	
+	static int INSERTION_MIN_LENGTH = 30;
+	static int INSERTION_MAX_DIST = 5000;
+	
 	static void usage()
 	{
 		System.out.println("Usage: (haven't written this message yet)");

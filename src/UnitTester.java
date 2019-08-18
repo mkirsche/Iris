@@ -1,5 +1,4 @@
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -115,13 +114,11 @@ public class UnitTester {
 		assertEquals(ve.getType(), "INS");
 	}
 	
-	@Test
-	public void invalidVcfEntryException()
+	@Test(expected = Exception.class)
+	public void invalidVcfEntryException() throws Exception
 	{
 		String line = "0\t\0\t0\t0\t0\t0\t0";
-		assertThrows(Exception.class, () -> { 
-			new VcfEntry(line); 
-		});
+		new VcfEntry(line); 
 	}
 
 }
