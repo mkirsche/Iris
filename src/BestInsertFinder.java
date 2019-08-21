@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 
-
-// TODO Current Work in Progress - next up is getting the expected offset in genome segment, probably from elsewhere
 public class BestInsertFinder {
 	
 /*

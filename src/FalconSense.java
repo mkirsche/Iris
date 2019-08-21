@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -63,7 +64,7 @@ public class FalconSense {
 	{
 		String fsCommand = String.format(
 				 "%s --min_idt %f --min_len %d --max_read_len %d "
-				 + "--min_ovl_len %d --min_cov %d --n_core %d > "
+				 + "--min_ovl_len %d --min_cov %d --n_core %d "
 				 + "> %s < %s", 
 				 Settings.FALCONSENSE_PATH, Settings.FALCONSENSE_MIN_IDT,
 				 Settings.FALCONSENSE_MIN_LEN, Settings.FALCONSENSE_MAX_READ_LEN,
@@ -71,6 +72,7 @@ public class FalconSense {
 				 Settings.FALCONSENSE_N_CORE, falconOut, falconIn);
 		// Use bin/sh because pipes will not work when called directly
 		String[] fullFsCommand = new String[] {"/bin/sh", "-c", fsCommand};
+		System.out.println(Arrays.toString(fullFsCommand));
 		Process child = Runtime.getRuntime().exec(fullFsCommand);
 		int p = child.waitFor();
 		if(p != 0)

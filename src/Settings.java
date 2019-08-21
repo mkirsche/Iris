@@ -18,7 +18,7 @@ public class Settings {
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 2;
-	static String FALCONSENSE_PATH = "/usr/local/bin/falcon_sense";
+	static String FALCONSENSE_PATH = "/home/mkirsche/github/canu/Linux-amd64/bin/falconsense";
 	
 	static int GENOME_REGION_BUFFER = 100_000;
 	
