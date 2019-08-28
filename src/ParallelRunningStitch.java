@@ -64,8 +64,8 @@ public class ParallelRunningStitch {
 							continue;
 						}
 						Logger.log("Found refined SV of new length " + ue.seq.length() + 
-								" and new pos " + (ue.pos+1) + " for " + variantKey);
-						results.add(variantKey, ue.seq, ue.pos+1);
+								" and new pos " + ue.pos + " for " + variantKey);
+						results.add(variantKey, ue.seq, ue.pos);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

@@ -127,12 +127,35 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		throw new Exception("Trying to access VCF INFO field which is not found: " + field);
 	}
 	
+	public boolean hasInfoField(String fieldName)
+	{
+		String infoToken = tabTokens[7];
+		String[] semicolonSplit = infoToken.split(";");
+		for(String semitoken : semicolonSplit)
+		{
+			int equalIndex = semitoken.indexOf('=');
+			if(equalIndex == -1)
+			{
+				continue;
+			}
+			String key = semitoken.substring(0, equalIndex);
+			if(key.equals(fieldName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void updateInsertionSequence(String newSeq) throws Exception
 	{
 		setRef("");
 		setAlt(newSeq);
 		setLength(newSeq.length());
-		setInfo("SEQ", newSeq);
+		if(hasInfoField("SEQ"))
+		{
+			setInfo("SEQ", newSeq);
+		}
 	}
 	
 	public void setInfo(String field, String val) throws Exception

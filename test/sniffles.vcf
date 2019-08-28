@@ -1,0 +1,37 @@
+##fileformat=VCFv4.1
+##source=Sniffles
+##fileDate=20190828
+##contig=<ID=chr1,length=110720>
+##ALT=<ID=DEL,Description="Deletion">
+##ALT=<ID=DUP,Description="Duplication">
+##ALT=<ID=INV,Description="Inversion">
+##ALT=<ID=INVDUP,Description="InvertedDUP with unknown boundaries">
+##ALT=<ID=TRA,Description="Translocation">
+##ALT=<ID=INS,Description="Insertion">
+##FILTER=<ID=UNRESOLVED,Description="An insertion that is longer than the read and thus we cannot predict the full size.">
+##INFO=<ID=CHR2,Number=1,Type=String,Description="Chromosome for END coordinate in case of a translocation">
+##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the structural variant">
+##INFO=<ID=MAPQ,Number=1,Type=Integer,Description="Median mapping quality of paired-ends">
+##INFO=<ID=RE,Number=1,Type=Integer,Description="read support">
+##INFO=<ID=IMPRECISE,Number=0,Type=Flag,Description="Imprecise structural variation">
+##INFO=<ID=PRECISE,Number=0,Type=Flag,Description="Precise structural variation">
+##INFO=<ID=SVLEN,Number=1,Type=Integer,Description="Length of the SV">
+##INFO=<ID=REF_strand,Number=2,Type=Integer,Description="Length of the SV">
+##INFO=<ID=SVMETHOD,Number=1,Type=String,Description="Type of approach used to detect SV">
+##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">
+##INFO=<ID=RNAMES,Number=.,Type=String,Description="Names of reads supporting SVs (comma separated)">
+##INFO=<ID=SEQ,Number=1,Type=String,Description="Extracted sequence from the best representative read.">
+##INFO=<ID=STD_quant_start,Number=A,Type=Float,Description="STD of the start breakpoints across the reads.">
+##INFO=<ID=STD_quant_stop,Number=A,Type=Float,Description="STD of the stop breakpoints across the reads.">
+##INFO=<ID=Kurtosis_quant_start,Number=A,Type=Float,Description="Kurtosis value of the start breakpoints across the reads.">
+##INFO=<ID=Kurtosis_quant_stop,Number=A,Type=Float,Description="Kurtosis value of the stop breakpoints across the reads.">
+##INFO=<ID=SUPTYPE,Number=A,Type=String,Description="Type by which the variant is supported.(SR,ALN,NR)">
+##INFO=<ID=STRANDS,Number=A,Type=String,Description="Strand orientation of the adjacency in BEDPE format (DEL:+-, DUP:-+, INV:++/--)">
+##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency.">
+##INFO=<ID=ZMW,Number=A,Type=Integer,Description="Number of ZMWs (Pacbio) supporting SV.">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##FORMAT=<ID=DR,Number=1,Type=Integer,Description="# high-quality reference reads">
+##FORMAT=<ID=DV,Number=1,Type=Integer,Description="# high-quality variant reads">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	aln_sorted.bam
+chr1	6930	0	N	AGGGGGGGGCCCCCCCCGGGGGGGGCCCCCCCCGGGGGGGGCCCCCCCCCGGGGGGGGGGCCCCCCCCGGGGGGC	.	PASS	PRECISE;SVMETHOD=Snifflesv1.0.11;CHR2=chr1;END=6930;STD_quant_start=0.250000;STD_quant_stop=1.274755;Kurtosis_quant_start=9.024137;Kurtosis_quant_stop=2.727957;SVTYPE=INS;RNAMES=CHR1_1200_+,CHR1_1632_+,CHR1_1698_-,CHR1_1709_+,CHR1_1710_-,CHR1_2128_-,CHR1_2143_-,CHR1_2223_+,CHR1_2337_+,CHR1_2417_-,CHR1_2459_-,CHR1_2532_+,CHR1_2821_-,CHR1_2864_+,CHR1_3020_+,CHR1_3066_+,CHR1_3109_+,CHR1_3161_-,CHR1_3233_-,CHR1_3301_+,CHR1_4055_-,CHR1_4373_-,CHR1_4403_+,CHR1_4558_-,CHR1_5043_-,CHR1_5481_+,CHR1_5515_+,CHR1_5608_-,CHR1_6181_-,CHR1_6373_+,CHR1_6444_-,CHR1_819_+;SUPTYPE=AL,SR;SVLEN=74;STRANDS=+-;RE=32;REF_strand=32;AF=1	GT:DR:DV	1/1:0:32
+chr1	13790	1	ACCATGTTGGCCAAGATGTTCTCGATCTCCTGACCTTGTGATCTGCCTGCCTCGTCCTCCCAAAGTGCTGG	N	.	PASS	PRECISE;SVMETHOD=Snifflesv1.0.11;CHR2=chr1;END=13860;STD_quant_start=0.000000;STD_quant_stop=0.392232;Kurtosis_quant_start=2.156396;Kurtosis_quant_stop=1.135587;SVTYPE=DEL;RNAMES=CHR1_11004_+,CHR1_11112_-,CHR1_11317_+,CHR1_11726_-,CHR1_12485_+,CHR1_12505_-,CHR1_12599_-,CHR1_12770_+,CHR1_13016_+,CHR1_1632_+,CHR1_1698_-,CHR1_2223_+,CHR1_3066_+,CHR1_3109_+,CHR1_4055_-,CHR1_4558_-,CHR1_5481_+,CHR1_6444_-,CHR1_7329_-,CHR1_7469_+,CHR1_7762_+,CHR1_7862_+,CHR1_7975_+,CHR1_8373_-,CHR1_8602_+,CHR1_9171_-,CHR1_9480_-;SUPTYPE=AL,SR;SVLEN=-70;STRANDS=+-;RE=27;REF_strand=27;AF=1	GT:DR:DV	1/1:0:27
