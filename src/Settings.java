@@ -12,7 +12,7 @@ public class Settings {
 	static String READS_FILE = "pbAll.bam";
 	
 	// System options
-	static int THREADS = 2;
+	static int THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	
 	// External tool paths
@@ -42,8 +42,8 @@ public class Settings {
 		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf reads_in=reads.bam vcf_out=refined.vcf");
 		System.out.println("Required args:");
 		System.out.println("  genome_in (String) - the FASTA file containing the reference genome");
-		System.out.println("  vcf_in    (String) - the VCF file with variant calls determined by Sniffles (and supporting reads)");
-		System.out.println("  reads_in  (String) - the BAM file containing the reads (must already be indexed with samtools)");
+		System.out.println("  vcf_in    (String) - the VCF file with variant calls/supporting reads determined by Sniffles");
+		System.out.println("  reads_in  (String) - the BAM file containing the reads (must be indexed with samtools)");
 		System.out.println("  vcf_out   (String) - the name of the refined VCF file to be produced");
 		System.out.println();
 		System.out.println("Optional args");
