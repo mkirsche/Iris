@@ -14,3 +14,4 @@ src/org.junit.Assert.assertEquals
 *.region.fa
 *.log
 update.sh
+test/*
