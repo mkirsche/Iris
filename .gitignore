@@ -3,9 +3,14 @@ bin/
 out.vcf
 .classpath
 .settings/
+*java.util*
+*java.io*
+src/org.junit.Assert.assertEquals
 .project
+*.class
 *.in
 *.out
 *.ngm
 *.region.fa
 *.log
+update.sh
