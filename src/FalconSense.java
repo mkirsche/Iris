@@ -16,8 +16,8 @@ public class FalconSense {
 	{
 		String falconInFn = id + ".falcon.in";
 		String falconOutFn = id + ".falcon.out";
-		writeFalconSenseInput(reads, falconInFn);
-		executeFalconSense(falconInFn, falconOutFn);
+		int maxLength = writeFalconSenseInput(reads, falconInFn);
+		executeFalconSense(falconInFn, maxLength, falconOutFn);
 		ArrayList<String> res = parseFalconSenseOutput(falconOutFn);
 		if(Settings.CLEAN_INTERMEDIATE_FILES)
 		{
@@ -43,13 +43,17 @@ public class FalconSense {
 	 * + +
 	 * - - 
 	 * 
+	 * Returns the maximum length of any read
+	 * 
 	 */
-	static void writeFalconSenseInput(ArrayList<String> reads, String falconInputFileName) throws Exception
+	static int writeFalconSenseInput(ArrayList<String> reads, String falconInputFileName) throws Exception
 	{
 		PrintWriter out = new PrintWriter(new File(falconInputFileName));
 		int n = reads.size();
+		int maxLength = 0;
 		for(int i = 0; i<n; i++)
 		{
+			maxLength = Math.max(maxLength, reads.get(i).length());
 			out.println(String.format("read%d %s", i, reads.get(i)));
 			for(int j = 0; j<n; j++)
 			{
@@ -60,19 +64,20 @@ public class FalconSense {
 		}
 		out.println("- -");
 		out.close();
+		return maxLength + 1;
 	}
 	
 	/*
 	 * Run Falconsense through the command line using parameters from Settings
 	 */
-	static void executeFalconSense(String falconIn, String falconOut) throws Exception
+	static void executeFalconSense(String falconIn, int maxLength, String falconOut) throws Exception
 	{
 		String fsCommand = String.format(
 				 "%s --min_idt %f --min_len %d --max_read_len %d "
 				 + "--min_ovl_len %d --min_cov %d --n_core %d "
 				 ,//+ "> %s < %s", 
 				 Settings.FALCONSENSE_PATH, Settings.FALCONSENSE_MIN_IDT,
-				 Settings.FALCONSENSE_MIN_LEN, Settings.FALCONSENSE_MAX_READ_LEN,
+				 Settings.FALCONSENSE_MIN_LEN, maxLength,
 				 Settings.FALCONSENSE_MIN_OVL_LEN, Settings.FALCONSENSE_MIN_COV,
 				 Settings.FALCONSENSE_N_CORE);//, falconOut, falconIn);
 		// Use bin/sh because pipes will not work when called directly

@@ -14,7 +14,7 @@ public class Settings {
 	// System options
 	static int THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
-	static String LOG_OUT_FILE = "log.out";
+	static String LOG_OUT_FILE = "";
 	
 	// External tool paths
 	static String SAMTOOLS_PATH = "external_scripts/samtools";
@@ -31,7 +31,7 @@ public class Settings {
 	
 	// Alignment options
 	static int GENOME_REGION_BUFFER = 100_000;
-	static int NGMLR_THREADS = 4;
+	static int NGMLR_THREADS = 1;
 	
 	// Insertion filter
 	static int INSERTION_MIN_LENGTH = 30;

@@ -20,6 +20,7 @@ public class ParallelRunningStitch {
 		this.gq = gq;
 		this.readMap = readMap;
 		keys = readMap.keyArray();
+		Logger.log("Number of insertions with supporting reads: " + keys.length);
 		this.numThreads = numThreads;
 		
 		todo = new ConcurrentLinkedQueue<Integer>();
@@ -46,8 +47,6 @@ public class ParallelRunningStitch {
 	
 	public class Rayon extends Thread {
 		
-		boolean done;
-
 		@Override
 		public void run() {
 			while(!todo.isEmpty()) {
@@ -55,22 +54,23 @@ public class ParallelRunningStitch {
 				if(cur != null)
 				{
 					String variantKey = keys[cur];
+					Logger.log("Starting to process " + variantKey);
 					ArrayList<String> readNames = readMap.get(variantKey);
 					NewSequenceMap.UpdatedEntry ue;
 					try {
 						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
 						if(ue == null) {
+							Logger.log("No refined SV found");
 							continue;
 						}
+						Logger.log("Found refined SV of new length " + ue.seq.length() + 
+								" and new pos " + (ue.pos+1) + " for " + variantKey);
 						results.add(variantKey, ue.seq, ue.pos+1);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 					int numDone = variantsProcessed.incrementAndGet();
-					if(numDone%100 == 0)
-					{
-						Logger.std_log("Processed " + numDone + " variants");
-					}
+					Logger.log("Done processing " + variantKey + " (total processed = " + numDone + ")");
 				}
 			}
 			

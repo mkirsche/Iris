@@ -101,6 +101,7 @@ public class VcfEditor {
 				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
 				{
 					// Make necessary replacements
+					Logger.log("Outputting refined SV for " + key);
 					String newSeq = nsm.getSeq(key);
 					long newPos = nsm.getPos(key);
 					
@@ -114,10 +115,12 @@ public class VcfEditor {
 				{
 					if(ve.getType().equals("INS"))
 					{
+						Logger.log("Outputting original insertion for " + key);
 						updateBeforeAfter(ve);
 					}
 					else if(ve.getType().equals("DEL"))
 					{
+						Logger.log("Outputting original deletion for " + key);
 						String chr = ve.getChromosome();
 						// Fix off-by-one in indexing
 						long pos = ve.getPos() + 1;

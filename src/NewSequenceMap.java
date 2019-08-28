@@ -44,9 +44,17 @@ public class NewSequenceMap {
 	static UpdatedEntry fromReadNames(String key, ArrayList<String> names, GenomeQuery gq) throws Exception
 	{
 		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
+		Logger.log("Found " + readSeqs.size() + " relevant reads for " + key);
 		ArrayList<String> consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
+		Logger.log("Found " + consensusSequences.size() + " consensus sequences for " + key);
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
-		return BestInsertFinder.findBestInsert(key, alignmentRecords);
+		Logger.log("Found " + alignmentRecords.size() + " alignment records for" + key);
+		UpdatedEntry res = BestInsertFinder.findBestInsert(key, alignmentRecords);
+		if(VcfEntry.getPosFromKey(key) > Settings.GENOME_REGION_BUFFER)
+		{
+			res.pos += VcfEntry.getPosFromKey(key) - Settings.GENOME_REGION_BUFFER;
+		}
+		return res;
 	}
 	
 	static class UpdatedEntry

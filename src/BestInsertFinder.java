@@ -13,7 +13,7 @@ public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<S
 	
 /*
  * Find the best insertion from a list of SAM records and
- * how far into the reference we an insertion is expected
+ * how far into the reference an insertion is expected
  */
 public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<String> alignmentRecords, long offset)
 {

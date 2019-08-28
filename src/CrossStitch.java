@@ -1,7 +1,7 @@
 public class CrossStitch {
 public static void main(String[] args) throws Exception
 {
-	Logger.init("log.out");
+	Logger.init(Settings.LOG_OUT_FILE);
 	Settings.parseArgs(args);
 	SupportingReadMap srm = new SupportingReadMap(Settings.VCF_FILE);
 	GenomeQuery gq = new GenomeQuery(Settings.GENOME_FILE);
