@@ -4,3 +4,8 @@ out.vcf
 .classpath
 .settings/
 .project
+*.in
+*.out
+*.ngm
+*.region.fa
+*.log

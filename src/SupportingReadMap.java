@@ -16,6 +16,10 @@ public class SupportingReadMap {
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
 		for(VcfEntry ve : vei)
 		{
+			if(!ve.getType().equals("INS"))
+			{
+				continue;
+			}
 			String key = ve.getKey();
 			String supportingReadList = ve.getInfo("RNAMES");
 			String[] nameTokens = supportingReadList.split(",");

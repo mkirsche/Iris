@@ -129,8 +129,10 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	
 	public void updateInsertionSequence(String newSeq) throws Exception
 	{
+		setRef("");
 		setAlt(newSeq);
 		setLength(newSeq.length());
+		setInfo("SEQ", newSeq);
 	}
 	
 	public void setInfo(String field, String val) throws Exception

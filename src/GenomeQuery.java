@@ -57,9 +57,12 @@ public class GenomeQuery {
 			seqInput.close();
         	throw new Exception("samtools faidx produced a sequence name but not an actual sequence: " + faidxCommand);
 		}
-		
-		String res = seqInput.next();
+		StringBuilder res = new StringBuilder("");
+		while(seqInput.hasNext())
+		{
+			res.append(seqInput.next());
+		}
 		seqInput.close();
-		return res;
+		return res.toString();
 	}
 }

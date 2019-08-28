@@ -69,11 +69,10 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record)
 	char[] cigarChars = samFields[5].toCharArray();
 	String queryString = samFields[9];
 	
-	int refPos = 0;
+	int refPos = Integer.parseInt(samFields[3])-1;
 	int queryPos = 0;
 	int segmentLength = 0;
 	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<>();
-	
 	for(char c : cigarChars)
 	{
 		if(c >= '0' && c <= '9')

@@ -59,9 +59,11 @@ public class AlignConsensus {
 				 "%s -t %d -r %s -q %s -o %s", 
 				 Settings.NGMLR_PATH, Settings.NGMLR_THREADS,
 				 genomeSample, ngmlrIn, ngmlrOut);
-		// Use bin/sh because pipes will not work when called directly
-		String[] fullNgmlrCommand = new String[] {"/bin/sh", "-c", ngmlrCommand};
-		Process child = Runtime.getRuntime().exec(fullNgmlrCommand);
+		ArrayList<String> fullNgmlrCommand = new ArrayList<>();
+		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
+		Process child = new ProcessBuilder()
+				.command(fullNgmlrCommand)
+				.start();
 		int p = child.waitFor();
 		if(p != 0)
 		{
@@ -86,8 +88,9 @@ public class AlignConsensus {
 		while(input.hasNext())
 		{
 			String line = input.nextLine();
-			if(!line.startsWith("#"))
+			if(!line.startsWith("@"))
 			{
+				//System.out.println(line);
 				alignmentRecords.add(line);
 			}
 		}

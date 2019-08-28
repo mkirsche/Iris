@@ -57,6 +57,9 @@ public class ParallelRunningStitch {
 					NewSequenceMap.UpdatedEntry ue;
 					try {
 						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
+						if(ue == null) {
+							continue;
+						}
 						results.add(variantKey, ue.seq, ue.pos);
 					} catch (Exception e) {
 						e.printStackTrace();

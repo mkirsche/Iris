@@ -4,25 +4,25 @@
 public class Settings {
 	static int VCF_PADDING_BEFORE = 1;
 	static int VCF_PADDING_AFTER = 0;
-	static String VCF_FILE = "pbAll.sniffles.vcf";
+	static String VCF_FILE = "smallsample.vcf";//"pbAll.sniffles.vcf";
 	static String VCF_OUT_FILE = "out.vcf";
 	static String GENOME_FILE = "base.fa";
 	static String READS_FILE = "pbAll.bam";
-	static int THREADS = 4;
+	static int THREADS = 1;
 	static String SAMTOOLS_PATH = "/usr/local/bin/samtools";
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	
 	static double FALCONSENSE_MIN_IDT = 0.7;
 	static int FALCONSENSE_MIN_LEN = 500;
-	static int FALCONSENSE_MAX_READ_LEN = 123_456_789;
+	static int FALCONSENSE_MAX_READ_LEN = 1_234_567;
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 2;
-	static String FALCONSENSE_PATH = "/home/mkirsche/github/canu/Linux-amd64/bin/falconsense";
+	static String FALCONSENSE_PATH = "canu/Linux-amd64/bin/falcon_sense";
 	
 	static int GENOME_REGION_BUFFER = 100_000;
 	
-	static String NGMLR_PATH = "/usr/local/bin/ngmlr";
+	static String NGMLR_PATH = "ngmlr/bin/ngmlr-0.2.7/ngmlr";
 	static int NGMLR_THREADS = 4;
 	
 	static int INSERTION_MIN_LENGTH = 30;
