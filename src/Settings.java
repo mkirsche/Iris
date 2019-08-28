@@ -4,33 +4,81 @@
 public class Settings {
 	static int VCF_PADDING_BEFORE = 1;
 	static int VCF_PADDING_AFTER = 0;
+	
+	// Mandatory filenames
 	static String VCF_FILE = "smallsample.vcf";//"pbAll.sniffles.vcf";
 	static String VCF_OUT_FILE = "out.vcf";
 	static String GENOME_FILE = "base.fa";
 	static String READS_FILE = "pbAll.bam";
-	static int THREADS = 1;
-	static String SAMTOOLS_PATH = "/usr/local/bin/samtools";
+	
+	// System options
+	static int THREADS = 2;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	
+	// External tool paths
+	static String SAMTOOLS_PATH = "external_scripts/samtools";
+	static String FALCONSENSE_PATH = "external_scripts/falcon_sense";
+	static String NGMLR_PATH = "external_scripts/ngmlr";
+	
+	// Consensus options
 	static double FALCONSENSE_MIN_IDT = 0.7;
 	static int FALCONSENSE_MIN_LEN = 500;
 	static int FALCONSENSE_MAX_READ_LEN = 1_234_567;
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 2;
-	static String FALCONSENSE_PATH = "canu/Linux-amd64/bin/falcon_sense";
 	
+	// Alignment options
 	static int GENOME_REGION_BUFFER = 100_000;
-	
-	static String NGMLR_PATH = "ngmlr/bin/ngmlr-0.2.7/ngmlr";
 	static int NGMLR_THREADS = 4;
 	
+	// Insertion filter
 	static int INSERTION_MIN_LENGTH = 30;
 	static int INSERTION_MAX_DIST = 5000;
 	
 	static void usage()
 	{
-		System.out.println("Usage: (haven't written this message yet)");
+		System.out.println("Usage: java CrossStitch [args]");
+		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf reads_in=reads.bam vcf_out=refined.vcf");
+		System.out.println("Required args:");
+		System.out.println("  genome_in (String) - the FASTA file containing the reference genome");
+		System.out.println("  vcf_in    (String) - the VCF file with variant calls determined by Sniffles (and supporting reads)");
+		System.out.println("  reads_in  (String) - the BAM file containing the reads (must already be indexed with samtools)");
+		System.out.println("  vcf_out   (String) - the name of the refined VCF file to be produced");
+		System.out.println();
+		System.out.println("Optional args");
+		System.out.println("  threads          (int) [4]    - the number of threads to use when running CrossStitch");
+		System.out.println("  padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields");
+		System.out.println("  padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields");
+		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
+		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if not using included binary");
+		System.out.println("  falconsense_path (String)     - the path to falconsense if not using included binary");
+		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads back to");
+		System.out.println("  min_ins_length   (int) [30]   - the minimum length allowed for a refined insertion sequence");
+		System.out.println("  max_ins_dist     (int) [5k]   - the maximum distance a refined insertion call can be from its old position");
+	}
+	
+	static long parseLong(String s) throws Exception
+	{
+		s = s.toLowerCase();
+		if(s.endsWith("g") || s.endsWith("b") || s.endsWith("kkk"))
+		{
+			return (long)(Double.parseDouble(s.substring(0, s.length()-1)) * 1e9 + .5);
+		}
+		if(s.endsWith("m") || s.endsWith("kk"))
+		{
+			return (long)(Double.parseDouble(s.substring(0, s.length()-1)) * 1e6 + .5); 
+		}
+		if(s.endsWith("k"))
+		{
+			return (long)(Double.parseDouble(s.substring(0, s.length()-1)) * 1e3 + .5); 
+		}
+		return Long.parseLong(s);
+	}
+	
+	static int parseInt(String s) throws Exception
+	{
+		return (int)parseLong(s);
 	}
 
 	static void parseArgs(String[] args) throws Exception
@@ -46,11 +94,32 @@ public class Settings {
 			String val = args[i].substring(1 + equalIdx);
 			switch(key) 
 			{
+				case "threads":
+					THREADS = Integer.parseInt(val);
+					break;
+				case "genome_buffer":
+					GENOME_REGION_BUFFER = parseInt(val);
+					break;
 				case "padding_before": 
-					VCF_PADDING_BEFORE = Integer.parseInt(val);
+					VCF_PADDING_BEFORE = parseInt(val);
 					break;
 				case "padding_after":
-					VCF_PADDING_AFTER = Integer.parseInt(val);
+					VCF_PADDING_AFTER = parseInt(val);
+					break;
+				case "min_ins_length":
+					INSERTION_MIN_LENGTH = parseInt(val);
+					break;
+				case "max_ins_dist":
+					INSERTION_MAX_DIST = parseInt(val);
+					break;
+				case "samtools_path":
+					SAMTOOLS_PATH = val;
+					break;
+				case "ngmlr_path":
+					NGMLR_PATH = val;
+					break;
+				case "falconsense_path":
+					FALCONSENSE_PATH = val;
 					break;
 				case "vcf_in":
 					VCF_FILE = val;

@@ -20,7 +20,19 @@ public class AlignConsensus {
 		writeNgmlrInput(consensusSequences, ngmlrInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
 		executeNgmlr(ngmlrInFn, genomeSampleFn, ngmlrOutFn);
-		return getNgmlrAlignmentStrings(ngmlrOutFn);
+		ArrayList<String> res = getNgmlrAlignmentStrings(ngmlrOutFn);
+		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		{
+			new File(ngmlrInFn).delete();
+			new File(ngmlrOutFn).delete();
+			new File(genomeSampleFn).delete();
+			new File(genomeSampleFn + "-enc.2.ngm").delete();
+			
+			// Note: 13 here is the default kmer length used in ngmlr's indexing - change if default is not used
+			new File(genomeSampleFn + "-ht-13-2.2.ngm").delete();
+			
+		}
+		return res;
 	}
 	
 	static void writeGenomeSample(String id, String gsFn, GenomeQuery gq) throws Exception

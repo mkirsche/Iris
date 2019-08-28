@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -19,7 +18,13 @@ public class FalconSense {
 		String falconOutFn = id + ".falcon.out";
 		writeFalconSenseInput(reads, falconInFn);
 		executeFalconSense(falconInFn, falconOutFn);
-		return parseFalconSenseOutput(falconOutFn);
+		ArrayList<String> res = parseFalconSenseOutput(falconOutFn);
+		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		{
+			new File(falconInFn).delete();
+			new File(falconOutFn).delete();
+		}
+		return res;
 	}
 	
 	/*
@@ -99,7 +104,6 @@ public class FalconSense {
 		ArrayList<String> consensusSequences = new ArrayList<>();
 		
 		StringBuilder currentSequence = new StringBuilder("");
-		String currentName = "";
 		
 		Scanner input = new Scanner(new FileInputStream(toRead));
 		while(input.hasNext())
@@ -112,7 +116,6 @@ public class FalconSense {
 					consensusSequences.add(currentSequence.toString());
 				}
 				currentSequence = new StringBuilder("");
-				currentName = line.substring(1);
 			}
 			else
 			{

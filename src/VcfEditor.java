@@ -36,11 +36,33 @@ public class VcfEditor {
 	String getBeforeAfter(VcfEntry ve) throws Exception
 	{
 		String chr = ve.getChromosome();
-		long pos = ve.getPos();
-		long start = pos - Settings.VCF_PADDING_BEFORE;
-		long end = pos + Settings.VCF_PADDING_AFTER - 1;
-		String res = gq.genomeSubstring(chr, start, end);
-		return res;
+		long pos = ve.getPos() + 1;
+		
+		if(!consumesReference(ve.getType()))
+		{
+			long start = pos - Settings.VCF_PADDING_BEFORE;
+			long end = pos + Settings.VCF_PADDING_AFTER - 1;
+			String res = gq.genomeSubstring(chr, start, end);
+			return res;
+		}
+		else
+		{
+			long start1 = pos - Settings.VCF_PADDING_BEFORE;
+			long end1 = pos - 1;
+			long start2 = pos + ve.getLength();
+			long end2 = start2 + Settings.VCF_PADDING_AFTER - 1;
+			String res = gq.genomeSubstring(chr, start1, end1) + gq.genomeSubstring(chr, start2, end2);
+			return res;
+		}
+	}
+	
+	boolean consumesReference(String type)
+	{
+		if(type.equals("DEL"))
+		{
+			return true;
+		}
+		return false;
 	}
 	
 	/*
@@ -49,7 +71,8 @@ public class VcfEditor {
 	void updateBeforeAfter(VcfEntry ve) throws Exception
 	{
 		String beforeAfter = getBeforeAfter(ve);
-		ve.setRef(beforeAfter);
+		ve.setRef(beforeAfter.substring(0, Settings.VCF_PADDING_BEFORE) 
+				+ ve.getRef() + beforeAfter.substring(Settings.VCF_PADDING_BEFORE));
 		ve.setAlt(beforeAfter.substring(0, Settings.VCF_PADDING_BEFORE) 
 				+ ve.getAlt() + beforeAfter.substring(Settings.VCF_PADDING_BEFORE));
 	}
@@ -89,8 +112,18 @@ public class VcfEditor {
 				}
 				else
 				{
-					if(ve.getType().equals("INS") || ve.getType().equals("DEL"))
+					if(ve.getType().equals("INS"))
 					{
+						updateBeforeAfter(ve);
+					}
+					else if(ve.getType().equals("DEL"))
+					{
+						String chr = ve.getChromosome();
+						// Fix off-by-one in indexing
+						long pos = ve.getPos() + 1;
+						ve.setRef(gq.genomeSubstring(chr, pos, pos+Math.abs(ve.getLength()) - 1));
+						ve.setAlt("");
+						//System.out.println(ve.getRef()+" "+ve.getAlt());
 						updateBeforeAfter(ve);
 					}
 					out.println(ve);

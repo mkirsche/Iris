@@ -110,7 +110,7 @@ public class ReadShirring {
 		while(input.hasNext())
 		{
 			try {
-				String name = input.nextLine();
+				input.nextLine();
 				res.add(input.nextLine());
 				for(int i = 0; i<2; i++) input.nextLine();
 			} catch(Exception e) {

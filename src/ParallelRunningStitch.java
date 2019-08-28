@@ -60,7 +60,7 @@ public class ParallelRunningStitch {
 						if(ue == null) {
 							continue;
 						}
-						results.add(variantKey, ue.seq, ue.pos);
+						results.add(variantKey, ue.seq, ue.pos+1);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

@@ -37,6 +37,10 @@ public class GenomeQuery {
 	
 	String genomeSubstring(String chr, long startPos, long endPos) throws Exception
 	{
+		if(startPos > endPos)
+		{
+			return "";
+		}
 		String faidxCommand = String.format(Settings.SAMTOOLS_PATH + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
 		Process child = Runtime.getRuntime().exec(faidxCommand);
         InputStream seqStream = child.getInputStream();
