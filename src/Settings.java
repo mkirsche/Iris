@@ -41,7 +41,8 @@ public class Settings {
 	{
 		System.out.println();
 		System.out.println("Usage: java CrossStitch [args]");
-		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf reads_in=reads.bam vcf_out=refined.vcf");
+		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf ");
+		System.out.println("      reads_in=reads.bam vcf_out=refined.vcf");
 		System.out.println();
 		System.out.println("Required args:");
 		System.out.println("  genome_in (String) - the FASTA file containing the reference genome");
@@ -49,7 +50,7 @@ public class Settings {
 		System.out.println("  reads_in  (String) - the BAM file containing the reads (must be indexed with samtools)");
 		System.out.println("  vcf_out   (String) - the name of the refined VCF file to be produced");
 		System.out.println();
-		System.out.println("Optional args");
+		System.out.println("Optional args:");
 		System.out.println("  threads          (int) [4]    - the number of threads to use when running CrossStitch");
 		System.out.println("  padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields");
 		System.out.println("  padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields");
@@ -57,9 +58,9 @@ public class Settings {
 		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if not using included binary");
 		System.out.println("  falconsense_path (String)     - the path to falconsense if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
-		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads back to");
-		System.out.println("  min_ins_length   (int) [30]   - the minimum length allowed for a refined insertion sequence");
-		System.out.println("  max_ins_dist     (int) [5k]   - the maximum distance a refined insertion call can be from its old position");
+		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
+		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
+		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
 		System.out.println();
 	}
 	
