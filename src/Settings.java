@@ -6,14 +6,15 @@ public class Settings {
 	static int VCF_PADDING_AFTER = 0;
 	
 	// Mandatory filenames
-	static String VCF_FILE = "smallsample.vcf";//"pbAll.sniffles.vcf";
-	static String VCF_OUT_FILE = "out.vcf";
-	static String GENOME_FILE = "base.fa";
-	static String READS_FILE = "pbAll.bam";
+	static String VCF_FILE = "";
+	static String VCF_OUT_FILE = "";
+	static String GENOME_FILE = "";
+	static String READS_FILE = "";
 	
 	// System options
 	static int THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
+	static String LOG_OUT_FILE = "log.out";
 	
 	// External tool paths
 	static String SAMTOOLS_PATH = "external_scripts/samtools";
@@ -38,8 +39,10 @@ public class Settings {
 	
 	static void usage()
 	{
+		System.out.println();
 		System.out.println("Usage: java CrossStitch [args]");
 		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf reads_in=reads.bam vcf_out=refined.vcf");
+		System.out.println();
 		System.out.println("Required args:");
 		System.out.println("  genome_in (String) - the FASTA file containing the reference genome");
 		System.out.println("  vcf_in    (String) - the VCF file with variant calls/supporting reads determined by Sniffles");
@@ -53,9 +56,11 @@ public class Settings {
 		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
 		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if not using included binary");
 		System.out.println("  falconsense_path (String)     - the path to falconsense if not using included binary");
+		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads back to");
 		System.out.println("  min_ins_length   (int) [30]   - the minimum length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [5k]   - the maximum distance a refined insertion call can be from its old position");
+		System.out.println();
 	}
 	
 	static long parseLong(String s) throws Exception
@@ -121,6 +126,9 @@ public class Settings {
 				case "falconsense_path":
 					FALCONSENSE_PATH = val;
 					break;
+				case "log_out":
+					LOG_OUT_FILE = val;
+					break;
 				case "vcf_in":
 					VCF_FILE = val;
 					break;
@@ -137,7 +145,7 @@ public class Settings {
 					break;
 			}
 		}
-		if(VCF_FILE == null || GENOME_FILE == null || VCF_OUT_FILE == null || READS_FILE == null)
+		if(VCF_FILE.length() == 0 || GENOME_FILE.length() == 0 || VCF_OUT_FILE.length() == 0 || READS_FILE.length() == 0)
 		{
 			usage();
 			System.exit(1);

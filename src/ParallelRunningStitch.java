@@ -3,6 +3,7 @@
  */
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParallelRunningStitch {
 	GenomeQuery gq;
@@ -10,6 +11,7 @@ public class ParallelRunningStitch {
 	NewSequenceMap results;
 	int numThreads;
 	String[] keys;
+	static AtomicInteger variantsProcessed = new AtomicInteger(0);
 	
 	ConcurrentLinkedQueue<Integer> todo;
 	
@@ -63,6 +65,11 @@ public class ParallelRunningStitch {
 						results.add(variantKey, ue.seq, ue.pos+1);
 					} catch (Exception e) {
 						e.printStackTrace();
+					}
+					int numDone = variantsProcessed.incrementAndGet();
+					if(numDone%100 == 0)
+					{
+						Logger.std_log("Processed " + numDone + " variants");
 					}
 				}
 			}
