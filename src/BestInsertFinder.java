@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BestInsertFinder {
 	
@@ -17,10 +18,66 @@ public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<S
  */
 public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<String> alignmentRecords, long offset)
 {
+	// Bookkeeping information to maintain the best insertion
 	double bestScore = 0.0;
 	NewSequenceMap.UpdatedEntry bestEntry = null;
 	
+	// In case the exact same insertion occurs in multiple reads, keep that info to increase scores of repeated sequences
+	HashMap<String, Integer> insertSupport = new HashMap<>();
+	
+	// Get expected length
+	HashMap<Integer, Double> lengthScores = getLengthScores(alignmentRecords, offset);
+	
 	// Iterate over the alignments and decide which one is the best match
+	for(String record : alignmentRecords)
+	{
+		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getAllInsertions(record);
+		
+		// Iterate over alignments for this read
+		for(NewSequenceMap.UpdatedEntry candidate : candidates)
+		{
+			long distance = Math.abs(candidate.pos - offset);
+			int length = candidate.seq.length();
+			
+			// Throw out short and far away insertions
+			if(distance > Settings.INSERTION_MAX_DIST || length < Settings.INSERTION_MIN_LENGTH)
+			{
+				continue;
+			}
+			
+			// Update count for this insertion
+			String candidateKey = candidate.seq+ "#" + candidate.pos;
+			if(insertSupport.containsKey(candidateKey))
+			{
+				insertSupport.put(candidateKey, 1 + insertSupport.get(candidateKey));
+			}
+			else
+			{
+				insertSupport.put(candidateKey, 1);
+			}
+			
+			// Compute score and see if this is a new best
+			double currentScore = scoreInsertion(length, lengthScores.get(length), distance, insertSupport.get(candidateKey));		
+			if(bestEntry == null || currentScore > bestScore)
+			{
+				bestScore = currentScore;
+				bestEntry = candidate;
+			}
+		}
+	}
+	
+	return bestEntry;
+}
+
+/*
+ * Computes how often insertions of different lengths occur in the dataset and scores each length
+ * If f(x) is the number of insertions with length x, then 
+ * score(x) = f(x) + sum(i = 1 to 10)[(f(x-i) + f(x+i)) / (i+1)]
+ * Note that insertions which are too short or far away are ignored in these counts
+ */
+static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecords, long offset)
+{
+	HashMap<Integer, Integer> lengthFreq = new HashMap<>();
 	for(String record : alignmentRecords)
 	{
 		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getAllInsertions(record);
@@ -34,18 +91,29 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
 				continue;
 			}
 			
-			double currentScore = scoreInsertion(length, distance);
-			
-			if(bestEntry == null || currentScore > bestScore)
-			{
-				bestEntry = candidate;
-			}
+			lengthFreq.put(length, lengthFreq.containsKey(length) ? (1 + lengthFreq.get(length)) : 1);
 		}
 	}
 	
-	return bestEntry;
+	HashMap<Integer, Double> lengthScore = new HashMap<>();
+	for(int x : lengthFreq.keySet())
+	{
+		double curScore = 0.0;
+		for(int i = x - 10; i <= x + 10; i++)
+		{
+			if(lengthFreq.containsKey(i))
+			{
+				curScore += lengthFreq.get(x) + (1 + Math.abs(i - x));
+			}
+		}
+		lengthScore.put(x, curScore);
+	}
+	return lengthScore;
 }
 
+/*
+ * Gets the position in the genome region we expect the SV to occur at based on its position in the whole genome
+ */
 static long getExpectedOffset(String id)
 {
 	long pos = VcfEntry.getPosFromKey(id);
@@ -55,9 +123,9 @@ static long getExpectedOffset(String id)
 /*
  * Scoring function for an insertion 
  */
-static double scoreInsertion(long length, long distance)
+static double scoreInsertion(long length, double lengthScore, long distance, int support)
 {
-	return 20 * length - distance * distance;
+	return 20 * (length + lengthScore) * support - distance * distance;
 }
 
 /*
