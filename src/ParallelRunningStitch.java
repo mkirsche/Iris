@@ -37,7 +37,7 @@ public class ParallelRunningStitch {
 		for(int i = 0; i<numThreads; i++)
 		{
 			threads[i] = new Rayon();
-			threads[i].run();
+			threads[i].start();
 		}
 		for(int i = 0; i<numThreads; i++)
 		{
