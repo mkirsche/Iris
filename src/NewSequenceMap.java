@@ -50,7 +50,7 @@ public class NewSequenceMap {
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
 		Logger.log("Found " + alignmentRecords.size() + " alignment records for" + key);
 		UpdatedEntry res = BestInsertFinder.findBestInsert(key, alignmentRecords);
-		if(VcfEntry.getPosFromKey(key) > Settings.GENOME_REGION_BUFFER)
+		if(res != null && VcfEntry.getPosFromKey(key) > Settings.GENOME_REGION_BUFFER)
 		{
 			res.pos += VcfEntry.getPosFromKey(key) - Settings.GENOME_REGION_BUFFER;
 		}
