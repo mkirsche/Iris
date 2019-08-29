@@ -1,6 +1,5 @@
-# CrossStitch2
-A work-in-progress upgrading CrossStitch's refine insertions module to be more user-friendly.
-Name pending!
+# RESOLVASE: RESOLving VAriant SEquences
+A module used primarily within CrossStitch which corrects the sequences of structural variant calls (currently only insertions).  It uses FalconSense to obtain consensus sequences of the reads surrounding each variant and aligns these sequences back to the reference at the insertion site, resulting in an insertion which takes into account the aggregate information of all supporting reads.
 
 ## Building
 
@@ -17,8 +16,12 @@ because the developers have changed the interface for running it.
 
 This runs an example on a simulated dataset with an insertion 
 (length 70, sequence (GGGGGGGGCCCCCCCC)x4 + GGGGGG) at position 6930 
-and a deletion (length 70) at position 13790, and outputs the refined variant calls.  
-Currently the output is missing the first G but has everything else right - fix in progress!
+and a deletion (length 70) at position 13790, and outputs the refined variant calls.
+
+```./run_sample.sh```
+
+This runs another example on a simulated dataset with 29 insertions and a number of deletions.
+This is more used for assessing the speed of different settings and for testing during development.
 
 ## Running 
 
