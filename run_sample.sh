@@ -1,3 +1,3 @@
 ./build.sh
-java -cp src CrossStitch genome_in=base.fa vcf_in=pbAll.sniffles.vcf reads_in=pbAll.bam vcf_out=out.vcf
+java -cp src CrossStitch genome_in=test/base.fa vcf_in=test/pbAll.sniffles.vcf reads_in=test/pbAll.bam vcf_out=out.vcf
 
