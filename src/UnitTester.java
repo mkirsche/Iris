@@ -79,7 +79,7 @@ public class UnitTester {
 		
 		// Run the VCF editor
 		String newVcf = "out.vcf";
-		VcfEditor ved = new VcfEditor("sample.vcf", newVcf, nsm, gq);
+		VcfEditor ved = new VcfEditor("sample.vcf", newVcf, "out.tsv", nsm, gq);
 		ved.run();
 		
 		VcfEntryIterator vei = new VcfEntryIterator(newVcf);

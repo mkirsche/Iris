@@ -16,6 +16,7 @@ public class Settings {
 	static int NGMLR_THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static String LOG_OUT_FILE = "";
+	static String TABLE_OUT_FILE = "results.tsv";
 	
 	// External tool paths
 	static String SAMTOOLS_PATH = "external_scripts/samtools";
