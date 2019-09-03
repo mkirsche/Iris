@@ -78,7 +78,7 @@ public class ResultsTableWriter {
 			return chromosome + "\t" 
 					+ originalPosition + "\t"
 					+ originalSequence + "\t"
-					+ originalLength + "t"
+					+ originalLength + "\t"
 					+ type + "\t"
 					+ refined + "\t"
 					+ (refined ? newPosition : originalPosition) + "\t"
