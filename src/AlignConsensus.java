@@ -71,7 +71,7 @@ public class AlignConsensus {
 				 "%s -t %d -r %s -q %s -o %s", 
 				 Settings.NGMLR_PATH, Settings.NGMLR_THREADS,
 				 genomeSample, ngmlrIn, ngmlrOut);
-		ArrayList<String> fullNgmlrCommand = new ArrayList<>();
+		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
 		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
 		Process child = new ProcessBuilder()
 				.command(fullNgmlrCommand)
@@ -94,7 +94,7 @@ public class AlignConsensus {
 			throw new Exception("could not find ngmlr output file: " + ngmlrOutputFileName);
 		}
 		
-		ArrayList<String> alignmentRecords = new ArrayList<>();
+		ArrayList<String> alignmentRecords = new ArrayList<String>();
 				
 		Scanner input = new Scanner(new FileInputStream(toRead));
 		while(input.hasNext())

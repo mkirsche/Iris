@@ -25,13 +25,13 @@ public class Settings {
 	// Consensus options
 	static double FALCONSENSE_MIN_IDT = 0.7;
 	static int FALCONSENSE_MIN_LEN = 500;
-	static int FALCONSENSE_MAX_READ_LEN = 1_234_567;
+	static int FALCONSENSE_MAX_READ_LEN = 1234567;
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 2;
 	
 	// Alignment options
-	static int GENOME_REGION_BUFFER = 100_000;
+	static int GENOME_REGION_BUFFER = 100000;
 	
 	// Insertion filter
 	static int INSERTION_MIN_LENGTH = 30;

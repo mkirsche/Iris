@@ -7,7 +7,7 @@ public class SupportingReadMap {
 	
 	SupportingReadMap(String filename) throws Exception
 	{
-		map = new HashMap<>();
+		map = new HashMap<String, ArrayList<String>>();
 		File f = new File(filename);
 		if(!f.exists())
 		{
