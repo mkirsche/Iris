@@ -32,8 +32,8 @@ public class ResultsTableWriter {
 			{
 				boolean sameChar = from.charAt(i-1) == to.charAt(j-1);
 				int min = (sameChar ? 0 : 1) + dp[(i-1)%2][j-1];
-				min = Math.min(min, dp[(i-1)%2][j]);
-				min = Math.min(min, dp[i%2][j-1]);
+				min = Math.min(min, 1 + dp[(i-1)%2][j]);
+				min = Math.min(min, 1 + dp[i%2][j-1]);
 				dp[i%2][j] = min;
 			}
 		}
