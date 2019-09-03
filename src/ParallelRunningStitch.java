@@ -54,7 +54,6 @@ public class ParallelRunningStitch {
 				if(cur != null)
 				{
 					String variantKey = keys[cur];
-					System.out.println(Thread.currentThread().getId());
 					Logger.log("Starting to process " + variantKey);
 					ArrayList<String> readNames = readMap.get(variantKey);
 					NewSequenceMap.UpdatedEntry ue;
