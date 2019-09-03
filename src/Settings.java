@@ -101,6 +101,10 @@ public class Settings {
 			}
 			int equalIdx = args[i].indexOf('=');
 			String key = args[i].substring(0, equalIdx);
+			while(key.length() > 0 && key.charAt(0) == '-')
+			{
+				key = key.substring(1);
+			}
 			String val = args[i].substring(1 + equalIdx);
 			switch(key) 
 			{
