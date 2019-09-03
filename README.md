@@ -6,8 +6,8 @@ A module used primarily within CrossStitch which corrects the sequences of struc
 ```./build.sh```
 
 Note: The external tools samtools, ngmlr, and falcon_sense are provided pre-built in the external_scripts folder.  
-However, to rebuild them from scratch, fetch and build the included submodules according to their README files.
-There is an option when running CrossStitch to use custom paths for these programs, but this is not recommended for falcon_sense 
+However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.
+There is an option when running CrossStitch to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
 because the developers have changed the interface for running it.
 
 ## Testing
