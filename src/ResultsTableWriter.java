@@ -1,3 +1,7 @@
+/*
+ * A class for handling the creation of a results table
+ */
+
 import java.io.File;
 import java.io.PrintWriter;
 

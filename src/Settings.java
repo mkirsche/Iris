@@ -1,5 +1,3 @@
-import java.nio.file.Paths;
-
 /*
  * Holds settings such as input/output filenames and various parameters
  */
@@ -17,8 +15,10 @@ public class Settings {
 	static int THREADS = 4;
 	static int NGMLR_THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
+	static boolean RESUME = false;
 	static String LOG_OUT_FILE = "";
 	static String TABLE_OUT_FILE = "results.tsv";
+	static String INTERMEDIATE_RESULTS_FILE = "resultsstore.txt";
 	
 	// External tool paths
 	static String WORKING_DIR = System.getProperty("java.class.path") + "/..";
@@ -65,6 +65,7 @@ public class Settings {
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
+		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println();
 	}
 	
@@ -97,6 +98,10 @@ public class Settings {
 		{
 			if(args[i].indexOf('=') == -1)
 			{
+				if(args[i].endsWith("resume"))
+				{
+					RESUME = true;
+				}
 				continue;
 			}
 			int equalIdx = args[i].indexOf('=');
