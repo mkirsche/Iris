@@ -37,9 +37,7 @@ public class ParallelRunningStitch {
 		for(int i = 0; i<numThreads; i++)
 		{
 			threads[i] = new Rayon();
-			System.out.println("starting " + i);
 			threads[i].start();
-			System.out.println("started " + i);
 		}
 		for(int i = 0; i<numThreads; i++)
 		{
@@ -63,7 +61,7 @@ public class ParallelRunningStitch {
 					try {
 						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
 						if(ue == null) {
-							Logger.log("No refined SV found");
+							Logger.log("No refined SV found for " + variantKey);
 							continue;
 						}
 						Logger.log("Found refined SV of new length " + ue.seq.length() + 
