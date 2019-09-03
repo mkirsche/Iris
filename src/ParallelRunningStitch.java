@@ -37,7 +37,9 @@ public class ParallelRunningStitch {
 		for(int i = 0; i<numThreads; i++)
 		{
 			threads[i] = new Rayon();
-			threads[i].run();
+			System.out.println("starting " + i);
+			threads[i].start();
+			System.out.println("started " + i);
 		}
 		for(int i = 0; i<numThreads; i++)
 		{
@@ -54,6 +56,7 @@ public class ParallelRunningStitch {
 				if(cur != null)
 				{
 					String variantKey = keys[cur];
+					System.out.println(Thread.currentThread().getId());
 					Logger.log("Starting to process " + variantKey);
 					ArrayList<String> readNames = readMap.get(variantKey);
 					NewSequenceMap.UpdatedEntry ue;
