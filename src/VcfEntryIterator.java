@@ -45,6 +45,8 @@ class VcfEntryIterator implements Iterable<VcfEntry>
 				}
 			}
 			
+			public void remove() {}
+			
 		};
 	}
 	

@@ -11,7 +11,8 @@ public static void main(String[] args) throws Exception
 	
 	NewSequenceMap nsm = prs.results;
 	
-	VcfEditor ved = new VcfEditor(Settings.VCF_FILE, Settings.VCF_OUT_FILE, nsm, gq);
+	VcfEditor ved = new VcfEditor(Settings.VCF_FILE, Settings.VCF_OUT_FILE, 
+			Settings.TABLE_OUT_FILE, nsm, gq);
 	ved.run();
 	
 	Logger.close();

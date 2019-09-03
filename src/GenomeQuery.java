@@ -30,7 +30,7 @@ public class GenomeQuery {
         // Exit code > 1 means the command failed, usually because samtools is not installed or on path
         if(seqExit > 1)
         {
-        	throw new Exception("samtools produced bado exit code (" 
+        	throw new Exception("samtools produced bad exit code (" 
         			+ seqExit + ") - perhaps it is not on your path: " + Settings.SAMTOOLS_PATH);
         }
 	}

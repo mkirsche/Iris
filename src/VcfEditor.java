@@ -10,6 +10,7 @@ public class VcfEditor {
 	
 	String oldFile;
 	String newFile;
+	String tableFile;
 	NewSequenceMap nsm;
 	GenomeQuery gq;
 	
@@ -19,13 +20,14 @@ public class VcfEditor {
 	 * nsm is the map from variant key to new sequence/position
 	 * gq is the wrapper around samtools faidx for getting sequences from the original genome
 	 */
-	VcfEditor(String oldFile, String newFile, NewSequenceMap nsm, GenomeQuery gq) throws Exception
+	VcfEditor(String oldFile, String newFile, String tableFile, NewSequenceMap nsm, GenomeQuery gq) throws Exception
 	{
 		this.oldFile = oldFile;
 		if(!(new File(oldFile)).exists()) {
 			throw new Exception("old vcf file does not exist: " + oldFile);
 		}
 		this.newFile = newFile;
+		this.tableFile = tableFile;
 		this.nsm = nsm;
 		this.gq = gq;
 	}
@@ -81,6 +83,7 @@ public class VcfEditor {
 	{
 		Scanner input = new Scanner(new FileInputStream(new File(oldFile)));
 		PrintWriter out = new PrintWriter(new File(newFile));
+		ResultsTableWriter tableOut = new ResultsTableWriter(tableFile);
 		while(input.hasNext())
 		{
 			String line = input.nextLine();
@@ -96,6 +99,14 @@ public class VcfEditor {
 			{
 				VcfEntry ve = new VcfEntry(line);
 				String key = ve.getKey();
+				
+				// Print the entry to the results table
+				NewSequenceMap.UpdatedEntry newEntry = null;
+				if(nsm.containsKey(key))
+				{
+					newEntry = new NewSequenceMap.UpdatedEntry(nsm.getSeq(key), nsm.getPos(key));
+				}
+				tableOut.printEntry(ve, nsm.containsKey(key) ? newEntry : null);
 				
 				// If this variant is in the map, update its info according to the new sequence/position
 				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
@@ -124,9 +135,8 @@ public class VcfEditor {
 						String chr = ve.getChromosome();
 						// Fix off-by-one in indexing
 						long pos = ve.getPos() + 1;
-						ve.setRef(gq.genomeSubstring(chr, pos, pos+Math.abs(ve.getLength()) - 1));
+						ve.setRef(gq.genomeSubstring(chr, pos, pos + Math.abs(ve.getLength()) - 1));
 						ve.setAlt("");
-						//System.out.println(ve.getRef()+" "+ve.getAlt());
 						updateBeforeAfter(ve);
 					}
 					out.println(ve);
@@ -135,6 +145,7 @@ public class VcfEditor {
 			
 			
 		}
+		tableOut.close();
 		out.close();
 		input.close();
 	}

@@ -1,3 +1,5 @@
+import java.nio.file.Paths;
+
 /*
  * Holds settings such as input/output filenames and various parameters
  */
@@ -16,11 +18,13 @@ public class Settings {
 	static int NGMLR_THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static String LOG_OUT_FILE = "";
+	static String TABLE_OUT_FILE = "results.tsv";
 	
 	// External tool paths
-	static String SAMTOOLS_PATH = "external_scripts/samtools";
-	static String FALCONSENSE_PATH = "external_scripts/falcon_sense";
-	static String NGMLR_PATH = "external_scripts/ngmlr";
+	static String WORKING_DIR = System.getProperty("java.class.path") + "/..";
+	static String SAMTOOLS_PATH = WORKING_DIR + "/" + "external_scripts/samtools";
+	static String FALCONSENSE_PATH = WORKING_DIR + "/" + "external_scripts/falcon_sense";
+	static String NGMLR_PATH = WORKING_DIR + "/" + "external_scripts/ngmlr";
 	
 	// Consensus options
 	static double FALCONSENSE_MIN_IDT = 0.7;

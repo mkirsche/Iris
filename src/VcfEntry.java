@@ -107,6 +107,65 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		setInfo("SVTYPE", s);
 	}
 	
+	public String getSeq() throws Exception
+	{
+		if(hasInfoField("SEQ"))
+		{
+			return getInfo("SEQ");
+		}
+		String ref = getRef(), alt = getAlt();
+		String type = getType();
+		
+		// If the SV is a deletion, swap REF and ALT and treat as an insertion
+		if(type.equals("DEL"))
+		{
+			String tmp = ref;
+			ref = alt;
+			alt = tmp;
+			type = "INS";
+		}
+		if(ref.equals("X"))
+		{
+			return alt;
+		}
+		else if(alt.equals("X"))
+		{
+			return ref;
+		}
+		else if(type.equals("INS"))
+		{
+			int startPad = 0, endPad = 0;
+			int totalPad = ref.length();
+			while(startPad + endPad < totalPad)
+			{
+				if(ref.charAt(startPad) == alt.charAt(startPad))
+				{
+					startPad++;
+				}
+				else if(ref.charAt(ref.length() - 1 - endPad) == alt.charAt(alt.length() - 1 - endPad))
+				{
+					endPad++;
+				}
+				else
+				{
+					break;
+				}
+			}
+			if(startPad + endPad == totalPad)
+			{
+				return alt.substring(startPad, alt.length() - endPad);
+			}
+			else
+			{
+				return alt;
+			}
+		}
+		else
+		{
+			return alt;
+		}
+	}
+	
 	public String getInfo(String field) throws Exception
 	{
 		String infoToken = tabTokens[7];
