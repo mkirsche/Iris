@@ -74,7 +74,7 @@ public class ParallelRunningStitch {
 						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
 						if(ue == null) {
 							Logger.log("No refined SV found for " + variantKey);
-							irs.addVariant(variantKey, "X", -1);
+							irs.addNullVariant(variantKey);
 							continue;
 						}
 						Logger.log("Found refined SV of new length " + ue.seq.length() + 

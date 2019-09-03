@@ -55,6 +55,11 @@ public class IntermediateResultsStore {
 		set.add(key);
 	}
 	
+	void addNullVariant(String key)
+	{
+		addVariant(key, "X", -1);
+	}
+	
 	void fillMapFromStore(NewSequenceMap nsm) throws Exception
 	{
 		out.close();
