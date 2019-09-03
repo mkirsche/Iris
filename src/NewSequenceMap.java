@@ -10,7 +10,7 @@ public class NewSequenceMap {
 
 	NewSequenceMap()
 	{
-		map = new HashMap<>();
+		map = new HashMap<String, UpdatedEntry>();
 	}
 	
 	void add(String key, String seq, long pos)

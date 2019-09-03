@@ -23,7 +23,7 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
 	NewSequenceMap.UpdatedEntry bestEntry = null;
 	
 	// In case the exact same insertion occurs in multiple reads, keep that info to increase scores of repeated sequences
-	HashMap<String, Integer> insertSupport = new HashMap<>();
+	HashMap<String, Integer> insertSupport = new HashMap<String, Integer>();
 	
 	// Get expected length
 	HashMap<Integer, Double> lengthScores = getLengthScores(alignmentRecords, offset);
@@ -77,7 +77,7 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
  */
 static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecords, long offset)
 {
-	HashMap<Integer, Integer> lengthFreq = new HashMap<>();
+	HashMap<Integer, Integer> lengthFreq = new HashMap<Integer, Integer>();
 	for(String record : alignmentRecords)
 	{
 		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getAllInsertions(record);
@@ -95,7 +95,7 @@ static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecor
 		}
 	}
 	
-	HashMap<Integer, Double> lengthScore = new HashMap<>();
+	HashMap<Integer, Double> lengthScore = new HashMap<Integer, Double>();
 	for(int x : lengthFreq.keySet())
 	{
 		double curScore = 0.0;
@@ -140,7 +140,7 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record)
 	int refPos = Integer.parseInt(samFields[3])-1;
 	int queryPos = 0;
 	int segmentLength = 0;
-	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<>();
+	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<NewSequenceMap.UpdatedEntry>();
 	for(char c : cigarChars)
 	{
 		if(c >= '0' && c <= '9')

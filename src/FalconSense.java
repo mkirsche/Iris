@@ -81,7 +81,7 @@ public class FalconSense {
 				 Settings.FALCONSENSE_MIN_OVL_LEN, Settings.FALCONSENSE_MIN_COV,
 				 Settings.FALCONSENSE_N_CORE);//, falconOut, falconIn);
 		// Use bin/sh because pipes will not work when called directly
-		ArrayList<String> fullFsCommand = new ArrayList<>();
+		ArrayList<String> fullFsCommand = new ArrayList<String>();
 		for(String s : fsCommand.split(" ")) fullFsCommand.add(s);
 		Process child = new ProcessBuilder()
 				.command(fullFsCommand)
@@ -106,7 +106,7 @@ public class FalconSense {
 			throw new Exception("could not find falconsense output file: " + falconOutputFileName);
 		}
 		
-		ArrayList<String> consensusSequences = new ArrayList<>();
+		ArrayList<String> consensusSequences = new ArrayList<String>();
 		
 		StringBuilder currentSequence = new StringBuilder("");
 		
