@@ -8,9 +8,15 @@ A module which corrects the sequences of structural variant calls (currently onl
 Note: The external tools samtools, ngmlr, minimap2, and falcon_sense are provided pre-built in the external_scripts folder.  
 However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.  Note that either ngmlr (default) or minimap2 will be used, but not both.
 There is an option when running IRIS to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
-because the developers have changed the interface for running it.
+because the developers have significantly changed the interface for running it and it is not possible to run Falconsense in isolation with recent builds of Canu.
 
 ## Testing
+
+```./run_sample.sh```
+
+This runs an example on a simulated dataset with 29 insertions and a number of deletions.
+This is primarily used for assessing the speed of different settings and for testing during development,
+but also works well as a quick test to ensure that your build is working.
 
 ```./run_test.sh```
 
@@ -19,11 +25,6 @@ This runs an example on a simulated dataset with an insertion
 and a deletion (length 70) at position 13790, and outputs the refined variant calls.
 Note that this test depends on included binaries for BWA, SURVIVOR, and Sniffles,
 so it may be necessary to update test/align.sh to point to your own local executables.
-
-```./run_sample.sh```
-
-This runs an example on a simulated dataset with 29 insertions and a number of deletions.
-This is primarily used for assessing the speed of different settings and for testing during development.
 
 ## Running 
 
@@ -51,6 +52,7 @@ Optional args:
   min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence
   max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position
   --minimap                     - align with minimap instead of ngmlr
+  --keep_files                  - don't remove intermediate files - used for debugging
   --resume                      - use the results already computed from a previously terminated run
   ```
   
