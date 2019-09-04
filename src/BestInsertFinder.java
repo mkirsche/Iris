@@ -172,8 +172,7 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) th
 		}		
 	}
 	} catch(Exception e) {
-		throw new Exception("Error processing CIGAR string " + new String(cigarChars) 
-				+ " for " + queryString + ": " + e.getMessage());
+		throw new Exception("Error processing CIGAR string in " + record + ": " + e.getMessage());
 	}
 	return insertions;
 }

@@ -69,6 +69,7 @@ public class Settings {
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
 		System.out.println("  --minimap                     - align with minimap instead of ngmlr");
+		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println();
 	}
@@ -109,6 +110,10 @@ public class Settings {
 				else if(args[i].endsWith("minimap"))
 				{
 					USE_MINIMAP = true;
+				}
+				else if(args[i].endsWith("keep_files"))
+				{
+					CLEAN_INTERMEDIATE_FILES = false;
 				}
 				continue;
 			}
