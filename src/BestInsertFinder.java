@@ -7,7 +7,7 @@ public class BestInsertFinder {
  * Finds the best insertion given a variant ID and list of SAM alignment records of the assembled insertion sequence
  * back to a portion of the reference genome
  */
-public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<String> alignmentRecords)
+public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<String> alignmentRecords) throws Exception
 {
 	return findBestInsertFromOffset(alignmentRecords, getExpectedOffset(id));
 }
@@ -16,7 +16,7 @@ public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<S
  * Find the best insertion from a list of SAM records and
  * how far into the reference an insertion is expected
  */
-public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<String> alignmentRecords, long offset)
+public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<String> alignmentRecords, long offset) throws Exception
 {
 	// Bookkeeping information to maintain the best insertion
 	double bestScore = 0.0;
@@ -75,7 +75,7 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
  * score(x) = f(x) + sum(i = 1 to 10)[(f(x-i) + f(x+i)) / (i+1)]
  * Note that insertions which are too short or far away are ignored in these counts
  */
-static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecords, long offset)
+static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecords, long offset) throws Exception
 {
 	HashMap<Integer, Integer> lengthFreq = new HashMap<Integer, Integer>();
 	for(String record : alignmentRecords)
@@ -131,7 +131,7 @@ static double scoreInsertion(long length, double lengthScore, long distance, int
 /*
  * Get all insertions (sequence/position) from a SAM-formatted alignment record
  */
-static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record)
+static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) throws Exception
 {
 	String[] samFields = record.split("\t");
 	char[] cigarChars = samFields[5].toCharArray();
@@ -141,6 +141,8 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record)
 	int queryPos = 0;
 	int segmentLength = 0;
 	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<NewSequenceMap.UpdatedEntry>();
+	
+	try {
 	for(char c : cigarChars)
 	{
 		if(c >= '0' && c <= '9')
@@ -168,6 +170,9 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record)
 			
 			segmentLength = 0;
 		}		
+	}
+	} catch(Exception e) {
+		throw new Exception("Error processing CIGAR string " + new String(cigarChars));
 	}
 	return insertions;
 }
