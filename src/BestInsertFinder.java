@@ -137,10 +137,16 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) th
 	char[] cigarChars = samFields[5].toCharArray();
 	String queryString = samFields[9];
 	
+	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<NewSequenceMap.UpdatedEntry>();
+	
+	if(queryString.equals("*"))
+	{
+		return insertions;
+	}
+	
 	int refPos = Integer.parseInt(samFields[3])-1;
 	int queryPos = 0;
 	int segmentLength = 0;
-	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<NewSequenceMap.UpdatedEntry>();
 	
 	try {
 	for(char c : cigarChars)
@@ -172,7 +178,7 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) th
 		}		
 	}
 	} catch(Exception e) {
-		throw new Exception("Error processing CIGAR string in " + record + ": " + e.getMessage());
+		throw new Exception("Error processing CIGAR string in " + record);
 	}
 	return insertions;
 }
