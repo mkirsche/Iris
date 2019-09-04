@@ -100,19 +100,19 @@ public class AlignConsensus {
 	 */
 	static void executeMinimap(String minimapIn, String genomeSample, String minimapOut) throws Exception
 	{
-		String ngmlrCommand = String.format(
-				 "%s -a -t %d %s %s -o %s", 
+		String minimapCommand = String.format(
+				 "%s -L -c -a -t %d %s %s -o %s", 
 				 Settings.MINIMAP_PATH, Settings.ALIGNMENT_THREADS,
 				 genomeSample, minimapIn, minimapOut);
-		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
-		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
+		ArrayList<String> fullMinimapCommand = new ArrayList<String>();
+		for(String s : minimapCommand.split(" ")) fullMinimapCommand.add(s);
 		Process child = new ProcessBuilder()
-				.command(fullNgmlrCommand)
+				.command(fullMinimapCommand)
 				.start();
 		int p = child.waitFor();
 		if(p != 0)
 		{
-			throw new Exception("error running ngmlr on " + minimapIn);
+			throw new Exception("error running minimap on " + minimapIn);
 		}
 	}
 	
