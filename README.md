@@ -26,8 +26,8 @@ This is more used for assessing the speed of different settings and for testing 
 ## Running 
 
 ```
-java -cp src CrossStitch [args]
-  Example: java -cp src CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf 
+Usage: java CrossStitch [args]
+  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf 
       reads_in=reads.bam vcf_out=refined.vcf
 
 Required args:
@@ -41,11 +41,14 @@ Optional args:
   padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields
   padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields
   samtools_path    (String)     - the path to samtools if not using included binary
-  ngmlr_path       (String)     - the path to ngmlr if not using included binary
+  ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary
+  minimap_path     (String)     - the path to minimap if using minimap and not using included binary
   falconsense_path (String)     - the path to falconsense if not using included binary
   log_out          (String)     - the name of the log file to be produced
   genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to
   min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence
   max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position
+  --minimap                     - align with minimap instead of ngmlr
+  --resume                      - use the results already computed from a previously terminated run
   ```
   
