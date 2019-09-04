@@ -29,8 +29,8 @@ so it may be necessary to update test/align.sh to point to your own local execut
 ## Running 
 
 ```
-Usage: java Iris [args]
-  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf 
+java -cp src Iris [args]
+  Example: java -cp src Iris genome_in=genome.fa vcf_in=sniffles.vcf 
       reads_in=reads.bam vcf_out=refined.vcf
 
 Required args:
