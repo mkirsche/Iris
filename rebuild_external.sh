@@ -26,7 +26,7 @@ cd ..
 
 cd samtools
 autoheader
-conf
+autoconf
 ./configure --with-htslib=../htslib --prefix=$BASEDIR/samtools
 make
 make install
