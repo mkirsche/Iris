@@ -14,22 +14,34 @@ public class AlignConsensus {
 	 */
 	static ArrayList<String> getConsensusAlignmentRecords(String id, ArrayList<String> consensusSequences, GenomeQuery gq) throws Exception
 	{
-		String ngmlrInFn = id + ".ngmlr.in";
-		String ngmlrOutFn = id + ".ngmlr.out";
+		String alignInFn = id + ".align.in";
+		String alignOutFn = id + ".align.out";
 		String genomeSampleFn = id + ".region.fa";
-		writeNgmlrInput(consensusSequences, ngmlrInFn);
+		writeNgmlrInput(consensusSequences, alignInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
-		executeNgmlr(ngmlrInFn, genomeSampleFn, ngmlrOutFn);
-		ArrayList<String> res = getNgmlrAlignmentStrings(ngmlrOutFn);
+		
+		if(Settings.USE_MINIMAP)
+		{
+			executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
+		}
+		else
+		{
+			executeNgmlr(alignInFn, genomeSampleFn, alignOutFn);
+		}
+		ArrayList<String> res = getNgmlrAlignmentStrings(alignOutFn);
 		if(Settings.CLEAN_INTERMEDIATE_FILES)
 		{
-			new File(ngmlrInFn).delete();
-			new File(ngmlrOutFn).delete();
+			new File(alignInFn).delete();
+			new File(alignOutFn).delete();
 			new File(genomeSampleFn).delete();
-			new File(genomeSampleFn + "-enc.2.ngm").delete();
 			
-			// Note: 13 here is the default kmer length used in ngmlr's indexing - change if default is not used
-			new File(genomeSampleFn + "-ht-13-2.2.ngm").delete();
+			if(!Settings.USE_MINIMAP)
+			{
+				new File(genomeSampleFn + "-enc.2.ngm").delete();
+			
+				// Note: 13 here is the default kmer length used in ngmlr's indexing - change if default is not used
+				new File(genomeSampleFn + "-ht-13-2.2.ngm").delete();
+			}
 			
 		}
 		return res;
@@ -69,7 +81,7 @@ public class AlignConsensus {
 	{
 		String ngmlrCommand = String.format(
 				 "%s -t %d -r %s -q %s -o %s", 
-				 Settings.NGMLR_PATH, Settings.NGMLR_THREADS,
+				 Settings.NGMLR_PATH, Settings.ALIGNMENT_THREADS,
 				 genomeSample, ngmlrIn, ngmlrOut);
 		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
 		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
@@ -80,6 +92,27 @@ public class AlignConsensus {
 		if(p != 0)
 		{
 			throw new Exception("error running ngmlr on " + ngmlrIn);
+		}
+	}
+	
+	/*
+	 * Run ngmlr through the command line using parameters from Settings
+	 */
+	static void executeMinimap(String minimapIn, String genomeSample, String minimapOut) throws Exception
+	{
+		String ngmlrCommand = String.format(
+				 "%s -a -t %d %s %s -o %s", 
+				 Settings.MINIMAP_PATH, Settings.ALIGNMENT_THREADS,
+				 genomeSample, minimapIn, minimapOut);
+		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
+		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
+		Process child = new ProcessBuilder()
+				.command(fullNgmlrCommand)
+				.start();
+		int p = child.waitFor();
+		if(p != 0)
+		{
+			throw new Exception("error running ngmlr on " + minimapIn);
 		}
 	}
 	

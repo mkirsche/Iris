@@ -11,6 +11,11 @@ cd ../bin/ngmlr-*
 cp ngmlr ../../../rebuilt_external_scripts
 cd ../../..
 
+cd minimap2
+make
+cp minimap2 ../rebuilt_external_scripts
+cd ..
+
 cd htslib
 autoheader
 autoconf

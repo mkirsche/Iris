@@ -13,7 +13,7 @@ public class Settings {
 	
 	// System options
 	static int THREADS = 4;
-	static int NGMLR_THREADS = 4;
+	static int ALIGNMENT_THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static boolean RESUME = false;
 	static String LOG_OUT_FILE = "";
@@ -25,6 +25,7 @@ public class Settings {
 	static String SAMTOOLS_PATH = WORKING_DIR + "/" + "external_scripts/samtools";
 	static String FALCONSENSE_PATH = WORKING_DIR + "/" + "external_scripts/falcon_sense";
 	static String NGMLR_PATH = WORKING_DIR + "/" + "external_scripts/ngmlr";
+	static String MINIMAP_PATH = WORKING_DIR + "/" + "external_scripts/minimap2";
 	
 	// Consensus options
 	static double FALCONSENSE_MIN_IDT = 0.7;
@@ -35,6 +36,7 @@ public class Settings {
 	static int FALCONSENSE_N_CORE = 2;
 	
 	// Alignment options
+	static boolean USE_MINIMAP = false;
 	static int GENOME_REGION_BUFFER = 100000;
 	
 	// Insertion filter
@@ -59,12 +61,14 @@ public class Settings {
 		System.out.println("  padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields");
 		System.out.println("  padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields");
 		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
-		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if not using included binary");
+		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary");
+		System.out.println("  minimap_path     (String)     - the path to minimap if using minimap and not using included binary");
 		System.out.println("  falconsense_path (String)     - the path to falconsense if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
+		System.out.println("  --minimap                     - align with minimap instead of ngmlr");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println();
 	}
@@ -102,6 +106,10 @@ public class Settings {
 				{
 					RESUME = true;
 				}
+				else if(args[i].endsWith("minimap"))
+				{
+					USE_MINIMAP = true;
+				}
 				continue;
 			}
 			int equalIdx = args[i].indexOf('=');
@@ -136,6 +144,9 @@ public class Settings {
 					break;
 				case "ngmlr_path":
 					NGMLR_PATH = val;
+					break;
+				case "minimap_path":
+					MINIMAP_PATH = val;
 					break;
 				case "falconsense_path":
 					FALCONSENSE_PATH = val;
