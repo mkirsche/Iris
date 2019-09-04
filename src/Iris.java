@@ -1,4 +1,4 @@
-public class CrossStitch {
+public class Iris {
 public static void main(String[] args) throws Exception
 {
 	Logger.init(Settings.LOG_OUT_FILE);

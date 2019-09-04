@@ -28,8 +28,8 @@ This is primarily used for assessing the speed of different settings and for tes
 ## Running 
 
 ```
-Usage: java CrossStitch [args]
-  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf 
+Usage: java Iris [args]
+  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf 
       reads_in=reads.bam vcf_out=refined.vcf
 
 Required args:
@@ -39,7 +39,7 @@ Required args:
   vcf_out   (String) - the name of the refined VCF file to be produced
 
 Optional args:
-  threads          (int) [4]    - the number of threads to use when running CrossStitch
+  threads          (int) [4]    - the number of threads to use when running Iris
   padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields
   padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields
   samtools_path    (String)     - the path to samtools if not using included binary

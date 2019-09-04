@@ -46,8 +46,8 @@ public class Settings {
 	static void usage()
 	{
 		System.out.println();
-		System.out.println("Usage: java CrossStitch [args]");
-		System.out.println("  Example: java CrossStitch genome_in=genome.fa vcf_in=sniffles.vcf ");
+		System.out.println("Usage: java Iris [args]");
+		System.out.println("  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf ");
 		System.out.println("      reads_in=reads.bam vcf_out=refined.vcf");
 		System.out.println();
 		System.out.println("Required args:");
@@ -57,7 +57,7 @@ public class Settings {
 		System.out.println("  vcf_out   (String) - the name of the refined VCF file to be produced");
 		System.out.println();
 		System.out.println("Optional args:");
-		System.out.println("  threads          (int) [4]    - the number of threads to use when running CrossStitch");
+		System.out.println("  threads          (int) [4]    - the number of threads to use when running Iris");
 		System.out.println("  padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields");
 		System.out.println("  padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields");
 		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
