@@ -1,13 +1,13 @@
 # IRIS: Implement for Refining Insertion Sequences
-A module used primarily within CrossStitch which corrects the sequences of structural variant calls (currently only insertions).  It uses FalconSense to obtain consensus sequences of the reads surrounding each variant and aligns these sequences back to the reference at the insertion site, resulting in an insertion which takes into account the aggregate information of all supporting reads.
+A module which corrects the sequences of structural variant calls (currently only insertions).  It uses FalconSense to obtain consensus sequences of the reads surrounding each variant and aligns these sequences back to the reference at the insertion site, resulting in an insertion which takes into account the aggregate information of all supporting reads.
 
 ## Building
 
 ```./build.sh```
 
-Note: The external tools samtools, ngmlr, and falcon_sense are provided pre-built in the external_scripts folder.  
-However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.
-There is an option when running CrossStitch to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
+Note: The external tools samtools, ngmlr, minimap2, and falcon_sense are provided pre-built in the external_scripts folder.  
+However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.  Note that either ngmlr (default) or minimap2 will be used, but not both.
+There is an option when running IRIS to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
 because the developers have changed the interface for running it.
 
 ## Testing
@@ -17,11 +17,13 @@ because the developers have changed the interface for running it.
 This runs an example on a simulated dataset with an insertion 
 (length 70, sequence (GGGGGGGGCCCCCCCC)x4 + GGGGGG) at position 6930 
 and a deletion (length 70) at position 13790, and outputs the refined variant calls.
+Note that this test depends on included binaries for BWA, SURVIVOR, and Sniffles,
+so it may be necessary to update test/align.sh to point to your own local executables.
 
 ```./run_sample.sh```
 
-This runs another example on a simulated dataset with 29 insertions and a number of deletions.
-This is more used for assessing the speed of different settings and for testing during development.
+This runs an example on a simulated dataset with 29 insertions and a number of deletions.
+This is primarily used for assessing the speed of different settings and for testing during development.
 
 ## Running 
 
