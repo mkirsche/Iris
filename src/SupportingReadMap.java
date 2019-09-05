@@ -16,22 +16,28 @@ public class SupportingReadMap {
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
 		for(VcfEntry ve : vei)
 		{
-			if(!ve.getType().equals("INS"))
+			boolean shouldProcess = ve.getType().equals("INS");
+			
+			if(Settings.PROCESS_DELETIONS && ve.getType().equals("DEL"))
 			{
-				continue;
+				shouldProcess = true;
 			}
-			String key = ve.getKey();
-			String supportingReadList = ve.getInfo("RNAMES");
-			String[] nameTokens = supportingReadList.split(",");
-			ArrayList<String> val = new ArrayList<String>();
-			for(String s : nameTokens)
-			{
-				if(s.length() != 0)
+			
+			if(shouldProcess)
+			{			
+				String key = ve.getKey();
+				String supportingReadList = ve.getInfo("RNAMES");
+				String[] nameTokens = supportingReadList.split(",");
+				ArrayList<String> val = new ArrayList<String>();
+				for(String s : nameTokens)
 				{
-					val.add(s);
+					if(s.length() != 0)
+					{
+						val.add(s);
+					}
 				}
+				map.put(key, val);
 			}
-			map.put(key, val);
 		}
 		
 	}

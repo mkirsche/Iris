@@ -16,6 +16,7 @@ public class Settings {
 	static int ALIGNMENT_THREADS = 4;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static boolean RESUME = false;
+	static boolean PROCESS_DELETIONS = false;
 	static String LOG_OUT_FILE = "";
 	static String TABLE_OUT_FILE = "results.tsv";
 	static String INTERMEDIATE_RESULTS_FILE = "resultsstore.txt";
@@ -70,6 +71,7 @@ public class Settings {
 		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
 		System.out.println("  --minimap                     - align with minimap instead of ngmlr");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
+		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println();
 	}
@@ -114,6 +116,10 @@ public class Settings {
 				else if(args[i].endsWith("keep_files"))
 				{
 					CLEAN_INTERMEDIATE_FILES = false;
+				}
+				else if(args[i].endsWith("also_deletions"))
+				{
+					PROCESS_DELETIONS = true;
 				}
 				continue;
 			}

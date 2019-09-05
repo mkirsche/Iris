@@ -106,21 +106,38 @@ public class VcfEditor {
 				{
 					newEntry = new NewSequenceMap.UpdatedEntry(nsm.getSeq(key), nsm.getPos(key));
 				}
-				tableOut.printEntry(ve, nsm.containsKey(key) ? newEntry : null);
+				
+				tableOut.printEntry(ve, gq, nsm.containsKey(key) ? newEntry : null);
 				
 				// If this variant is in the map, update its info according to the new sequence/position
 				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
 				{
 					// Make necessary replacements
-					Logger.log("Outputting refined SV for " + key);
-					String newSeq = nsm.getSeq(key);
-					long newPos = nsm.getPos(key);
-					
-					ve.setPos(newPos);
-					ve.updateInsertionSequence(newSeq);
-					updateBeforeAfter(ve);
-					
-					out.println(ve);
+					if(ve.getType().equals("INS"))
+					{
+						Logger.log("Outputting refined insertion for " + key);
+						String newSeq = nsm.getSeq(key);
+						long newPos = nsm.getPos(key);
+						
+						ve.setPos(newPos);
+						ve.updateInsertionSequence(newSeq);
+						updateBeforeAfter(ve);
+						
+						out.println(ve);
+					}
+					else if(ve.getType().equals("DEL"))
+					{
+						Logger.log("Outputting refined deletion for " + key);
+						int newLength = nsm.getSeq(key).length();
+						long newPos = nsm.getPos(key);
+						String newSeq = gq.genomeSubstring(ve.getChromosome(), newPos + 1, newPos + newLength);
+						
+						ve.setPos(newPos);
+						ve.updateDeletion(newSeq);
+						updateBeforeAfter(ve);
+						
+						out.println(ve);
+					}
 				}
 				else
 				{

@@ -15,9 +15,9 @@ public class ResultsTableWriter {
 		out.println(TableEntry.makeHeader());
 	}
 	
-	void printEntry(VcfEntry oldEntry, NewSequenceMap.UpdatedEntry newEntry) throws Exception
+	void printEntry(VcfEntry oldEntry, GenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
 	{
-		out.println(new TableEntry(oldEntry, newEntry));
+		out.println(new TableEntry(oldEntry, gq, newEntry));
 	}
 	
 	void close()
@@ -30,6 +30,10 @@ public class ResultsTableWriter {
 		int n = from.length();
 		int m = to.length();
 		int[][] dp = new int[2][m+1];
+		for(int i = 1; i<=m; i++)
+		{
+			dp[0][i] = i;
+		}
 		for(int i = 1; i <= n; i++)
 		{
 			for(int j = 1; j <= m; j++)
@@ -57,22 +61,34 @@ public class ResultsTableWriter {
 		int newLength;
 		int editDistance;
 		
-		TableEntry(VcfEntry oldEntry, NewSequenceMap.UpdatedEntry newEntry) throws Exception
+		TableEntry(VcfEntry oldEntry, GenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
 		{
 			chromosome = oldEntry.getChromosome();
 			originalPosition = oldEntry.getPos();
 			originalSequence = oldEntry.getSeq();
+			type = oldEntry.getType();
+			// Fix cases with the old format where deletions 
+			if((originalSequence.equals("N") || originalSequence.equals("X")) 
+					&& oldEntry.hasInfoField("SVLEN"))
+			{
+				originalSequence = gq.genomeSubstring(chromosome, originalPosition + 1,
+						originalPosition + Integer.parseInt(oldEntry.getInfo("SVLEN")));
+			}
 			originalLength = originalSequence.length();
 			newPosition = originalPosition;
 			newSequence = originalSequence;
 			newLength = originalLength;
-			type = oldEntry.getType();
 			refined = newEntry != null;
 			if(refined)
 			{
 				newPosition = newEntry.pos;
 				newSequence = newEntry.seq;
 				newLength = newSequence.length();
+				if(type.equals("DEL"))
+				{
+					newSequence = gq.genomeSubstring(chromosome, newPosition + 1, 
+							newPosition + newLength);
+				}
 				editDistance = editDistance(originalSequence, newSequence);
 			}
 		}

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class BestInsertFinder {
@@ -31,7 +32,7 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
 	// Iterate over the alignments and decide which one is the best match
 	for(String record : alignmentRecords)
 	{
-		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getAllInsertions(record);
+		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getSVsByType(record, 'I');
 		
 		// Iterate over alignments for this read
 		for(NewSequenceMap.UpdatedEntry candidate : candidates)
@@ -80,7 +81,7 @@ static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecor
 	HashMap<Integer, Integer> lengthFreq = new HashMap<Integer, Integer>();
 	for(String record : alignmentRecords)
 	{
-		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getAllInsertions(record);
+		ArrayList<NewSequenceMap.UpdatedEntry> candidates = getSVsByType(record, 'I');
 		for(NewSequenceMap.UpdatedEntry candidate : candidates)
 		{
 			long distance = Math.abs(candidate.pos - offset);
@@ -128,20 +129,27 @@ static double scoreInsertion(long length, double lengthScore, long distance, int
 	return 20 * (length + lengthScore) * support - distance * distance;
 }
 
+static String makeFiller(int length)
+{
+	char[] res = new char[length];
+	Arrays.fill(res, 'A');
+	return new String(res);
+}
+
 /*
  * Get all insertions (sequence/position) from a SAM-formatted alignment record
  */
-static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) throws Exception
+static ArrayList<NewSequenceMap.UpdatedEntry> getSVsByType(String record, char type) throws Exception
 {
 	String[] samFields = record.split("\t");
 	char[] cigarChars = samFields[5].toCharArray();
 	String queryString = samFields[9];
 	
-	ArrayList<NewSequenceMap.UpdatedEntry> insertions = new ArrayList<NewSequenceMap.UpdatedEntry>();
+	ArrayList<NewSequenceMap.UpdatedEntry> res = new ArrayList<NewSequenceMap.UpdatedEntry>();
 	
 	if(queryString.equals("*"))
 	{
-		return insertions;
+		return res;
 	}
 	
 	int refPos = Integer.parseInt(samFields[3])-1;
@@ -149,38 +157,48 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getAllInsertions(String record) th
 	int segmentLength = 0;
 	
 	try {
-	for(char c : cigarChars)
-	{
-		if(c >= '0' && c <= '9')
+		for(char c : cigarChars)
 		{
-			segmentLength = segmentLength * 10 + (c - '0');
+			if(c >= '0' && c <= '9')
+			{
+				segmentLength = segmentLength * 10 + (c - '0');
+			}
+			else
+			{
+				if(c == type)
+				{
+					if(c == 'I')
+					{
+						// Found an insertion - add it to the list!
+						String insertionSequence = queryString.substring(queryPos, queryPos + segmentLength);
+						res.add(new NewSequenceMap.UpdatedEntry(insertionSequence, refPos));
+					}
+					else if(c == 'D')
+					{
+						char[] filler = new char[segmentLength];
+						Arrays.fill(filler, 'A');
+						res.add(new NewSequenceMap.UpdatedEntry(new String(filler), refPos));
+					}
+				}
+				
+				// Move the ref/query positions based on the alignment type
+				if(advancesQuery(c))
+				{
+					queryPos += segmentLength;
+				}
+				if(advancesReference(c))
+				{
+					refPos += segmentLength;
+				}
+				
+				segmentLength = 0;
+			}		
 		}
-		else
-		{
-			if(c == 'I')
-			{
-				// Found an insertion - add it to the list!
-				String insertionSequence = queryString.substring(queryPos, queryPos + segmentLength);
-				insertions.add(new NewSequenceMap.UpdatedEntry(insertionSequence, refPos));
-			}
-			
-			// Move the ref/query positions based on the alignment type
-			if(advancesQuery(c))
-			{
-				queryPos += segmentLength;
-			}
-			if(advancesReference(c))
-			{
-				refPos += segmentLength;
-			}
-			
-			segmentLength = 0;
-		}		
-	}
 	} catch(Exception e) {
 		throw new Exception("Error processing CIGAR string in " + record);
 	}
-	return insertions;
+	
+	return res;
 }
 /*
  * Whether or not a given CIGAR character advances the position in the reference

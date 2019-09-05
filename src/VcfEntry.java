@@ -124,11 +124,11 @@ public class VcfEntry implements Comparable<VcfEntry> {
 			alt = tmp;
 			type = "INS";
 		}
-		if(ref.equals("X"))
+		if(ref.equals("X") || ref.equals("N"))
 		{
 			return alt;
 		}
-		else if(alt.equals("X"))
+		else if(alt.equals("X") || ref.equals("N"))
 		{
 			return ref;
 		}
@@ -217,6 +217,17 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		}
 	}
 	
+	public void updateDeletion(String newSeq) throws Exception
+	{
+		setRef(newSeq);
+		setAlt("");
+		setLength(-newSeq.length());
+		if(hasInfoField("SEQ"))
+		{
+			setInfo("SEQ", newSeq);
+		}
+	}
+	
 	public void setInfo(String field, String val) throws Exception
 	{
 		String oldVal = getInfo(field);
@@ -227,7 +238,7 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	
 	public String getKey() throws Exception
 	{
-		return getChromosome() + ":" + getPos() + ":" + getId();
+		return getChromosome() + ":" + getPos() + ":" + getType() + ":" + getId();
 	}
 	
 	static String getChrFromKey(String key)
@@ -240,6 +251,12 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	{
 		String[] tokens = key.split(":");
 		return Long.parseLong(tokens[1]);
+	}
+	
+	static String getTypeFromKey(String key)
+	{
+		String[] tokens = key.split(":");
+		return tokens[2];
 	}
 	
 	@Override

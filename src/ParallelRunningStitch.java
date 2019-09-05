@@ -21,7 +21,7 @@ public class ParallelRunningStitch {
 		this.gq = gq;
 		this.readMap = readMap;
 		keys = readMap.keyArray();
-		Logger.log("Number of insertions with supporting reads: " + keys.length);
+		Logger.log("Number of variants to refine with supporting reads: " + keys.length);
 		this.numThreads = numThreads;
 		
 		irs = new IntermediateResultsStore(Settings.INTERMEDIATE_RESULTS_FILE);

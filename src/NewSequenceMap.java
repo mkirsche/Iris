@@ -49,7 +49,16 @@ public class NewSequenceMap {
 		Logger.log("Found " + consensusSequences.size() + " consensus sequences for " + key);
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
 		Logger.log("Found " + alignmentRecords.size() + " alignment records for" + key);
-		UpdatedEntry res = BestInsertFinder.findBestInsert(key, alignmentRecords);
+		String type = VcfEntry.getTypeFromKey(key);
+		UpdatedEntry res = null;
+		if(type.equals("INS"))
+		{
+			res = BestInsertFinder.findBestInsert(key, alignmentRecords);
+		}
+		else if(type.contentEquals("DEL"))
+		{
+			res = BestDeletionFinder.findBestDeletion(key, alignmentRecords);
+		}
 		if(res != null && VcfEntry.getPosFromKey(key) > Settings.GENOME_REGION_BUFFER)
 		{
 			res.pos += VcfEntry.getPosFromKey(key) - Settings.GENOME_REGION_BUFFER;
