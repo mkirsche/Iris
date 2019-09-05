@@ -30,7 +30,7 @@ so it may be necessary to update test/align.sh to point to your own local execut
 
 This runs an example on a simulated dataset with 50 indels of lengths in [50, 200].  It then
 runs IRIS on the variant calls output from Sniffles twice (once with ngmlr as the aligner and once with minimap2).
-It compares the refined sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.
+It compares the refined insertion sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.
 
 ## Running 
 
