@@ -14,7 +14,7 @@ src/org.junit.Assert.assertEquals
 *.region.fa
 *.log
 update.sh
-test/*
+test/*/*refined*
 resultsstore.txt
 results.tsv
 rebuilt_external_scripts/
