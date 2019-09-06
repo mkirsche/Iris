@@ -56,7 +56,7 @@ Optional args:
   log_out          (String)     - the name of the log file to be produced
   genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to
   min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence
-  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position
+  max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position
   --ngmlr                       - align with ngmlr instead of minimap
   --keep_files                  - don't remove intermediate files - used for debugging
   --resume                      - use the results already computed from a previously terminated run

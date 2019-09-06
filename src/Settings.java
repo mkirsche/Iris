@@ -42,7 +42,7 @@ public class Settings {
 	
 	// Insertion filter
 	static int INSERTION_MIN_LENGTH = 30;
-	static int INSERTION_MAX_DIST = 5000;
+	static int INSERTION_MAX_DIST = 100;
 	
 	static void usage()
 	{
@@ -68,7 +68,7 @@ public class Settings {
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
-		System.out.println("  max_ins_dist     (int) [5k]   - the max distance a refined insertion call can be from its old position");
+		System.out.println("  max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position");
 		System.out.println("  --ngmlr                       - align with ngmlr instead of minimap");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
 		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
