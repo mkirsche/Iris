@@ -21,9 +21,9 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("  iris_calls    (String) - the VCF file with variant calls refined by IRIS");
 		System.out.println();
 	}
-	static TreeMap<Place, String> readGroundTruth(String filename) throws Exception
+	static TreeMap<PosStore.Place, String> readGroundTruth(String filename) throws Exception
 	{
-		TreeMap<Place, String> res = new TreeMap<Place, String>();
+		TreeMap<PosStore.Place, String> res = new TreeMap<PosStore.Place, String>();
 		Scanner input = new Scanner(new FileInputStream(new File(filename)));
 		while(input.hasNext())
 		{
@@ -32,7 +32,7 @@ public class EvaluateSimulatedAccuracy {
 			String[] split = name.split("_");
 			String chromosome = split[0];
 			long pos = Long.parseLong(split[1]);
-			res.put(new Place(chromosome, pos), seq);
+			res.put(new PosStore.Place(chromosome, pos), seq);
 		}
 		input.close();
 		return res;
@@ -67,14 +67,15 @@ public class EvaluateSimulatedAccuracy {
 		}
 		return true;
 	}
-	static Place getNearestVariant(Place curPlace, TreeMap<Place, String> truth)
+	static PosStore.Place getNearestVariant(
+			PosStore.Place curPlace, TreeMap<PosStore.Place, String> truth)
 	{
 		if(truth.containsKey(curPlace))
 		{
 			return curPlace;
 		}
-		Place lower = truth.lowerKey(curPlace);
-		Place higher = truth.higherKey(curPlace);
+		PosStore.Place lower = truth.lowerKey(curPlace);
+		PosStore.Place higher = truth.higherKey(curPlace);
 		if(lower == null && higher == null)
 		{
 			return null;
@@ -117,7 +118,7 @@ public class EvaluateSimulatedAccuracy {
 			usage();
 			return;
 		}
-		TreeMap<Place, String> truth = readGroundTruth(groundTruthFilename);
+		TreeMap<PosStore.Place, String> truth = readGroundTruth(groundTruthFilename);
 		
 		VcfEntryIterator vei = new VcfEntryIterator(irisCallsFilename);
 		
@@ -133,9 +134,9 @@ public class EvaluateSimulatedAccuracy {
 				continue;
 			}
 			
-			Place curPlace = new Place(cur.getChromosome(), cur.getPos());
+			PosStore.Place curPlace = new PosStore.Place(cur.getChromosome(), cur.getPos());
 			String curSeq = cur.getSeq();
-			Place truthKey = getNearestVariant(curPlace, truth);
+			PosStore.Place truthKey = getNearestVariant(curPlace, truth);
 			if(truthKey == null)
 			{
 				falsePositives++;
@@ -169,22 +170,5 @@ public class EvaluateSimulatedAccuracy {
 		for(long x : list) res += x;
 		return list.size() == 0 ? 0.0 : res / list.size();
 	}
-	static class Place implements Comparable<Place>
-	{
-		String chr;
-		long pos;
-		Place(String chr, long pos)
-		{
-			this.chr = chr;
-			this.pos = pos;
-		}
-		public int compareTo(Place o)
-		{
-			if(!chr.equals(o.chr))
-			{
-				return chr.compareTo(o.chr);
-			}
-			return Long.compare(pos, o.pos);
-		}
-	}
+	
 }

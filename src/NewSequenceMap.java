@@ -63,6 +63,19 @@ public class NewSequenceMap {
 		{
 			res.pos += VcfEntry.getPosFromKey(key) - Settings.GENOME_REGION_BUFFER;
 		}
+		
+		String originalChr = VcfEntry.getChrFromKey(key);
+		long originalPos = VcfEntry.getPosFromKey(key);
+		PosStore.Place originalPlace = new PosStore.Place(originalChr, originalPos);
+		
+		PosStore.Place closestToRefined = PosStore.getNearestVariant(type, originalChr, res.pos);
+		
+		if(originalPlace.compareTo(closestToRefined) != 0)
+		{
+			Logger.log("Did not change position of " + key + " to " + res.pos + " because too close to other variant");
+			return null;
+		}
+		
 		return res;
 	}
 	

@@ -15,6 +15,14 @@ src/org.junit.Assert.assertEquals
 *.log
 update.sh
 test/*/*refined*
+test/bigsimtest/bigaln_sorted.bam
+test/bigsimtest/bigaln_sorted.bam.bai
+test/bigsimtest/bigreads.fastq
+test/bigsimtest/bigsim.bed
+test/bigsimtest/bigsim.fasta
+test/bigsimtest/bigsim.insertions.fa
+test/bigsimtest/bigsim.vcf
+test/bigsimtest/bigsniffles.vcf
 resultsstore.txt
 results.tsv
 rebuilt_external_scripts/

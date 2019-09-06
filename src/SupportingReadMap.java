@@ -13,6 +13,10 @@ public class SupportingReadMap {
 		{
 			throw new Exception("Tried to create a supporting read map from a file which does not exist");
 		}
+		
+		// Also store the variant positions for uniqueness checking later
+		PosStore.init(filename);
+		
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
 		for(VcfEntry ve : vei)
 		{
