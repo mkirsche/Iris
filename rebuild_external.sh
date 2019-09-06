@@ -42,5 +42,7 @@ cp falcon_sense ../../../rebuilt_external_scripts
 cd ../../..
 
 sed -i 's/external_scripts/rebuilt_external_scripts/g' src/Settings.java
-sed -i 's/external_scripts/rebuilt_external_scripts/g' test/align.sh
+sed -i 's/external_scripts/rebuilt_external_scripts/g' test/smallsimtest/align.sh
+sed -i 's/external_scripts/rebuilt_external_scripts/g' test/bigsimtest/big_sim.sh
+
 
