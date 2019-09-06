@@ -6,32 +6,34 @@ A module which corrects the sequences of structural variant calls (currently onl
 ```./build.sh```
 
 Note: The external tools samtools, ngmlr, minimap2, and falcon_sense are provided pre-built in the external_scripts folder.  
-However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.  Note that either minimap2 (default) or ngmlr will be used, but not both.
+However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.
+Note that either minimap2 (default) or ngmlr will be used, but not both.
 There is an option when running IRIS to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
 because the developers have significantly changed the interface for running it and it is not possible to run Falconsense in isolation with recent builds of Canu.
 
 ## Testing
 
-```./run_sample.sh```
+```./run_premade_sim.sh```
 
-This runs an example on a simulated dataset with 29 insertions and a number of deletions.
+This runs an example on a simulated dataset with 29 insertions and a number of deletions with no included ground truth.
 This is primarily used for assessing the speed of different settings and for testing during development,
 but also works well as a quick test to ensure that your build is working.
 
-```./run_test.sh```
+```./run_small_sim.sh```
 
 This runs an example on a simulated dataset with an insertion 
 (length 70, sequence (GGGGGGGGCCCCCCCC)x4 + GGGGGG) at position 6930 
 and a deletion (length 70) at position 13790, and outputs the refined variant calls.
+This test runs the simulation itself in addition to the refinement and is good for ensuring that variant calls are precise and match the desired format.
 Note that this test depends on included binaries for BWA, SURVIVOR, and Sniffles,
 so it may be necessary to update test/smallsimtest/align.sh to point to your own local executables.
 
-```./run_sim.sh```
+```./run_big_sim.sh```
 
-This runs an example on a simulated dataset with 50 indels of lengths in [50, 200].  It then
+This creates and refines a simulated dataset with 50 indels of lengths in [50, 200].  It then
 runs IRIS on the variant calls output from Sniffles twice (once with ngmlr as the aligner and once with minimap2).
-It compares the refined insertion sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.  As with run_test, it may be necessary to modify bigsimtest/big_sim.sh to point to your
-own installations of required software.
+It compares the refined insertion sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.
+As with run_test, it may be necessary to modify bigsimtest/big_sim.sh to point to your own installations of required software (ngmlr, SURVIVOR, and Sniffles).
 
 ## Running 
 
