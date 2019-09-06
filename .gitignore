@@ -15,3 +15,6 @@ src/org.junit.Assert.assertEquals
 *.log
 update.sh
 test/*
+resultsstore.txt
+results.tsv
+rebuilt_external_scripts/

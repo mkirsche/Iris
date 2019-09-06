@@ -20,13 +20,13 @@ public class AlignConsensus {
 		writeNgmlrInput(consensusSequences, alignInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
 		
-		if(Settings.USE_MINIMAP)
+		if(Settings.USE_NGMLR)
 		{
-			executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
+			executeNgmlr(alignInFn, genomeSampleFn, alignOutFn);
 		}
 		else
 		{
-			executeNgmlr(alignInFn, genomeSampleFn, alignOutFn);
+			executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
 		}
 		ArrayList<String> res = getNgmlrAlignmentStrings(alignOutFn);
 		if(Settings.CLEAN_INTERMEDIATE_FILES)
@@ -35,7 +35,7 @@ public class AlignConsensus {
 			new File(alignOutFn).delete();
 			new File(genomeSampleFn).delete();
 			
-			if(!Settings.USE_MINIMAP)
+			if(Settings.USE_NGMLR)
 			{
 				new File(genomeSampleFn + "-enc.2.ngm").delete();
 			
