@@ -13,7 +13,7 @@ public class Settings {
 	
 	// System options
 	static int THREADS = 4;
-	static int ALIGNMENT_THREADS = 2;
+	static int ALIGNMENT_THREADS = 1;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static boolean RESUME = false;
 	static boolean PROCESS_DELETIONS = false;
@@ -34,7 +34,7 @@ public class Settings {
 	static int FALCONSENSE_MAX_READ_LEN = 1234567;
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
-	static int FALCONSENSE_N_CORE = 2;
+	static int FALCONSENSE_N_CORE = 1;
 	
 	// Alignment options
 	static boolean USE_NGMLR = false;
