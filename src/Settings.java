@@ -13,7 +13,7 @@ public class Settings {
 	
 	// System options
 	static int THREADS = 4;
-	static int ALIGNMENT_THREADS = 4;
+	static int ALIGNMENT_THREADS = 2;
 	static boolean CLEAN_INTERMEDIATE_FILES = true;
 	static boolean RESUME = false;
 	static boolean PROCESS_DELETIONS = false;
