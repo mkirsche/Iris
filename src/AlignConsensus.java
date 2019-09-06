@@ -101,8 +101,8 @@ public class AlignConsensus {
 	static void executeMinimap(String minimapIn, String genomeSample, String minimapOut) throws Exception
 	{
 		String minimapCommand = String.format(
-				 "%s -L -c -a -t %d %s %s -o %s", 
-				 Settings.MINIMAP_PATH, Settings.ALIGNMENT_THREADS,
+				 "%s -L -c -a -x %s -t %d %s %s -o %s", 
+				 Settings.MINIMAP_PATH, Settings.MINIMAP_MODE, Settings.ALIGNMENT_THREADS,
 				 genomeSample, minimapIn, minimapOut);
 		ArrayList<String> fullMinimapCommand = new ArrayList<String>();
 		for(String s : minimapCommand.split(" ")) fullMinimapCommand.add(s);

@@ -39,6 +39,7 @@ public class Settings {
 	// Alignment options
 	static boolean USE_NGMLR = false;
 	static int GENOME_REGION_BUFFER = 100000;
+	static String MINIMAP_MODE = "map-ont";
 	
 	// Insertion filter
 	static int INSERTION_MIN_LENGTH = 30;
@@ -73,6 +74,7 @@ public class Settings {
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
 		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
+		System.out.println("  --pacbio                      - if using minimap as the aligner, run in pacbio mode");
 		System.out.println();
 	}
 	
@@ -116,6 +118,10 @@ public class Settings {
 				else if(args[i].endsWith("keep_files"))
 				{
 					CLEAN_INTERMEDIATE_FILES = false;
+				}
+				else if(args[i].endsWith("pacbio"))
+				{
+					MINIMAP_MODE = "map-pb";
 				}
 				else if(args[i].endsWith("also_deletions"))
 				{

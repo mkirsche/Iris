@@ -64,5 +64,6 @@ Optional args:
   --keep_files                  - don't remove intermediate files - used for debugging
   --also_deletions              - also try to refine deletion positions/lengths
   --resume                      - use the results already computed from a previously terminated run
+  --pacbio                      - if using minimap as the aligner, run in pacbio mode
   ```
   
