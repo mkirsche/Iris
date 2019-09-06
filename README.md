@@ -62,6 +62,7 @@ Optional args:
   max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position
   --ngmlr                       - align with ngmlr instead of minimap
   --keep_files                  - don't remove intermediate files - used for debugging
+  --also_deletions              - also try to refine deletion positions/lengths
   --resume                      - use the results already computed from a previously terminated run
   ```
   
