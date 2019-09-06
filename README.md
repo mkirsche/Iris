@@ -24,13 +24,14 @@ This runs an example on a simulated dataset with an insertion
 (length 70, sequence (GGGGGGGGCCCCCCCC)x4 + GGGGGG) at position 6930 
 and a deletion (length 70) at position 13790, and outputs the refined variant calls.
 Note that this test depends on included binaries for BWA, SURVIVOR, and Sniffles,
-so it may be necessary to update test/align.sh to point to your own local executables.
+so it may be necessary to update test/smallsimtest/align.sh to point to your own local executables.
 
 ```./run_sim.sh```
 
 This runs an example on a simulated dataset with 50 indels of lengths in [50, 200].  It then
 runs IRIS on the variant calls output from Sniffles twice (once with ngmlr as the aligner and once with minimap2).
-It compares the refined insertion sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.
+It compares the refined insertion sequences as well as the original calls to the ground truth and outputs some simple accuracy metrics for each.  As with run_test, it may be necessary to modify bigsimtest/big_sim.sh to point to your
+own installations of required software.
 
 ## Running 
 
