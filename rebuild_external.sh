@@ -1,5 +1,8 @@
-BASEDIR=`dirname $(readlink -f "$0")`
-
+if [ "$(uname -s)" = 'Linux' ]; then
+    BASEDIR=$(dirname "$(readlink -f "$0" || echo "$(echo "$0" | sed -e 's,\\,/,g')")")
+else
+    BASEDIR=$(dirname "$(readlink "$0" || echo "$(echo "$0" | sed -e 's,\\,/,g')")")
+fi
 mkdir rebuilt_external_scripts
 git submodule update --init --recursive
 cd ngmlr
