@@ -3,6 +3,7 @@ if [ "$(uname -s)" = 'Linux' ]; then
 else
     BASEDIR=$(dirname "$(readlink "$0" || echo "$(echo "$0" | sed -e 's,\\,/,g')")")
 fi
+cd $BASEDIR
 mkdir rebuilt_external_scripts
 git submodule update --init --recursive
 cd ngmlr
