@@ -209,9 +209,10 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	public void updateInsertionSequence(String newSeq) throws Exception
 	{
 		setRef("");
-		setAlt(newSeq);
+		if(newSeq.length() < Settings.MAX_OUTPUT_LENGTH) setAlt(newSeq);
+		else setAlt("");
 		setLength(newSeq.length());
-		if(hasInfoField("SEQ"))
+		if(hasInfoField("SEQ") && newSeq.length() < Settings.MAX_OUTPUT_LENGTH)
 		{
 			setInfo("SEQ", newSeq);
 		}
@@ -219,10 +220,11 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	
 	public void updateDeletion(String newSeq) throws Exception
 	{
-		setRef(newSeq);
+		if(newSeq.length() < Settings.MAX_OUTPUT_LENGTH) setRef(newSeq);
+		else setRef("");
 		setAlt("");
 		setLength(-newSeq.length());
-		if(hasInfoField("SEQ"))
+		if(hasInfoField("SEQ") && newSeq.length() < Settings.MAX_OUTPUT_LENGTH)
 		{
 			setInfo("SEQ", newSeq);
 		}
