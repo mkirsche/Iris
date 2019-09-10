@@ -77,6 +77,21 @@ public class NewSequenceMap {
 				Logger.log("Did not change position of " + key + " to " + res.pos + " because too close to other variant");
 				return null;
 			}
+			
+			long oldLength = PosStore.getLength(type, closestToRefined.chr, closestToRefined.pos);
+			long newLength = res.seq.length();
+			
+			if(newLength > oldLength * (1 + Settings.MAX_LENGTH_CHANGE))
+			{
+				Logger.log("Did not change " + key + " because new sequence too long");
+				return null;
+			}
+			
+			if(newLength < oldLength * (1 - Settings.MAX_LENGTH_CHANGE))
+			{
+				Logger.log("Did not change " + key + " because new sequence too short");
+				return null;
+			}
 		}
 		
 		return res;

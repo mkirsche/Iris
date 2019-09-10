@@ -1,25 +1,30 @@
 import java.util.HashMap;
-import java.util.TreeSet;
+import java.util.TreeMap;
 /*
  * Data structure for storing a set of variant positions
  */
 public class PosStore {
-	static HashMap<String, TreeSet<Place>> positions;
+	static HashMap<String, TreeMap<Place, Long>> positions;
 	static void init(String filename) throws Exception
 	{
-		positions = new HashMap<String, TreeSet<Place>>();
+		positions = new HashMap<String, TreeMap<Place, Long>>();
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
 		for(VcfEntry cur : vei)
 		{
 			String type = cur.getType();
 			String chr = cur.getChromosome();
+			long len = cur.getLength();
 			long pos = cur.getPos();
 			if(!positions.containsKey(type))
 			{
-				positions.put(type, new TreeSet<Place>());
+				positions.put(type, new TreeMap<Place, Long>());
 			}
-			positions.get(type).add(new Place(chr, pos));
+			positions.get(type).put(new Place(chr, pos), len);
 		}
+	}
+	static long getLength(String type, String chr, long pos)
+	{
+		return positions.get(type).get(new Place(chr, pos));
 	}
 	static Place getNearestVariant(String type, String chr, long pos)
 	{
@@ -27,9 +32,9 @@ public class PosStore {
 		{
 			return null;
 		}
-		TreeSet<Place> rightType = positions.get(type);
+		TreeMap<Place, Long> rightType = positions.get(type);
 		Place query = new Place(chr, pos);
-		Place floor = rightType.floor(query), ceiling = rightType.ceiling(query);
+		Place floor = rightType.floorKey(query), ceiling = rightType.ceilingKey(query);
 		if(floor != null && !floor.chr.equals(chr))
 		{
 			floor = null;
