@@ -98,6 +98,10 @@ public class VcfEditor {
 			else
 			{
 				VcfEntry ve = new VcfEntry(line);
+				if(ve.getLength() > Settings.MAX_OUTPUT_LENGTH)
+				{
+					continue;
+				}
 				String key = ve.getKey();
 				
 				// Print the entry to the results table
