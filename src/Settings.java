@@ -45,7 +45,7 @@ public class Settings {
 	static int INSERTION_MIN_LENGTH = 30;
 	static int INSERTION_MAX_DIST = 100;
 	static double MAX_LENGTH_CHANGE = 0.25;
-	static int MAX_OUTPUT_LENGTH = 100_000;
+	static int MAX_OUTPUT_LENGTH = 100000;
 	
 	static void usage()
 	{

@@ -92,13 +92,15 @@ public class VcfEditor {
 			if(line.charAt(0) == '#')
 			{
 				// Just copy the header
+				VcfEntry ve = new VcfEntry(line);
+				Logger.log("Not outputting SV for " + ve.getKey() + " because length is too long");
 				out.println(line);
 			}
 			
 			else
 			{
 				VcfEntry ve = new VcfEntry(line);
-				if(ve.getLength() > Settings.MAX_OUTPUT_LENGTH)
+				if(Math.abs(ve.getLength()) > Settings.MAX_OUTPUT_LENGTH)
 				{
 					continue;
 				}
