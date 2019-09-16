@@ -11,6 +11,7 @@ import java.util.TreeMap;
 public class EvaluateSimulatedAccuracy {
 	static String groundTruthFilename = "";
 	static String irisCallsFilename = "";
+	static int DISTANCE_THRESHOLD = 1000;
 	static void usage()
 	{
 		System.out.println("Usage: java EvaluateSimulatedAccuracy [args]");
@@ -21,7 +22,7 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("  iris_calls    (String) - the VCF file with variant calls refined by IRIS");
 		System.out.println();
 	}
-	static TreeMap<PosStore.Place, String> readGroundTruth(String filename) throws Exception
+	static TreeMap<PosStore.Place, String> readGroundTruthFromFasta(String filename) throws Exception
 	{
 		TreeMap<PosStore.Place, String> res = new TreeMap<PosStore.Place, String>();
 		Scanner input = new Scanner(new FileInputStream(new File(filename)));
@@ -35,6 +36,25 @@ public class EvaluateSimulatedAccuracy {
 			res.put(new PosStore.Place(chromosome, pos), seq);
 		}
 		input.close();
+		return res;
+	}
+	static TreeMap<PosStore.Place, String> readGroundTruthFromVcf(String filename) throws Exception
+	{
+		VcfEntryIterator vei = new VcfEntryIterator(filename);
+		TreeMap<PosStore.Place, String> res = new TreeMap<PosStore.Place, String>();
+		
+		for(VcfEntry cur : vei)
+		{
+			if(!cur.getType().equals("INS"))
+			{
+				continue;
+			}
+			
+			PosStore.Place curPlace = new PosStore.Place(cur.getChromosome(), cur.getPos());
+			String curSeq = cur.getSeq();
+			res.put(curPlace, curSeq);
+		}
+		
 		return res;
 	}
 	static boolean parseArgs(String[] args)
@@ -59,6 +79,10 @@ public class EvaluateSimulatedAccuracy {
 			else if(key.equals("iris_calls"))
 			{
 				irisCallsFilename = val;
+			}
+			else if(key.equals("max_distance"))
+			{
+				DISTANCE_THRESHOLD = Integer.parseInt(val);
 			}
 		}
 		if(groundTruthFilename.length() == 0 || irisCallsFilename.length() == 0)
@@ -118,7 +142,9 @@ public class EvaluateSimulatedAccuracy {
 			usage();
 			return;
 		}
-		TreeMap<PosStore.Place, String> truth = readGroundTruth(groundTruthFilename);
+		TreeMap<PosStore.Place, String> truth = groundTruthFilename.endsWith(".vcf") ?
+				readGroundTruthFromVcf(groundTruthFilename)
+				: readGroundTruthFromFasta(groundTruthFilename);
 		
 		VcfEntryIterator vei = new VcfEntryIterator(irisCallsFilename);
 		
@@ -126,6 +152,8 @@ public class EvaluateSimulatedAccuracy {
 		
 		ArrayList<Long> distances = new ArrayList<Long>();
 		ArrayList<Long> editDistances = new ArrayList<Long>();
+		
+		int countLong = 0;
 		
 		for(VcfEntry cur : vei)
 		{
@@ -136,8 +164,12 @@ public class EvaluateSimulatedAccuracy {
 			
 			PosStore.Place curPlace = new PosStore.Place(cur.getChromosome(), cur.getPos());
 			String curSeq = cur.getSeq();
+			if(curSeq.length() > 100000)
+			{
+				countLong++;
+			}
 			PosStore.Place truthKey = getNearestVariant(curPlace, truth);
-			if(truthKey == null)
+			if(truthKey == null || Math.abs(truthKey.pos - cur.getPos()) > DISTANCE_THRESHOLD)
 			{
 				falsePositives++;
 			}
@@ -156,6 +188,8 @@ public class EvaluateSimulatedAccuracy {
 		}
 		
 		int falseNegatives = truth.size();
+		
+		System.out.println("Insertions over 100kbp: " + countLong);
 		
 		System.out.println("False positives: " + falsePositives);
 		System.out.println("False negatives: " + falseNegatives);
