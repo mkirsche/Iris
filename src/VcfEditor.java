@@ -98,7 +98,7 @@ public class VcfEditor {
 			else
 			{
 				VcfEntry ve = new VcfEntry(line);
-				if(ve.getLength() > Settings.MAX_OUTPUT_LENGTH)
+				if(Math.abs(ve.getLength()) > Settings.MAX_OUTPUT_LENGTH)
 				{
 					continue;
 				}
