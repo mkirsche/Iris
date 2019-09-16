@@ -41,6 +41,11 @@ public static NewSequenceMap.UpdatedEntry findBestDeletionFromOffset(ArrayList<S
 		}
 	}
 	
+	if(allDeletions.size() == 0)
+	{
+		return null;
+	}
+	
 	DeletionRecord res = getConsensus(allDeletions);
 	
 	char[] filler = new char[res.length];
@@ -61,7 +66,7 @@ static DeletionRecord getConsensus(ArrayList<DeletionRecord> records)
 			{
 				scores[j]++;
 			}
-			if(records.get(i).length == records.get(j).pos)
+			if(records.get(i).length == records.get(j).length)
 			{
 				scores[j]++;
 			}
