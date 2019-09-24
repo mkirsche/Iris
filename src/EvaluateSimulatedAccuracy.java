@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -12,14 +13,18 @@ public class EvaluateSimulatedAccuracy {
 	static String groundTruthFilename = "";
 	static String irisCallsFilename = "";
 	static int DISTANCE_THRESHOLD = 1000;
+	static double ID_THRESHOLD = 0.5;
+	static String OUTPUT_FILE = "scores.txt";
 	static void usage()
 	{
 		System.out.println("Usage: java EvaluateSimulatedAccuracy [args]");
 		System.out.println("  Example: java EvaluateSimulatedAccuracy ground_truth=bigsim.insertions.fa iris_calls=out.vcf");
 		System.out.println();
 		System.out.println("Required args:");
-		System.out.println("  ground_truth (String) - the FASTA file containing the variants added during the simulation");
-		System.out.println("  iris_calls    (String) - the VCF file with variant calls refined by IRIS");
+		System.out.println("  ground_truth   (String) - the FASTA file containing the variants added during the simulation");
+		System.out.println("  iris_calls     (String) - the VCF file with variant calls refined by IRIS");
+		System.out.println("  min_similarity (float)  - min sequence identity needed for a match to count");
+		System.out.println("  max_distance   (int)    - max distance allowed for a match to count");
 		System.out.println();
 	}
 	static TreeMap<PosStore.Place, String> readGroundTruthFromFasta(String filename) throws Exception
@@ -84,6 +89,10 @@ public class EvaluateSimulatedAccuracy {
 			{
 				DISTANCE_THRESHOLD = Integer.parseInt(val);
 			}
+			else if(key.equals("min_similarity"))
+			{
+				ID_THRESHOLD = Double.parseDouble(val);
+			}
 		}
 		if(groundTruthFilename.length() == 0 || irisCallsFilename.length() == 0)
 		{
@@ -142,6 +151,9 @@ public class EvaluateSimulatedAccuracy {
 			usage();
 			return;
 		}
+		
+		PrintWriter out = new PrintWriter(new File(OUTPUT_FILE));
+		
 		TreeMap<PosStore.Place, String> truth = groundTruthFilename.endsWith(".vcf") ?
 				readGroundTruthFromVcf(groundTruthFilename)
 				: readGroundTruthFromFasta(groundTruthFilename);
@@ -152,6 +164,7 @@ public class EvaluateSimulatedAccuracy {
 		
 		ArrayList<Long> distances = new ArrayList<Long>();
 		ArrayList<Long> editDistances = new ArrayList<Long>();
+		ArrayList<Double> sequenceIdentities = new ArrayList<Double>();
 		
 		int countLong = 0;
 		
@@ -164,9 +177,10 @@ public class EvaluateSimulatedAccuracy {
 			
 			PosStore.Place curPlace = new PosStore.Place(cur.getChromosome(), cur.getPos());
 			String curSeq = cur.getSeq();
-			if(curSeq.length() > 100000)
+			if(Math.abs(cur.getLength()) > 100000)
 			{
 				countLong++;
+				continue;
 			}
 			PosStore.Place truthKey = getNearestVariant(curPlace, truth);
 			if(truthKey == null || Math.abs(truthKey.pos - cur.getPos()) > DISTANCE_THRESHOLD)
@@ -176,12 +190,21 @@ public class EvaluateSimulatedAccuracy {
 			else
 			{
 				String trueSeq = truth.get(truthKey);
+				int editDistance = ResultsTableWriter.editDistance(trueSeq, curSeq);
+				double seqIdentity = 1 - 1.0 * editDistance / trueSeq.length();
+				if(seqIdentity < ID_THRESHOLD)
+				{
+					falsePositives++;
+					continue;
+				}
 				truth.remove(truthKey);
 				
 				long dist = Math.abs(curPlace.pos - truthKey.pos);
-				int editDistance = ResultsTableWriter.editDistance(trueSeq, curSeq);
+				
 				distances.add(dist);
 				editDistances.add((long)editDistance);
+				sequenceIdentities.add(seqIdentity);
+				out.println(seqIdentity);
 			}
 			
 			
@@ -196,7 +219,16 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("Matches: " + distances.size());
 		System.out.println("Average genomic distance: " + average(distances));
 		System.out.println("Average sequence edit distance: " + average(editDistances));
+		System.out.println("Average sequence identity: " + floatAverage(sequenceIdentities));
 		
+		out.close();
+		
+	}
+	static double floatAverage(ArrayList<Double> list)
+	{
+		double res = 0;
+		for(double x : list) res += x;
+		return list.size() == 0 ? 0.0 : res / list.size();
 	}
 	static double average(ArrayList<Long> list)
 	{

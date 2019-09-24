@@ -71,7 +71,7 @@ public class ParallelRunningStitch {
 					ArrayList<String> readNames = readMap.get(variantKey);
 					NewSequenceMap.UpdatedEntry ue;
 					try {
-						ue = NewSequenceMap.fromReadNames(variantKey, readNames, gq);
+						ue = NewSequenceMap.fromReadNames(variantKey, readMap.seqMap, readNames, gq);
 						if(ue == null) {
 							Logger.log("No refined SV found for " + variantKey);
 							irs.addNullVariant(variantKey);

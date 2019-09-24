@@ -41,14 +41,22 @@ public class NewSequenceMap {
 		return map.get(key).pos;
 	}
 	
-	static UpdatedEntry fromReadNames(String key, ArrayList<String> names, GenomeQuery gq) throws Exception
+	static UpdatedEntry fromReadNames(String key, HashMap<String, String> seqMap, ArrayList<String> names, GenomeQuery gq) throws Exception
 	{
 		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
 		Logger.log("Found " + readSeqs.size() + " relevant reads for " + key);
-		ArrayList<String> consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
+		ArrayList<String> consensusSequences;
+		if(Settings.USE_FALCONSENSE)
+		{
+			consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
+		}
+		else
+		{
+			consensusSequences = Racon.getConsensusSequences(key, seqMap.get(key), gq, readSeqs);
+		}
 		Logger.log("Found " + consensusSequences.size() + " consensus sequences for " + key);
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
-		Logger.log("Found " + alignmentRecords.size() + " alignment records for" + key);
+		Logger.log("Found " + alignmentRecords.size() + " alignment records for " + key);
 		String type = VcfEntry.getTypeFromKey(key);
 		UpdatedEntry res = null;
 		if(type.equals("INS"))

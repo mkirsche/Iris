@@ -4,10 +4,12 @@ import java.util.HashMap;
 
 public class SupportingReadMap {
 	HashMap<String, ArrayList<String>> map;
+	HashMap<String, String> seqMap;
 	
 	SupportingReadMap(String filename) throws Exception
 	{
 		map = new HashMap<String, ArrayList<String>>();
+		seqMap = new HashMap<String, String>();
 		File f = new File(filename);
 		if(!f.exists())
 		{
@@ -41,6 +43,7 @@ public class SupportingReadMap {
 					}
 				}
 				map.put(key, val);
+				seqMap.put(key, ve.getSeq());
 			}
 		}
 		

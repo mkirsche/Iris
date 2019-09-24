@@ -27,6 +27,7 @@ public class Settings {
 	static String FALCONSENSE_PATH = WORKING_DIR + "/" + "external_scripts/falcon_sense";
 	static String NGMLR_PATH = WORKING_DIR + "/" + "external_scripts/ngmlr";
 	static String MINIMAP_PATH = WORKING_DIR + "/" + "external_scripts/minimap2";
+	static String RACON_PATH = WORKING_DIR + "/" + "external_scripts/racon";
 	
 	// Consensus options
 	static double FALCONSENSE_MIN_IDT = 0.7;
@@ -35,6 +36,8 @@ public class Settings {
 	static int FALCONSENSE_MIN_OVL_LEN = 250;
 	static int FALCONSENSE_MIN_COV = 2;
 	static int FALCONSENSE_N_CORE = 1;
+	static boolean USE_FALCONSENSE = false;
+	static int RACON_BUFFER = 1000;
 	
 	// Alignment options
 	static boolean USE_NGMLR = false;
@@ -67,12 +70,14 @@ public class Settings {
 		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
 		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary");
 		System.out.println("  minimap_path     (String)     - the path to minimap if using minimap and not using included binary");
-		System.out.println("  falconsense_path (String)     - the path to falconsense if not using included binary");
+		System.out.println("  falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary");
+		System.out.println("  racon_path (String)           - the path to racon if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position");
 		System.out.println("  --ngmlr                       - align with ngmlr instead of minimap");
+		System.out.println("  --falconsense                 - compute consensus with falconsense instead of racon");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
 		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
@@ -117,6 +122,10 @@ public class Settings {
 				{
 					USE_NGMLR = true;
 				}
+				else if(args[i].endsWith("falconsense"))
+				{
+					USE_FALCONSENSE = true;
+				}
 				else if(args[i].endsWith("keep_files"))
 				{
 					CLEAN_INTERMEDIATE_FILES = false;
@@ -146,6 +155,9 @@ public class Settings {
 				case "genome_buffer":
 					GENOME_REGION_BUFFER = parseInt(val);
 					break;
+				case "racon_buffer":
+					RACON_BUFFER = parseInt(val);
+					break;
 				case "padding_before": 
 					VCF_PADDING_BEFORE = parseInt(val);
 					break;
@@ -169,6 +181,9 @@ public class Settings {
 					break;
 				case "falconsense_path":
 					FALCONSENSE_PATH = val;
+					break;
+				case "racon_path":
+					RACON_PATH = val;
 					break;
 				case "log_out":
 					LOG_OUT_FILE = val;
