@@ -71,7 +71,7 @@ public class Settings {
 		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary");
 		System.out.println("  minimap_path     (String)     - the path to minimap if using minimap and not using included binary");
 		System.out.println("  falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary");
-		System.out.println("  racon_path (String)           - the path to racon if not using included binary");
+		System.out.println("  racon_path       (String)           - the path to racon if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");

@@ -5,9 +5,10 @@ A module which corrects the sequences of structural variant calls (currently onl
 
 ```./build.sh```
 
-Note: The external tools samtools, ngmlr, minimap2, and falcon_sense are provided pre-built in the external_scripts folder.  
+Note: The external tools samtools, ngmlr, minimap2, racon, and falcon_sense are provided pre-built in the external_scripts folder.  
 However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.  Note: gcc >= 6.4.0 is required to rebuild dependencies in this way.
 Note that either minimap2 (default) or ngmlr will be used, but not both.
+Also, racon (default) or falcon_sense will be used, but not both, and racon depends on minimap2.
 There is an option when running IRIS to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
 because the developers have significantly changed the interface for running it and it is not possible to run Falconsense in isolation with recent builds of Canu.
 
@@ -55,12 +56,14 @@ Optional args:
   samtools_path    (String)     - the path to samtools if not using included binary
   ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary
   minimap_path     (String)     - the path to minimap if using minimap and not using included binary
-  falconsense_path (String)     - the path to falconsense if not using included binary
+  falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary
+  racon_path       (String)           - the path to racon if not using included binary
   log_out          (String)     - the name of the log file to be produced
   genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to
   min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence
   max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position
   --ngmlr                       - align with ngmlr instead of minimap
+  --falconsense                 - compute consensus with falconsense instead of racon
   --keep_files                  - don't remove intermediate files - used for debugging
   --also_deletions              - also try to refine deletion positions/lengths
   --resume                      - use the results already computed from a previously terminated run
