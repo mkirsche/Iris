@@ -38,6 +38,14 @@ cd bin
 cp samtools ../../rebuilt_external_scripts
 cd ../..
 
+cd racon
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+cp bin/racon ../../rebuilt_external_scripts
+cd ../..
+
 cd canu
 cd src
 make -j 4
