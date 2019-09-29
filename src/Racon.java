@@ -41,7 +41,8 @@ public class Racon {
 		String raconOutFn = id + ".racon.out";
 		String draft = getDraft(oldSeq, gq, id);
 		writeRaconInput(reads, raconInAll, raconInSingle, raconInAlign, draft);
-		executeRacon(raconInAll, raconInSingle, raconInAlign, raconOutFn);
+		int numRuns = Settings.RACON_ITERS;
+		executeRacon(raconInAll, raconInSingle, raconInAlign, raconOutFn, numRuns);
 		ArrayList<String> res = parseRaconOutput(raconOutFn);
 		if(Settings.CLEAN_INTERMEDIATE_FILES)
 		{
@@ -89,8 +90,17 @@ public class Racon {
 	 * Run Racon through the command line using parameters from Settings
 	 */
 	static void executeRacon(String raconInAll, String raconInSingle,
-			String raconInAlignments, String raconOut) throws Exception
+			String raconInAlignments, String raconOut, int numRuns) throws Exception
 	{
+		if(numRuns > 1)
+		{
+			String intermediateOutput = raconOut + "_" + numRuns + ".fa";
+			executeRacon(raconInAll, raconInSingle, raconInAlignments, intermediateOutput, 1);
+			String intermediateAlign = raconOut + "_" + numRuns + ".sam";
+			AlignConsensus.executeMinimap(raconInAll, intermediateOutput, intermediateAlign);
+			executeRacon(raconInAll, intermediateOutput, intermediateAlign, raconOut, numRuns - 1);
+			return;
+		}
 		String fsCommand = String.format(
 				 "%s %s %s %s", 
 				 Settings.RACON_PATH, raconInAll, raconInAlignments, raconInSingle);

@@ -38,6 +38,7 @@ public class Settings {
 	static int FALCONSENSE_N_CORE = 1;
 	static boolean USE_FALCONSENSE = false;
 	static int RACON_BUFFER = 1000;
+	static int RACON_ITERS = 1;
 	
 	// Alignment options
 	static boolean USE_NGMLR = false;
@@ -82,6 +83,7 @@ public class Settings {
 		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println("  --pacbio                      - if using minimap as the aligner, run in pacbio mode");
+		System.out.println("  --rerunracon                  - if using racon for consensus, run it twice");
 		System.out.println();
 	}
 	
@@ -137,6 +139,13 @@ public class Settings {
 				else if(args[i].endsWith("also_deletions"))
 				{
 					PROCESS_DELETIONS = true;
+				}
+				else if(args[i].endsWith("rerun_racon"))
+				{
+					if(RACON_ITERS == 1)
+					{
+						RACON_ITERS = 2;
+					}
 				}
 				continue;
 			}
@@ -200,6 +209,8 @@ public class Settings {
 				case "reads_in":
 					READS_FILE = val;
 					break;
+				case "racon_iters":
+					RACON_ITERS = Integer.parseInt(val);
 				default:
 					break;
 			}
