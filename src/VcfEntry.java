@@ -88,7 +88,14 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		try {
 			return Integer.parseInt(s);
 		} catch(Exception e) {
-			throw new Exception("SVLEN field is not an integer: " + s);
+            try {
+                String seq = getSeq();
+                String type = getType();
+                if(type.equals("INS")) return seq.length();
+                else return -seq.length();
+            } catch(Exception f) {
+			    throw new Exception("SVLEN field is not an integer: " + s);
+            }
 		}
 	}
 	
