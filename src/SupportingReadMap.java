@@ -44,7 +44,7 @@ public class SupportingReadMap {
 				}
 				
 				String seq = ve.getSeq();
-				if(seq.length() > 0)
+				if(seq.length() > 0 || !ve.getType().equals("INS"))
 				{
 					map.put(key, val);
 					seqMap.put(key, seq);
