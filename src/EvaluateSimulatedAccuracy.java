@@ -15,6 +15,8 @@ public class EvaluateSimulatedAccuracy {
 	static int DISTANCE_THRESHOLD = 1000;
 	static double ID_THRESHOLD = 0.5;
 	static String OUTPUT_FILE = "scores.txt";
+	static String GENOME_FILE = "";
+	static GenomeQuery gq;
 	static void usage()
 	{
 		System.out.println("Usage: java EvaluateSimulatedAccuracy [args]");
@@ -23,8 +25,10 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("Required args:");
 		System.out.println("  ground_truth   (String) - the FASTA file containing the variants added during the simulation");
 		System.out.println("  iris_calls     (String) - the VCF file with variant calls refined by IRIS");
+		System.out.println("Optional args:");
 		System.out.println("  min_similarity (float)  - min sequence identity needed for a match to count");
 		System.out.println("  max_distance   (int)    - max distance allowed for a match to count");
+		System.out.println("  --use_genome   (String) - genome file for doing fancier sequence matching");
 		System.out.println();
 	}
 	static TreeMap<PosStore.Place, String> readGroundTruthFromFasta(String filename) throws Exception
@@ -92,6 +96,10 @@ public class EvaluateSimulatedAccuracy {
 			else if(key.equals("min_similarity"))
 			{
 				ID_THRESHOLD = Double.parseDouble(val);
+			}
+			else if(key.equals("use_genome"))
+			{
+				GENOME_FILE = val;
 			}
 		}
 		if(groundTruthFilename.length() == 0 || irisCallsFilename.length() == 0)
@@ -190,12 +198,31 @@ public class EvaluateSimulatedAccuracy {
 			else
 			{
 				String trueSeq = truth.get(truthKey);
-				int editDistance = ResultsTableWriter.editDistance(trueSeq, curSeq);
+				int editDistance = 0;
+				if(GENOME_FILE.length() > 0)
+				{
+					if(gq == null) gq = new GenomeQuery(GENOME_FILE);
+					long start = Math.max(1, curPlace.pos - 10);
+					long end = curPlace.pos + 10;
+					String before = gq.genomeSubstring(curPlace.chr, start, curPlace.pos - 1);
+					String after = gq.genomeSubstring(curPlace.chr, curPlace.pos, end);
+					curSeq = before + curSeq + after;
+					editDistance = localEditDistance(trueSeq, curSeq);
+					 
+				}
+				else
+				{
+					editDistance = ResultsTableWriter.editDistance(trueSeq, curSeq);
+				}
 				double seqIdentity = 1 - 1.0 * editDistance / trueSeq.length();
 				if(seqIdentity < ID_THRESHOLD)
 				{
 					falsePositives++;
 					continue;
+				}
+				if(seqIdentity > .5 && seqIdentity < .8 && cur.getChromosome().contains("22"))
+				{
+					//System.out.println(cur.getChromosome()+" "+cur.getPos()+" "+truthKey.pos+" "+seqIdentity+" "+curSeq.length()+" "+trueSeq.length()+" "+curSeq+" "+trueSeq);
 				}
 				truth.remove(truthKey);
 				
@@ -223,6 +250,33 @@ public class EvaluateSimulatedAccuracy {
 		
 		out.close();
 		
+	}
+	/*
+	 * Gets the edit distance between query and the best possible substring of ref
+	 * To allow the use of any substring, the following changes are made to the usual edit distance algorithm
+	 *   table[0][i] is 0 for all i, meaning the match can start anywhere in the reference
+	 *   min_j(table[n][j]) is used for the answer, meaning the match can end anywhere in the reference
+	 */
+	static int localEditDistance(String query, String ref)
+	{
+		String q = query.toLowerCase();
+		String r = ref.toLowerCase();
+		int n = query.length(), m = ref.length();
+		int res = query.length();
+		int[][] table = new int[n+1][m+1];
+		for(int i = 1; i<=n; i++) table[i][0] = i;
+		for(int i = 1; i<=n; i++)
+			for(int j = 1; j <= m; j++)
+			{
+				table[i][j] = table[i-1][j-1] + (q.charAt(i-1) == r.charAt(j-1) ? 0 : 1);
+				table[i][j] = Math.min(table[i][j], table[i-1][j] + 1);
+				table[i][j] = Math.min(table[i][j], table[i][j-1] + 1);
+				if(i == n)
+				{
+					res = Math.min(res, table[i][j]);
+				}
+			}
+		return res;
 	}
 	static double floatAverage(ArrayList<Double> list)
 	{

@@ -50,6 +50,14 @@ public class Racon {
 			new File(raconInSingle).delete();
 			new File(raconInAlign).delete();
 			new File(raconOutFn).delete();
+			if(Settings.RACON_ITERS > 1)
+			{
+				for(int i = 2; i<=Settings.RACON_ITERS; i++)
+				{
+					new File(raconOutFn + "_" + i + ".fa").delete();
+					new File(raconOutFn + "_" + i + ".sam").delete();
+				}
+			}
 		}
 		return res;
 	}

@@ -121,6 +121,10 @@ public class VcfEntry implements Comparable<VcfEntry> {
 			return getInfo("SEQ");
 		}
 		String ref = getRef(), alt = getAlt();
+		if(alt.startsWith("<"))
+		{
+			return "";
+		}
 		String type = getType();
 		
 		// If the SV is a deletion, swap REF and ALT and treat as an insertion

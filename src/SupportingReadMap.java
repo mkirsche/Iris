@@ -42,8 +42,17 @@ public class SupportingReadMap {
 						val.add(s);
 					}
 				}
-				map.put(key, val);
-				seqMap.put(key, ve.getSeq());
+				
+				String seq = ve.getSeq();
+				if(seq.length() > 0)
+				{
+					map.put(key, val);
+					seqMap.put(key, seq);
+				}
+				else
+				{
+					Logger.log("Skipping " + key + " because there is no sequence");
+				}
 			}
 		}
 		
