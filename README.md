@@ -72,3 +72,7 @@ Optional args:
   --keep_long_variants          - output original VCF line for very long variants instead of ignoring them
   ```
 
+## Other Notes
+
+* Very long variants (longer than 100 kbp) will be ignored, resulting in an output file which has fewer entries than the input VCF file.  To prevent this, use the --keep_long_variants flag above.  Since adding the sequences of these variants may cause a very large output file, the original VCF entry will be used, which may be inconsistent with the other output entries if the input did not conform to proper VCF format.
+
