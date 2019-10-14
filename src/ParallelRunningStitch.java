@@ -24,7 +24,7 @@ public class ParallelRunningStitch {
 		Logger.log("Number of variants to refine with supporting reads: " + keys.length);
 		this.numThreads = numThreads;
 		
-		irs = new IntermediateResultsStore(Settings.INTERMEDIATE_RESULTS_FILE);
+		irs = new IntermediateResultsStore(Settings.INTERMEDIATE_RESULTS_FILE, Settings.RESUME);
 		
 		todo = new ConcurrentLinkedQueue<Integer>();
 		for(int i = 0; i<keys.length; i++)

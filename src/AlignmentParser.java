@@ -22,6 +22,7 @@ public class AlignmentParser {
 			}
 			alns.add(new Alignment(line));
 		}
+		input.close();
 	}
 	
 	int countAlignedReads()

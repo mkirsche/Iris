@@ -10,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -19,12 +18,13 @@ public class IntermediateResultsStore {
 	String fileName;
 	PrintWriter out;
 	Set<String> set;
-	IntermediateResultsStore(String s) throws Exception
+	IntermediateResultsStore(String s, boolean resume) throws Exception
 	{
 		fileName = s;
 		HashSet<String> ids = new HashSet<String>();
 		set = Collections.synchronizedSet(ids);
-		if(new File(s).exists())
+		// If we are resuming, read in results so far and open appending output stream
+		if(new File(s).exists() && resume)
 		{
 			Scanner input = new Scanner(new FileInputStream(new File(s)));
 			while(input.hasNext())
