@@ -68,5 +68,7 @@ Optional args:
   --also_deletions              - also try to refine deletion positions/lengths
   --resume                      - use the results already computed from a previously terminated run
   --pacbio                      - if using minimap as the aligner, run in pacbio mode
+  --rerunracon                  - if using racon for consensus, run it twice
+  --keep_long_variants          - output original VCF line for very long variants instead of ignoring them
   ```
-  
+
