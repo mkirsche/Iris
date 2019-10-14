@@ -6,7 +6,7 @@ A module which corrects the sequences of structural variant calls (currently onl
 ```./build.sh```
 
 Note: The external tools samtools, ngmlr, minimap2, racon, and falcon_sense are provided pre-built in the external_scripts folder.  
-However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_external.sh.  Note: gcc >= 6.4.0 is required to rebuild dependencies in this way.
+However, to rebuild them from scratch, fetch and build the included submodules according to their README files by running the script rebuild_default_external.sh (or rebuild_external.sh if using falcon_sense or ngmlr, which are not used by default).  Note: gcc >= 6.4.0 is required to rebuild dependencies in this way.
 Note that either minimap2 (default) or ngmlr will be used, but not both.
 Also, racon (default) or falcon_sense will be used, but not both, and racon depends on minimap2.
 There is an option when running IRIS to use custom paths for these programs if you already have them installed, but this is not recommended for falcon_sense 
