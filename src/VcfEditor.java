@@ -100,7 +100,15 @@ public class VcfEditor {
 				VcfEntry ve = new VcfEntry(line);
 				if(Math.abs(ve.getLength()) > Settings.MAX_OUTPUT_LENGTH)
 				{
-					Logger.log("Not outputting SV for " + ve.getKey() + " because length is too long");
+					if(Settings.KEEP_LONG_VARIANTS)
+					{
+						Logger.log("Printing original VCF entry for " + ve.getKey() + " because length is too long");
+						out.println(ve);
+					}
+					else
+					{
+						Logger.log("Not outputting SV for " + ve.getKey() + " because length is too long");
+					}
 					continue;
 				}
 				String key = ve.getKey();

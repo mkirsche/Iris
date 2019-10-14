@@ -51,6 +51,7 @@ public class Settings {
 	static int INSERTION_MAX_DIST = 100;
 	static double MAX_LENGTH_CHANGE = 0.25;
 	static int MAX_OUTPUT_LENGTH = 100000;
+	static boolean KEEP_LONG_VARIANTS = false;
 	
 	static void usage()
 	{
@@ -85,6 +86,7 @@ public class Settings {
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
 		System.out.println("  --pacbio                      - if using minimap as the aligner, run in pacbio mode");
 		System.out.println("  --rerunracon                  - if using racon for consensus, run it twice");
+		System.out.println("  --keep_long_variants          - output original VCF line for very long variants instead of ignoring them");
 		System.out.println();
 	}
 	
@@ -147,6 +149,10 @@ public class Settings {
 					{
 						RACON_ITERS = 2;
 					}
+				}
+				else if(args[i].endsWith("keep_long_variants"))
+				{
+					KEEP_LONG_VARIANTS = true;
 				}
 				continue;
 			}
