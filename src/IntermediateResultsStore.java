@@ -31,7 +31,7 @@ public class IntermediateResultsStore {
 			{
 				String line = input.nextLine().trim();
 				String[] tokens = line.split("\t");
-				if(tokens.length != 4)
+				if(tokens.length != 5)
 				{
 					continue;
 				}
@@ -50,7 +50,7 @@ public class IntermediateResultsStore {
 	
 	void addVariant(String key, String seq, long pos)
 	{
-		out.println(key+"\t"+seq+"\t"+pos+"\t"+"$");
+		out.println(key+"\t"+seq+"\t"+pos+"\t"+System.currentTimeMillis()+"\t"+"$");
 		out.flush();
 		set.add(key);
 	}
@@ -68,7 +68,7 @@ public class IntermediateResultsStore {
 		{
 			String line = input.nextLine().trim();
 			String[] tokens = line.split("\t");
-			if(tokens.length != 4)
+			if(tokens.length != 5)
 			{
 				continue;
 			}
