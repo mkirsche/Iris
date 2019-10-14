@@ -13,3 +13,6 @@
 [submodule "minimap2"]
 	path = minimap2
 	url = https://github.com/lh3/minimap2.git
+[submodule "racon"]
+	path = racon
+	url = https://github.com/lbcb-sci/racon.git
