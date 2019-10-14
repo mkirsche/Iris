@@ -79,6 +79,7 @@ public class Settings {
 		System.out.println("  genome_buffer    (int) [100k] - the genome region on each side of the SV to align assembled reads to");
 		System.out.println("  min_ins_length   (int) [30]   - the min length allowed for a refined insertion sequence");
 		System.out.println("  max_ins_dist     (int) [100]  - the max distance a refined insertion call can be from its old position");
+		System.out.println("  max_out_length   (int) [100k] - the max length of variant which will be output");
 		System.out.println("  --ngmlr                       - align with ngmlr instead of minimap");
 		System.out.println("  --falconsense                 - compute consensus with falconsense instead of racon");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
@@ -217,10 +218,13 @@ public class Settings {
 					READS_FILE = val;
 					break;
 				case "racon_iters":
-					RACON_ITERS = Integer.parseInt(val);
+					RACON_ITERS = parseInt(val);
 					break;
 				case "rnames_fieldname":
 					RNAMES_FIELDNAME = val;
+					break;
+				case "max_out_length":
+					MAX_OUTPUT_LENGTH = parseInt(val);
 					break;
 				default:
 					break;
