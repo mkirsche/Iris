@@ -28,7 +28,7 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("Optional args:");
 		System.out.println("  min_similarity (float)  - min sequence identity needed for a match to count");
 		System.out.println("  max_distance   (int)    - max distance allowed for a match to count");
-		System.out.println("  --use_genome   (String) - genome file for doing fancier sequence matching");
+		System.out.println("  use_genome   (String) - genome file for doing fancier sequence matching");
 		System.out.println();
 	}
 	static TreeMap<PosStore.Place, String> readGroundTruthFromFasta(String filename) throws Exception
@@ -198,7 +198,9 @@ public class EvaluateSimulatedAccuracy {
 			else
 			{
 				String trueSeq = truth.get(truthKey);
+				if(trueSeq.length() == 0) continue;
 				int editDistance = 0;
+				String oldCurSeq = curSeq;
 				if(GENOME_FILE.length() > 0)
 				{
 					if(gq == null) gq = new GenomeQuery(GENOME_FILE);
@@ -222,7 +224,7 @@ public class EvaluateSimulatedAccuracy {
 				}
 				if(seqIdentity > .5 && seqIdentity < .8 && cur.getChromosome().contains("22"))
 				{
-					//System.out.println(cur.getChromosome()+" "+cur.getPos()+" "+truthKey.pos+" "+seqIdentity+" "+curSeq.length()+" "+trueSeq.length()+" "+curSeq+" "+trueSeq);
+					System.out.println(cur.getChromosome()+" "+cur.getPos()+" "+truthKey.pos+" "+seqIdentity+" "+oldCurSeq.length()+" "+trueSeq.length()+" "+oldCurSeq+" "+trueSeq);
 				}
 				truth.remove(truthKey);
 				

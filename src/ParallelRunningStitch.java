@@ -12,8 +12,8 @@ public class ParallelRunningStitch {
 	IntermediateResultsStore irs;
 	int numThreads;
 	String[] keys;
-	static AtomicInteger variantsProcessed = new AtomicInteger(0);
-	
+	AtomicInteger variantsProcessed = new AtomicInteger(0);
+	AtomicInteger variantsWithErrors = new AtomicInteger(0);
 	ConcurrentLinkedQueue<Integer> todo;
 	
 	ParallelRunningStitch(SupportingReadMap readMap, int numThreads, GenomeQuery gq) throws Exception
@@ -36,13 +36,22 @@ public class ParallelRunningStitch {
 	
 	void run() throws Exception
 	{
+		// Here the last thread in the array is the main thread, so it calls
+		// run() instead of start() and doesn't get joined below
 		Rayon[] threads = new Rayon[numThreads];
 		for(int i = 0; i<numThreads; i++)
 		{
 			threads[i] = new Rayon();
-			threads[i].start();
+			if(i == numThreads - 1)
+			{
+				threads[i].run();
+			}
+			else
+			{
+				threads[i].start();
+			}
 		}
-		for(int i = 0; i<numThreads; i++)
+		for(int i = 0; i<numThreads-1; i++)
 		{
 			threads[i].join();
 		}
@@ -82,7 +91,9 @@ public class ParallelRunningStitch {
 						irs.addVariant(variantKey, ue.seq, ue.pos);
 						results.add(variantKey, ue.seq, ue.pos);
 					} catch (Exception e) {
-						e.printStackTrace();
+						variantsWithErrors.incrementAndGet();
+						e.printStackTrace(Logger.out);
+						Logger.log("Found error in " + variantKey);
 					}
 					int numDone = variantsProcessed.incrementAndGet();
 					Logger.log("Done processing " + variantKey + " (total processed = " + numDone + ")");

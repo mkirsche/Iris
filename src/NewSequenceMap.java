@@ -55,6 +55,11 @@ public class NewSequenceMap {
 			consensusSequences = Racon.getConsensusSequences(key, seqMap.get(key), gq, readSeqs);
 		}
 		Logger.log("Found " + consensusSequences.size() + " consensus sequences for " + key);
+		if(consensusSequences.size() == 0)
+		{
+			Logger.log("Did not update " + key + " because of invalid or missing variant sequence");
+			return null;
+		}
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
 		Logger.log("Found " + alignmentRecords.size() + " alignment records for " + key);
 		String type = VcfEntry.getTypeFromKey(key);

@@ -20,6 +20,7 @@ public class Settings {
 	static String LOG_OUT_FILE = "";
 	static String TABLE_OUT_FILE = "results.tsv";
 	static String INTERMEDIATE_RESULTS_FILE = "resultsstore.txt";
+	static String RNAMES_FIELDNAME = "RNAMES";
 	
 	// External tool paths
 	static String WORKING_DIR = System.getProperty("java.class.path") + "/..";
@@ -211,6 +212,10 @@ public class Settings {
 					break;
 				case "racon_iters":
 					RACON_ITERS = Integer.parseInt(val);
+					break;
+				case "rnames_fieldname":
+					RNAMES_FIELDNAME = val;
+					break;
 				default:
 					break;
 			}

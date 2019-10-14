@@ -146,6 +146,12 @@ public class VcfEditor {
 				}
 				else
 				{
+					// When there is no sequence, don't change REF/ALT
+					if(ve.getSeq().length() == 0)
+					{
+						out.println(ve);
+						continue;
+					}
 					if(ve.getType().equals("INS"))
 					{
 						Logger.log("Outputting original insertion for " + key);

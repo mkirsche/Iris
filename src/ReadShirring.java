@@ -14,8 +14,16 @@ public class ReadShirring {
 		String bamFileName = key + ".bam";
 		String fastqFileName = key + ".fastq";
 		
+		// Handle case when read file is actually a list of files
+		ArrayList<String> readFiles = new ArrayList<String>();
+		String[] readFileNames = readFile.split(",");
+		for(String rfn : readFileNames)
+		{
+			readFiles.add(rfn);
+		}
+		
 		// Get SAM file with all relevant reads
-		extractReads(key, readNames, readFile, samFileName);
+		extractReads(key, readNames, readFiles, samFileName);
 		
 		// Convert to bam file for input into bam2fastq
 		samToBam(samFileName, bamFileName);
@@ -41,33 +49,41 @@ public class ReadShirring {
 	}
 	
 	// Gets reads with names in the list that are within 10kbp of a target SV and outputs them to a SAM file
-	static void extractReads(String key, ArrayList<String> readNames, String readFile, String samFileName) throws Exception
+	static void extractReads(String key, ArrayList<String> readNames, ArrayList<String> readFiles, String samFileName) throws Exception
 	{
 		String chr = VcfEntry.getChrFromKey(key);
 		long pos = VcfEntry.getPosFromKey(key);
 		
 		// Make grep query string to get header or any lines with 
 		StringBuilder grepQuery = new StringBuilder("\"" + "^@");
-		for(int i = 0; i<readNames.size(); i++) grepQuery.append("|" + readNames.get(i));
+		for(int i = 0; i<readNames.size(); i++)
+		{
+			grepQuery.append("|" + readNames.get(i));
+		}
 		grepQuery.append("\"");
 		
 		// Set up command to output alignments near SV and grep for names
-		String samtoolsCommand = String.format("%s view -h %s %s:%d-%d | grep -E %s > %s", 
-				Settings.SAMTOOLS_PATH,
-				readFile,
-				chr,
-				pos - 10000,
-				pos + 10000,
-				grepQuery.toString(),
-				samFileName);
-		
-		// Use bin/sh because pipes will not work when called directly
-		String[] fullSamtoolsCommmand = new String[] {"/bin/sh", "-c", samtoolsCommand};
-		Process child = Runtime.getRuntime().exec(fullSamtoolsCommmand);
-		int p = child.waitFor();
-		if(p != 0)
+		for(int i = 0; i<readFiles.size(); i++)
 		{
-			throw new Exception("getting alignments supporting " + key + " failed: " + samtoolsCommand);
+			String readFile = readFiles.get(i);
+			String samtoolsCommand = String.format("%s view " 
+				+ (i == 0 ? "-h " : "") + "%s %s:%d-%d | grep -E %s >> %s", 
+					Settings.SAMTOOLS_PATH,
+					readFile,
+					chr,
+					pos - 10000,
+					pos + 10000,
+					grepQuery.toString(),
+					samFileName);
+			
+			// Use bin/sh because pipes will not work when called directly
+			String[] fullSamtoolsCommmand = new String[] {"/bin/sh", "-c", samtoolsCommand};
+			Process child = Runtime.getRuntime().exec(fullSamtoolsCommmand);
+			int p = child.waitFor();
+			if(p != 0)
+			{
+				throw new Exception("getting alignments supporting " + key + " failed: " + samtoolsCommand);
+			}
 		}
 	}
 	

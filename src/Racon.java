@@ -33,8 +33,26 @@ public class Racon {
 		}
 	}
 	
+	static boolean isAlphanumeric(String s)
+	{
+		for(int i = 0; i<s.length(); i++)
+		{
+			char c = s.charAt(i);
+			if(!Character.isLetterOrDigit(c))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	static ArrayList<String> getConsensusSequences(String id, String oldSeq, GenomeQuery gq, ArrayList<String> reads) throws Exception
 	{
+		if(!isAlphanumeric(oldSeq))
+		{
+			Logger.log("Could not run racon on " + id + " because of non-alphanumeric variant sequence: " + oldSeq);
+			return new ArrayList<String>();
+		}
 		String raconInAll = id + ".racon.fa";
 		String raconInSingle = id + ".racon.seq.fa";
 		String raconInAlign = id + ".racon.align.sam";
@@ -92,6 +110,13 @@ public class Racon {
 		
 		// Compute minimap alignments of reads to sequence
 		AlignConsensus.executeMinimap(raconAllFileName, raconSingleFileName, raconAlignFileName);
+		
+		// Make sure there were actual alignments
+		AlignmentParser ap = new AlignmentParser(raconAlignFileName);
+		if(ap.countAlignedReads() == 0)
+		{
+			throw new Exception("No alignments found for polishing in " + raconAlignFileName);
+		}
 	}
 	
 	/*

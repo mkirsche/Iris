@@ -32,15 +32,22 @@ public class SupportingReadMap {
 			if(shouldProcess)
 			{			
 				String key = ve.getKey();
-				String supportingReadList = ve.getInfo("RNAMES");
+				String supportingReadList = ve.getInfo(Settings.RNAMES_FIELDNAME);
 				String[] nameTokens = supportingReadList.split(",");
 				ArrayList<String> val = new ArrayList<String>();
 				for(String s : nameTokens)
 				{
-					if(s.length() != 0)
+					if(s.length() != 0 && !s.equals("."))
 					{
 						val.add(s);
 					}
+				}
+				
+				if(val.size() == 0)
+				{
+					Logger.log("Skipping " + key + " because of invalid read names field: " 
+						+ ve.getInfo(Settings.RNAMES_FIELDNAME));
+					continue;
 				}
 				
 				String seq = ve.getSeq();

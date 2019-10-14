@@ -16,7 +16,7 @@ public static void main(String[] args) throws Exception
 	ved.run();
 	
 	Logger.log("Iris completed - output is in " + Settings.VCF_OUT_FILE);
-	
+	Logger.log("Total number of variants with errors: " + prs.variantsWithErrors.get() + " out of " + prs.variantsProcessed.get());
 	Logger.close();
 }
 }
