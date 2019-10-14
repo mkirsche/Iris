@@ -26,3 +26,12 @@ test/bigsimtest/bigsniffles.vcf
 resultsstore.txt
 results.tsv
 rebuilt_external_scripts/
+test/*
+test/*/*
+external_scripts/*
+canu
+htslib
+samtools
+*.png
+*.txt
+*.py

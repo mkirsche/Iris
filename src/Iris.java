@@ -15,6 +15,8 @@ public static void main(String[] args) throws Exception
 			Settings.TABLE_OUT_FILE, nsm, gq);
 	ved.run();
 	
+	Logger.log("Iris completed - output is in " + Settings.VCF_OUT_FILE);
+	
 	Logger.close();
 }
 }
