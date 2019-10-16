@@ -92,7 +92,7 @@ public class ParallelRunningStitch {
 						results.add(variantKey, ue.seq, ue.pos);
 					} catch (Exception e) {
 						variantsWithErrors.incrementAndGet();
-						e.printStackTrace(Logger.out);
+						e.printStackTrace();
 						Logger.log("Found error in " + variantKey);
 					}
 					int numDone = variantsProcessed.incrementAndGet();

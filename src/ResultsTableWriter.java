@@ -71,8 +71,9 @@ public class ResultsTableWriter {
 			if((originalSequence.equals("N") || originalSequence.equals("X")) 
 					&& oldEntry.hasInfoField("SVLEN"))
 			{
-				originalSequence = gq.genomeSubstring(chromosome, originalPosition + 1,
-						originalPosition + Integer.parseInt(oldEntry.getInfo("SVLEN")));
+                int oldLength = (int)(.5 + Double.parseDouble(oldEntry.getInfo("SVLEN")));
+                                originalSequence = gq.genomeSubstring(chromosome, originalPosition + 1,
+                                                                originalPosition + oldLength);
 			}
 			originalLength = originalSequence.length();
 			newPosition = originalPosition;

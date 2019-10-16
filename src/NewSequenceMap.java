@@ -45,6 +45,10 @@ public class NewSequenceMap {
 	{
 		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
 		Logger.log("Found " + readSeqs.size() + " relevant reads for " + key);
+        if(readSeqs.size() == 0)
+        {
+            return null;
+        }
 		ArrayList<String> consensusSequences;
 		if(Settings.USE_FALCONSENSE)
 		{

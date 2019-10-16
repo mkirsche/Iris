@@ -147,7 +147,7 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		{
 			int startPad = 0, endPad = 0;
 			int totalPad = ref.length();
-			while(startPad + endPad < totalPad)
+			while(startPad + endPad < totalPad && startPad < alt.length())
 			{
 				if(ref.charAt(startPad) == alt.charAt(startPad))
 				{
