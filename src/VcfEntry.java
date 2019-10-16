@@ -86,7 +86,7 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	{
 		String s = getInfo("SVLEN");
 		try {
-			return Integer.parseInt(s);
+			return (int)(.5 + Double.parseDouble(s));
 		} catch(Exception e) {
             try {
                 String seq = getSeq();
