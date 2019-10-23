@@ -67,7 +67,7 @@ public class ReadShirring {
 		{
 			String readFile = readFiles.get(i);
 			String samtoolsCommand = String.format("%s view " 
-				+ (i == 0 ? "-h " : "") + "%s %s:%d-%d | grep -E %s >> %s", 
+				+ (i == 0 ? "-h " : "") + "%s %s:%d-%d | grep -E %s " + (i == 0 ? ">" : ">>") + " %s", 
 					Settings.SAMTOOLS_PATH,
 					readFile,
 					chr,
