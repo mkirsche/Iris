@@ -120,7 +120,11 @@ public class VcfEditor {
 					newEntry = new NewSequenceMap.UpdatedEntry(nsm.getSeq(key), nsm.getPos(key));
 				}
 				
-				tableOut.printEntry(ve, gq, nsm.containsKey(key) ? newEntry : null);
+				try {
+					tableOut.printEntry(ve, gq, nsm.containsKey(key) ? newEntry : null);
+				} catch (Exception e) {
+					Logger.log("Failed to write " + ve + " to results table");
+				}
 				
 				// If this variant is in the map, update its info according to the new sequence/position
 				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
@@ -163,7 +167,13 @@ public class VcfEditor {
 					if(ve.getType().equals("INS"))
 					{
 						Logger.log("Outputting original insertion for " + key);
-						updateBeforeAfter(ve);
+						String seq = ve.getSeq();
+						if(seq.length() != 0)
+						{
+							ve.setRef("");
+							ve.setAlt(seq);
+							updateBeforeAfter(ve);
+						}
 					}
 					else if(ve.getType().equals("DEL"))
 					{
