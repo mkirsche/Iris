@@ -229,6 +229,7 @@ public class Settings {
 					break;
 				case "max_len_change":
 					MAX_LENGTH_CHANGE = Double.parseDouble(val);
+					break;
 				default:
 					break;
 			}
