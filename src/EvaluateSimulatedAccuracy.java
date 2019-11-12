@@ -17,6 +17,7 @@ public class EvaluateSimulatedAccuracy {
 	static String OUTPUT_FILE = "scores.txt";
 	static String GENOME_FILE = "";
 	static GenomeQuery gq;
+	static boolean PRINT_EXAMPLES = false;
 	static void usage()
 	{
 		System.out.println("Usage: java EvaluateSimulatedAccuracy [args]");
@@ -28,7 +29,8 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("Optional args:");
 		System.out.println("  min_similarity (float)  - min sequence identity needed for a match to count");
 		System.out.println("  max_distance   (int)    - max distance allowed for a match to count");
-		System.out.println("  use_genome   (String) - genome file for doing fancier sequence matching");
+		System.out.println("  use_genome     (String) - genome file for doing fancier sequence matching");
+		System.out.println("  scores_file    (String) - file to write accuracy scores to");
 		System.out.println();
 	}
 	static TreeMap<PosStore.Place, String> readGroundTruthFromFasta(String filename) throws Exception
@@ -72,6 +74,10 @@ public class EvaluateSimulatedAccuracy {
 		{
 			if(args[i].indexOf('=') == -1)
 			{
+				if(args[i].endsWith("print_examples"))
+				{
+					PRINT_EXAMPLES = true;
+				}
 				continue;
 			}
 			int equalIdx = args[i].indexOf('=');
@@ -100,6 +106,10 @@ public class EvaluateSimulatedAccuracy {
 			else if(key.equals("use_genome"))
 			{
 				GENOME_FILE = val;
+			}
+			else if(key.equals("scores_file"))
+			{
+				OUTPUT_FILE = val;
 			}
 		}
 		if(groundTruthFilename.length() == 0 || irisCallsFilename.length() == 0)
@@ -222,7 +232,7 @@ public class EvaluateSimulatedAccuracy {
 					falsePositives++;
 					continue;
 				}
-				if(seqIdentity > .5 && seqIdentity < .8 && cur.getChromosome().contains("22"))
+				if(PRINT_EXAMPLES && seqIdentity > .5 && seqIdentity < .8 && cur.getChromosome().contains("22"))
 				{
 					System.out.println(cur.getChromosome()+" "+cur.getPos()+" "+truthKey.pos+" "+seqIdentity+" "+oldCurSeq.length()+" "+trueSeq.length()+" "+oldCurSeq+" "+trueSeq);
 				}
