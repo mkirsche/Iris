@@ -1,6 +1,7 @@
 /*
  * Managing the parallelization of computing consensus sequences/positions
  */
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,10 +94,42 @@ public class ParallelRunningStitch {
 					} catch (Exception e) {
 						variantsWithErrors.incrementAndGet();
 						e.printStackTrace();
+						
+						// Remove Racon's files in the case of a crash since there can be many of them
+						if(Settings.CLEAN_INTERMEDIATE_FILES)
+						{
+							String raconInAll = variantKey + ".racon.fa";
+							String raconInSingle = variantKey + ".racon.seq.fa";
+							String raconInAlign = variantKey + ".racon.align.sam";
+							String raconOutFn = variantKey + ".racon.out";
+							File f;
+							if((f = new File(raconInAll)).exists()) f.delete();
+							if((f = new File(raconInSingle)).exists()) f.delete();
+							if((f = new File(raconInAlign)).exists()) f.delete();
+							if((f = new File(raconOutFn)).exists()) f.delete();
+							if(Settings.RACON_ITERS > 1)
+							{
+								for(int i = 2; i<=Settings.RACON_ITERS; i++)
+								{
+									String fastaName = raconOutFn + "_" + i + ".fa";
+									String outName = raconOutFn + "_" + i + ".sam";
+									if((f = new File(fastaName)).exists()) f.delete();
+									if((f = new File(outName)).exists()) f.delete();
+								}
+							}
+						}
+						
 						Logger.log("Found error in " + variantKey);
 					}
 					int numDone = variantsProcessed.incrementAndGet();
 					Logger.log("Done processing " + variantKey + " (total processed = " + numDone + ")");
+					
+					// Safeguard against creating too many intermediate files
+					if(numDone >= 50 && variantsWithErrors.get() * 2 > numDone)
+					{
+						Logger.log("Terminating thread because too many refinements crashed");
+						break;
+					}
 				}
 			}
 			

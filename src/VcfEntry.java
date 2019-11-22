@@ -106,7 +106,25 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	
 	public String getType() throws Exception
 	{
-		return getInfo("SVTYPE");
+		String res = getInfo("SVTYPE");
+		if(res.length() == 0)
+		{
+			int refLength = getRef().length();
+			int altLength = getAlt().length();
+			if(refLength > altLength)
+			{
+				return "INS";
+			}
+			else if(refLength < altLength)
+			{
+				return "DEL";
+			}
+			else
+			{
+				return "";
+			}
+		}
+		else return res;
 	}
 	
 	public void setType(String s) throws Exception

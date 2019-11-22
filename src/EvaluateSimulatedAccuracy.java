@@ -178,6 +178,8 @@ public class EvaluateSimulatedAccuracy {
 		
 		VcfEntryIterator vei = new VcfEntryIterator(irisCallsFilename);
 		
+		System.out.println("True insertions: " + truth.size());
+		
 		int falsePositives = 0;
 		
 		ArrayList<Long> distances = new ArrayList<Long>();
