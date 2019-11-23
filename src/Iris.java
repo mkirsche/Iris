@@ -1,6 +1,11 @@
 public class Iris {
 public static void main(String[] args) throws Exception
 {
+	runIris(args);
+}
+
+static void runIris(String[] args) throws Exception
+{
 	Logger.init(Settings.LOG_OUT_FILE);
 	Settings.parseArgs(args);
 	SupportingReadMap srm = new SupportingReadMap(Settings.VCF_FILE);
