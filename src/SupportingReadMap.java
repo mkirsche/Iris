@@ -29,6 +29,11 @@ public class SupportingReadMap {
 				shouldProcess = true;
 			}
 			
+			if(ve.getInfo("IRIS_PROCESSED").equals("0"))
+			{
+				shouldProcess = false;
+			}
+			
 			if(shouldProcess)
 			{			
 				String key = ve.getKey();
