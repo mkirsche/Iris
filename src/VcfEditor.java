@@ -84,6 +84,10 @@ public class VcfEditor {
 		Scanner input = new Scanner(new FileInputStream(new File(oldFile)));
 		PrintWriter out = new PrintWriter(new File(newFile));
 		ResultsTableWriter tableOut = new ResultsTableWriter(tableFile);
+		
+		VcfHeader header = new VcfHeader();
+		boolean headerPrinted = false;
+		
 		while(input.hasNext())
 		{
 			String line = input.nextLine();
@@ -91,13 +95,20 @@ public class VcfEditor {
 			// Handle header line separately
 			if(line.charAt(0) == '#')
 			{
-				// Just copy the header
-				out.println(line);
+				header.addLine(line);
 			}
 			
 			else
 			{
+				if(!headerPrinted)
+				{
+					headerPrinted = true;
+					header.addInfoField("IRIS_REFINED", "1", "String", "Whether or not a variant has been refined by Iris");
+					header.addInfoField("IRIS_PROCESSED", "1", "String", "Whether or not a variant has been considered by Iris for refinement");
+					header.print(out);
+				}
 				VcfEntry ve = new VcfEntry(line);
+				ve.setInfo("IRIS_PROCESSED", "1");
 				if(Math.abs(ve.getLength()) > Settings.MAX_OUTPUT_LENGTH)
 				{
 					if(Settings.KEEP_LONG_VARIANTS)
@@ -129,6 +140,7 @@ public class VcfEditor {
 				// If this variant is in the map, update its info according to the new sequence/position
 				if(nsm.containsKey(key) && nsm.getPos(key) != -1)
 				{
+					ve.setInfo("IRIS_REFINED", "1");
 					// Make necessary replacements
 					if(ve.getType().equals("INS"))
 					{
@@ -158,6 +170,7 @@ public class VcfEditor {
 				}
 				else
 				{
+					ve.setInfo("IRIS_REFINED", "0");
 					// When there is no sequence, don't change REF/ALT
 					if(ve.getSeq().length() == 0)
 					{
@@ -190,6 +203,13 @@ public class VcfEditor {
 			}
 			
 			
+		}
+		
+		// This case only occurs when the VCF is only the header, so don't bother add new fields here
+		if(!headerPrinted)
+		{
+			headerPrinted = true;
+			header.print(out);
 		}
 		tableOut.close();
 		out.close();

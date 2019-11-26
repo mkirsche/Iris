@@ -99,6 +99,41 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		}
 	}
 	
+	/*
+	 * Set a particular VCF INFO field, adding the field if it doesn't already exist
+	 */
+	public void setInfo(String field, String val) throws Exception
+	{
+		String[] infoFields = tabTokens[7].split(";");
+		for(String semitoken : infoFields)
+		{
+			int equalIndex = semitoken.indexOf('=');
+			if(equalIndex == -1)
+			{
+				continue;
+			}
+			String key = semitoken.substring(0, equalIndex);
+			if(key.equals(field))
+			{
+				String updatedToken = key + "=" + val;
+				
+				// Special case if this is the first INFO field
+				if(tabTokens[7].startsWith(semitoken))
+				{
+					tabTokens[7] = tabTokens[7].replaceFirst(semitoken, updatedToken);
+				}
+				else
+				{
+					tabTokens[7] = tabTokens[7].replaceAll(";" + semitoken, ";" + updatedToken);
+				}
+				return;
+			}
+		}
+		
+		// Field not found, so add it!
+		tabTokens[7] += ";" + field + "=" + val;
+	}
+	
 	public void setLength(int len) throws Exception
 	{
 		setInfo("SVLEN", len+"");
@@ -257,14 +292,6 @@ public class VcfEntry implements Comparable<VcfEntry> {
 		{
 			setInfo("SEQ", newSeq);
 		}
-	}
-	
-	public void setInfo(String field, String val) throws Exception
-	{
-		String oldVal = getInfo(field);
-		String toReplace = field + '=' + oldVal;
-		String replacement = field + '=' + val;
-		tabTokens[7] = tabTokens[7].replace(toReplace, replacement);
 	}
 	
 	public String getKey() throws Exception
