@@ -54,7 +54,7 @@ public class EvaluateSimulatedAccuracy {
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
 		TreeMap<PosStore.Place, String> res = new TreeMap<PosStore.Place, String>();
 		
-		for(VcfEntry cur : vei)
+		for(IrisVcfEntry cur : vei)
 		{
 			if(!cur.getType().equals("INS"))
 			{
@@ -188,7 +188,7 @@ public class EvaluateSimulatedAccuracy {
 		
 		int countLong = 0;
 		
-		for(VcfEntry cur : vei)
+		for(IrisVcfEntry cur : vei)
 		{
 			if(!cur.getType().equals("INS"))
 			{

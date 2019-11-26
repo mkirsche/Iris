@@ -27,7 +27,7 @@ public class UnitTester {
 	@Test public void testSuppReadMap() throws Exception
 	{
 		String vcfFile = "sreads.vcf";
-		VcfEntry ve = new VcfEntry(sampleEntry);
+		IrisVcfEntry ve = new IrisVcfEntry(sampleEntry);
 		
 		PrintWriter out = new PrintWriter(new File(vcfFile));
 		out.println(ve);
@@ -62,7 +62,7 @@ public class UnitTester {
 		// Now produce old VCF file
 		String oldVcf = "sample.vcf";
 		int oldPos = 10;
-		VcfEntry oldve = new VcfEntry(sampleEntry);
+		IrisVcfEntry oldve = new IrisVcfEntry(sampleEntry);
 		oldve.setChromosome(chrName);
 		oldve.setPos(oldPos);
 		
@@ -84,10 +84,10 @@ public class UnitTester {
 		
 		VcfEntryIterator vei = new VcfEntryIterator(newVcf);
 		int count = 0;
-		for(VcfEntry ve : vei)
+		for(IrisVcfEntry ve : vei)
 		{
-			String neededBefore = genomeSeq.substring(newPos - Settings.VCF_PADDING_BEFORE - 1, newPos - 1);
-			String neededAfter = genomeSeq.substring(newPos - 1, newPos + Settings.VCF_PADDING_AFTER - 1);
+			String neededBefore = genomeSeq.substring(newPos - IrisSettings.VCF_PADDING_BEFORE - 1, newPos - 1);
+			String neededAfter = genomeSeq.substring(newPos - 1, newPos + IrisSettings.VCF_PADDING_AFTER - 1);
 			assert(ve.getRef().equals(neededBefore + neededAfter));
 			assert(ve.getAlt().equals(neededBefore + newAlt + neededAfter));
 			count++;
@@ -102,9 +102,9 @@ public class UnitTester {
 	}
 	
 	@Test
-	public void vcfEntryFields() throws Exception
+	public void IrisVcfEntryFields() throws Exception
 	{
-		VcfEntry ve = new VcfEntry(sampleEntry);
+		IrisVcfEntry ve = new IrisVcfEntry(sampleEntry);
 		assertEquals(ve.getChromosome(), "21");
 		assertEquals(ve.getPos(), 9076661L);
 		assertEquals(ve.getId(), "28581");
@@ -115,10 +115,10 @@ public class UnitTester {
 	}
 	
 	@Test(expected = Exception.class)
-	public void invalidVcfEntryException() throws Exception
+	public void invalidIrisVcfEntryException() throws Exception
 	{
 		String line = "0\t\0\t0\t0\t0\t0\t0";
-		new VcfEntry(line); 
+		new IrisVcfEntry(line); 
 	}
 
 }

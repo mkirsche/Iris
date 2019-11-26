@@ -1,7 +1,7 @@
 /*
  * Holds settings such as input/output filenames and various parameters
  */
-public class Settings {
+public class IrisSettings {
 	static int VCF_PADDING_BEFORE = 1;
 	static int VCF_PADDING_AFTER = 0;
 	

@@ -50,7 +50,7 @@ public class NewSequenceMap {
             return null;
         }
 		ArrayList<String> consensusSequences;
-		if(Settings.USE_FALCONSENSE)
+		if(IrisSettings.USE_FALCONSENSE)
 		{
 			consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
 		}
@@ -66,7 +66,7 @@ public class NewSequenceMap {
 		}
 		ArrayList<String> alignmentRecords = AlignConsensus.getConsensusAlignmentRecords(key, consensusSequences, gq);
 		Logger.log("Found " + alignmentRecords.size() + " alignment records for " + key);
-		String type = VcfEntry.getTypeFromKey(key);
+		String type = IrisVcfEntry.getTypeFromKey(key);
 		UpdatedEntry res = null;
 		if(type.equals("INS"))
 		{
@@ -76,15 +76,15 @@ public class NewSequenceMap {
 		{
 			res = BestDeletionFinder.findBestDeletion(key, alignmentRecords);
 		}
-		if(res != null && VcfEntry.getPosFromKey(key) > Settings.GENOME_REGION_BUFFER)
+		if(res != null && IrisVcfEntry.getPosFromKey(key) > IrisSettings.GENOME_REGION_BUFFER)
 		{
-			res.pos += VcfEntry.getPosFromKey(key) - Settings.GENOME_REGION_BUFFER;
+			res.pos += IrisVcfEntry.getPosFromKey(key) - IrisSettings.GENOME_REGION_BUFFER;
 		}
 		
 		if(res != null)
 		{
-			String originalChr = VcfEntry.getChrFromKey(key);
-			long originalPos = VcfEntry.getPosFromKey(key);
+			String originalChr = IrisVcfEntry.getChrFromKey(key);
+			long originalPos = IrisVcfEntry.getPosFromKey(key);
 			PosStore.Place originalPlace = new PosStore.Place(originalChr, originalPos);
 			
 			PosStore.Place closestToRefined = PosStore.getNearestVariant(type, originalChr, res.pos);
@@ -98,13 +98,13 @@ public class NewSequenceMap {
 			long oldLength = PosStore.getLength(type, closestToRefined.chr, closestToRefined.pos);
 			long newLength = res.seq.length();
 			
-			if(newLength > oldLength * (1 + Settings.MAX_LENGTH_CHANGE))
+			if(newLength > oldLength * (1 + IrisSettings.MAX_LENGTH_CHANGE))
 			{
 				Logger.log("Did not change " + key + " because new sequence too long");
 				return null;
 			}
 			
-			if(newLength < oldLength * (1 - Settings.MAX_LENGTH_CHANGE))
+			if(newLength < oldLength * (1 - IrisSettings.MAX_LENGTH_CHANGE))
 			{
 				Logger.log("Did not change " + key + " because new sequence too short");
 				return null;

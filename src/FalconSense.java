@@ -19,7 +19,7 @@ public class FalconSense {
 		int maxLength = writeFalconSenseInput(reads, falconInFn);
 		executeFalconSense(falconInFn, maxLength, falconOutFn);
 		ArrayList<String> res = parseFalconSenseOutput(falconOutFn);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(falconInFn).delete();
 			new File(falconOutFn).delete();
@@ -76,10 +76,10 @@ public class FalconSense {
 				 "%s --min_idt %f --min_len %d --max_read_len %d "
 				 + "--min_ovl_len %d --min_cov %d --n_core %d "
 				 ,//+ "> %s < %s", 
-				 Settings.FALCONSENSE_PATH, Settings.FALCONSENSE_MIN_IDT,
-				 Settings.FALCONSENSE_MIN_LEN, maxLength,
-				 Settings.FALCONSENSE_MIN_OVL_LEN, Settings.FALCONSENSE_MIN_COV,
-				 Settings.FALCONSENSE_N_CORE);//, falconOut, falconIn);
+				 IrisSettings.FALCONSENSE_PATH, IrisSettings.FALCONSENSE_MIN_IDT,
+				 IrisSettings.FALCONSENSE_MIN_LEN, maxLength,
+				 IrisSettings.FALCONSENSE_MIN_OVL_LEN, IrisSettings.FALCONSENSE_MIN_COV,
+				 IrisSettings.FALCONSENSE_N_CORE);//, falconOut, falconIn);
 		// Use bin/sh because pipes will not work when called directly
 		ArrayList<String> fullFsCommand = new ArrayList<String>();
 		for(String s : fsCommand.split(" ")) fullFsCommand.add(s);

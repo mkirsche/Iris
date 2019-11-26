@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ReadShirring {
 	static ArrayList<String> getReads(String key, ArrayList<String> readNames) throws Exception
 	{
-		String readFile = Settings.READS_FILE;
+		String readFile = IrisSettings.READS_FILE;
 		String samFileName = key + ".sam";
 		String bamFileName = key + ".bam";
 		String fastqFileName = key + ".fastq";
@@ -27,20 +27,20 @@ public class ReadShirring {
 		
 		// Convert to bam file for input into bam2fastq
 		samToBam(samFileName, bamFileName);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(samFileName).delete();
 		}
 				
 		// Generate bam2fq command for converting alignments to fastq file
 		bamToFastq(bamFileName, fastqFileName);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(bamFileName).delete();
 		}
 		
 		ArrayList<String> readSequences = getReadsFromFastq(fastqFileName);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(fastqFileName).delete();
 		}
@@ -51,8 +51,8 @@ public class ReadShirring {
 	// Gets reads with names in the list that are within 10kbp of a target SV and outputs them to a SAM file
 	static void extractReads(String key, ArrayList<String> readNames, ArrayList<String> readFiles, String samFileName) throws Exception
 	{
-		String chr = VcfEntry.getChrFromKey(key);
-		long pos = VcfEntry.getPosFromKey(key);
+		String chr = IrisVcfEntry.getChrFromKey(key);
+		long pos = IrisVcfEntry.getPosFromKey(key);
 		
 		// Make grep query string to get header or any lines with 
 		StringBuilder grepQuery = new StringBuilder("\"" + "^@");
@@ -68,7 +68,7 @@ public class ReadShirring {
 			String readFile = readFiles.get(i);
 			String samtoolsCommand = String.format("%s view " 
 				+ (i == 0 ? "-h " : "") + "%s %s:%d-%d | grep -E %s " + (i == 0 ? ">" : ">>") + " %s", 
-					Settings.SAMTOOLS_PATH,
+					IrisSettings.SAMTOOLS_PATH,
 					readFile,
 					chr,
 					pos - 10000,
@@ -89,7 +89,7 @@ public class ReadShirring {
 	
 	static void samToBam(String samFileName, String bamFileName) throws Exception
 	{
-		String toBamCommand = String.format("%s view -h -S -b %s > %s", Settings.SAMTOOLS_PATH, samFileName, bamFileName);
+		String toBamCommand = String.format("%s view -h -S -b %s > %s", IrisSettings.SAMTOOLS_PATH, samFileName, bamFileName);
 		String[] fullBamtoolsCommmand = new String[] {"/bin/sh", "-c", toBamCommand};
 		Process child = Runtime.getRuntime().exec(fullBamtoolsCommmand);
 		int p = child.waitFor();
@@ -102,7 +102,7 @@ public class ReadShirring {
 	static void bamToFastq(String bamFileName, String fastqFileName) throws Exception
 	{
 		String toFastqCommand = String.format("%s bam2fq %s > %s", 
-				Settings.SAMTOOLS_PATH,
+				IrisSettings.SAMTOOLS_PATH,
 				bamFileName, 
 				fastqFileName);
 		String[] fullFastqCommmand = new String[] {"/bin/sh", "-c", toFastqCommand};

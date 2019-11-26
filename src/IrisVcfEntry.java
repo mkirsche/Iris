@@ -3,12 +3,12 @@ import java.util.Arrays;
 /*
  * Methods for handling VCF v4.2 entries for structural variants
  */
-public class VcfEntry implements Comparable<VcfEntry> {
+public class IrisVcfEntry implements Comparable<IrisVcfEntry> {
 
 	String originalLine;
 	String[] tabTokens;
 	
-	public VcfEntry(String line) throws Exception
+	public IrisVcfEntry(String line) throws Exception
 	{
 		originalLine = line;
 		tabTokens = line.split("\t");
@@ -273,10 +273,10 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	public void updateInsertionSequence(String newSeq) throws Exception
 	{
 		setRef("");
-		if(newSeq.length() < Settings.MAX_OUTPUT_LENGTH) setAlt(newSeq);
+		if(newSeq.length() < IrisSettings.MAX_OUTPUT_LENGTH) setAlt(newSeq);
 		else setAlt("");
 		setLength(newSeq.length());
-		if(hasInfoField("SEQ") && newSeq.length() < Settings.MAX_OUTPUT_LENGTH)
+		if(hasInfoField("SEQ") && newSeq.length() < IrisSettings.MAX_OUTPUT_LENGTH)
 		{
 			setInfo("SEQ", newSeq);
 		}
@@ -284,11 +284,11 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	
 	public void updateDeletion(String newSeq) throws Exception
 	{
-		if(newSeq.length() < Settings.MAX_OUTPUT_LENGTH) setRef(newSeq);
+		if(newSeq.length() < IrisSettings.MAX_OUTPUT_LENGTH) setRef(newSeq);
 		else setRef("");
 		setAlt("");
 		setLength(-newSeq.length());
-		if(hasInfoField("SEQ") && newSeq.length() < Settings.MAX_OUTPUT_LENGTH)
+		if(hasInfoField("SEQ") && newSeq.length() < IrisSettings.MAX_OUTPUT_LENGTH)
 		{
 			setInfo("SEQ", newSeq);
 		}
@@ -318,7 +318,7 @@ public class VcfEntry implements Comparable<VcfEntry> {
 	}
 	
 	@Override
-	public int compareTo(VcfEntry o) {
+	public int compareTo(IrisVcfEntry o) {
 		for(int i = 0; i<tabTokens.length && i < o.tabTokens.length; i++)
 		{
 			if(!tabTokens[i].equals(o.tabTokens[i]))

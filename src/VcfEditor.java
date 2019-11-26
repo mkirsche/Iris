@@ -35,24 +35,24 @@ public class VcfEditor {
 	/*
 	 * Gets padding characters before and after a variant based on its position
 	 */
-	String getBeforeAfter(VcfEntry ve) throws Exception
+	String getBeforeAfter(IrisVcfEntry ve) throws Exception
 	{
 		String chr = ve.getChromosome();
 		long pos = ve.getPos() + 1;
 		
 		if(!consumesReference(ve.getType()))
 		{
-			long start = pos - Settings.VCF_PADDING_BEFORE;
-			long end = pos + Settings.VCF_PADDING_AFTER - 1;
+			long start = pos - IrisSettings.VCF_PADDING_BEFORE;
+			long end = pos + IrisSettings.VCF_PADDING_AFTER - 1;
 			String res = gq.genomeSubstring(chr, start, end);
 			return res;
 		}
 		else
 		{
-			long start1 = pos - Settings.VCF_PADDING_BEFORE;
+			long start1 = pos - IrisSettings.VCF_PADDING_BEFORE;
 			long end1 = pos - 1;
 			long start2 = pos + ve.getLength();
-			long end2 = start2 + Settings.VCF_PADDING_AFTER - 1;
+			long end2 = start2 + IrisSettings.VCF_PADDING_AFTER - 1;
 			String res = gq.genomeSubstring(chr, start1, end1) + gq.genomeSubstring(chr, start2, end2);
 			return res;
 		}
@@ -70,13 +70,13 @@ public class VcfEditor {
 	/*
 	 * Updates the REF and ALT sequences for a variant by adding appropriate padding 
 	 */
-	void updateBeforeAfter(VcfEntry ve) throws Exception
+	void updateBeforeAfter(IrisVcfEntry ve) throws Exception
 	{
 		String beforeAfter = getBeforeAfter(ve);
-		ve.setRef(beforeAfter.substring(0, Settings.VCF_PADDING_BEFORE) 
-				+ ve.getRef() + beforeAfter.substring(Settings.VCF_PADDING_BEFORE));
-		ve.setAlt(beforeAfter.substring(0, Settings.VCF_PADDING_BEFORE) 
-				+ ve.getAlt() + beforeAfter.substring(Settings.VCF_PADDING_BEFORE));
+		ve.setRef(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
+				+ ve.getRef() + beforeAfter.substring(IrisSettings.VCF_PADDING_BEFORE));
+		ve.setAlt(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
+				+ ve.getAlt() + beforeAfter.substring(IrisSettings.VCF_PADDING_BEFORE));
 	}
 	
 	void run() throws Exception
@@ -107,11 +107,11 @@ public class VcfEditor {
 					header.addInfoField("IRIS_PROCESSED", "1", "String", "Whether or not a variant has been considered by Iris for refinement");
 					header.print(out);
 				}
-				VcfEntry ve = new VcfEntry(line);
+				IrisVcfEntry ve = new IrisVcfEntry(line);
 				ve.setInfo("IRIS_PROCESSED", "1");
-				if(Math.abs(ve.getLength()) > Settings.MAX_OUTPUT_LENGTH)
+				if(Math.abs(ve.getLength()) > IrisSettings.MAX_OUTPUT_LENGTH)
 				{
-					if(Settings.KEEP_LONG_VARIANTS)
+					if(IrisSettings.KEEP_LONG_VARIANTS)
 					{
 						Logger.log("Printing original VCF entry for " + ve.getKey() + " because length is too long");
 						out.println(ve);

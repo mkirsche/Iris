@@ -25,7 +25,7 @@ public class ParallelRunningStitch {
 		Logger.log("Number of variants to refine with supporting reads: " + keys.length);
 		this.numThreads = numThreads;
 		
-		irs = new IntermediateResultsStore(Settings.INTERMEDIATE_RESULTS_FILE, Settings.RESUME);
+		irs = new IntermediateResultsStore(IrisSettings.INTERMEDIATE_RESULTS_FILE, IrisSettings.RESUME);
 		
 		todo = new ConcurrentLinkedQueue<Integer>();
 		for(int i = 0; i<keys.length; i++)
@@ -70,7 +70,7 @@ public class ParallelRunningStitch {
 					String variantKey = keys[cur];
 					Logger.log("Starting to process " + variantKey);
 					
-					if(Settings.RESUME && irs.set.contains(variantKey))
+					if(IrisSettings.RESUME && irs.set.contains(variantKey))
 					{
 						Logger.log("Using results from previous run for " + variantKey);
 						int numDone = variantsProcessed.incrementAndGet();
@@ -96,7 +96,7 @@ public class ParallelRunningStitch {
 						e.printStackTrace();
 						
 						// Remove Racon's files in the case of a crash since there can be many of them
-						if(Settings.CLEAN_INTERMEDIATE_FILES)
+						if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 						{
 							String raconInAll = variantKey + ".racon.fa";
 							String raconInSingle = variantKey + ".racon.seq.fa";
@@ -107,9 +107,9 @@ public class ParallelRunningStitch {
 							if((f = new File(raconInSingle)).exists()) f.delete();
 							if((f = new File(raconInAlign)).exists()) f.delete();
 							if((f = new File(raconOutFn)).exists()) f.delete();
-							if(Settings.RACON_ITERS > 1)
+							if(IrisSettings.RACON_ITERS > 1)
 							{
-								for(int i = 2; i<=Settings.RACON_ITERS; i++)
+								for(int i = 2; i<=IrisSettings.RACON_ITERS; i++)
 								{
 									String fastaName = raconOutFn + "_" + i + ".fa";
 									String outName = raconOutFn + "_" + i + ".sam";

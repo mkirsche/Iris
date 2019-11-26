@@ -3,7 +3,7 @@ import java.io.FileInputStream;
 import java.util.Iterator;
 import java.util.Scanner;
 
-class VcfEntryIterator implements Iterable<VcfEntry> 
+class VcfEntryIterator implements Iterable<IrisVcfEntry> 
 {
 	Scanner input;
 	String last;
@@ -13,9 +13,9 @@ class VcfEntryIterator implements Iterable<VcfEntry>
 		last = null;
 	}
 	@Override
-	public Iterator<VcfEntry> iterator() {
+	public Iterator<IrisVcfEntry> iterator() {
 		
-		return new Iterator<VcfEntry>() {
+		return new Iterator<IrisVcfEntry>() {
 			@Override
 			public boolean hasNext() {
 				if(last != null)
@@ -34,11 +34,11 @@ class VcfEntryIterator implements Iterable<VcfEntry>
 				return last != null;
 			}
 			@Override
-			public VcfEntry next() {
+			public IrisVcfEntry next() {
 				try {
 					String curLine = last;
 					last = null;
-					return new VcfEntry(curLine);
+					return new IrisVcfEntry(curLine);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

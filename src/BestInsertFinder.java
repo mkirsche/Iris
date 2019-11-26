@@ -41,7 +41,7 @@ public static NewSequenceMap.UpdatedEntry findBestInsertFromOffset(ArrayList<Str
 			int length = candidate.seq.length();
 			
 			// Throw out short and far away insertions
-			if(distance > Settings.INSERTION_MAX_DIST || length < Settings.INSERTION_MIN_LENGTH)
+			if(distance > IrisSettings.INSERTION_MAX_DIST || length < IrisSettings.INSERTION_MIN_LENGTH)
 			{
 				continue;
 			}
@@ -87,7 +87,7 @@ static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecor
 			long distance = Math.abs(candidate.pos - offset);
 			int length = candidate.seq.length();
 			
-			if(distance > Settings.INSERTION_MAX_DIST || length < Settings.INSERTION_MIN_LENGTH)
+			if(distance > IrisSettings.INSERTION_MAX_DIST || length < IrisSettings.INSERTION_MIN_LENGTH)
 			{
 				continue;
 			}
@@ -117,8 +117,8 @@ static HashMap<Integer, Double> getLengthScores(ArrayList<String> alignmentRecor
  */
 static long getExpectedOffset(String id)
 {
-	long pos = VcfEntry.getPosFromKey(id);
-	return Math.min(pos, Settings.GENOME_REGION_BUFFER); // TODO check for indexing errors here
+	long pos = IrisVcfEntry.getPosFromKey(id);
+	return Math.min(pos, IrisSettings.GENOME_REGION_BUFFER); // TODO check for indexing errors here
 }
 
 /*

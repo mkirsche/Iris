@@ -20,11 +20,11 @@ public class SupportingReadMap {
 		PosStore.init(filename);
 		
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
-		for(VcfEntry ve : vei)
+		for(IrisVcfEntry ve : vei)
 		{
 			boolean shouldProcess = ve.getType().equals("INS");
 			
-			if(Settings.PROCESS_DELETIONS && ve.getType().equals("DEL"))
+			if(IrisSettings.PROCESS_DELETIONS && ve.getType().equals("DEL"))
 			{
 				shouldProcess = true;
 			}
@@ -37,7 +37,7 @@ public class SupportingReadMap {
 			if(shouldProcess)
 			{			
 				String key = ve.getKey();
-				String supportingReadList = ve.getInfo(Settings.RNAMES_FIELDNAME);
+				String supportingReadList = ve.getInfo(IrisSettings.RNAMES_FIELDNAME);
 				String[] nameTokens = supportingReadList.split(",");
 				ArrayList<String> val = new ArrayList<String>();
 				for(String s : nameTokens)
@@ -51,7 +51,7 @@ public class SupportingReadMap {
 				if(val.size() == 0)
 				{
 					Logger.log("Skipping " + key + " because of invalid read names field: " 
-						+ ve.getInfo(Settings.RNAMES_FIELDNAME));
+						+ ve.getInfo(IrisSettings.RNAMES_FIELDNAME));
 					continue;
 				}
 				

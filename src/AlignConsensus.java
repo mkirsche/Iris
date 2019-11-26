@@ -20,7 +20,7 @@ public class AlignConsensus {
 		writeNgmlrInput(consensusSequences, alignInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
 		
-		if(Settings.USE_NGMLR)
+		if(IrisSettings.USE_NGMLR)
 		{
 			executeNgmlr(alignInFn, genomeSampleFn, alignOutFn);
 		}
@@ -29,13 +29,13 @@ public class AlignConsensus {
 			executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
 		}
 		ArrayList<String> res = getNgmlrAlignmentStrings(alignOutFn);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(alignInFn).delete();
 			new File(alignOutFn).delete();
 			new File(genomeSampleFn).delete();
 			
-			if(Settings.USE_NGMLR)
+			if(IrisSettings.USE_NGMLR)
 			{
 				new File(genomeSampleFn + "-enc.2.ngm").delete();
 			
@@ -49,10 +49,10 @@ public class AlignConsensus {
 	
 	static void writeGenomeSample(String id, String gsFn, GenomeQuery gq) throws Exception
 	{
-		String chr = VcfEntry.getChrFromKey(id);
-		long pos = VcfEntry.getPosFromKey(id);
-		long start = Math.max(1, pos - Settings.GENOME_REGION_BUFFER);
-		long end = pos + Settings.GENOME_REGION_BUFFER;
+		String chr = IrisVcfEntry.getChrFromKey(id);
+		long pos = IrisVcfEntry.getPosFromKey(id);
+		long start = Math.max(1, pos - IrisSettings.GENOME_REGION_BUFFER);
+		long end = pos + IrisSettings.GENOME_REGION_BUFFER;
 		String sample = gq.genomeSubstring(chr, start, end);
 		
 		PrintWriter out = new PrintWriter(new File(gsFn));
@@ -81,7 +81,7 @@ public class AlignConsensus {
 	{
 		String ngmlrCommand = String.format(
 				 "%s -t %d -r %s -q %s -o %s", 
-				 Settings.NGMLR_PATH, Settings.ALIGNMENT_THREADS,
+				 IrisSettings.NGMLR_PATH, IrisSettings.ALIGNMENT_THREADS,
 				 genomeSample, ngmlrIn, ngmlrOut);
 		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
 		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
@@ -102,7 +102,7 @@ public class AlignConsensus {
 	{
 		String minimapCommand = String.format(
 				 "%s -L -c -a -x %s -t %d %s %s -o %s", 
-				 Settings.MINIMAP_PATH, Settings.MINIMAP_MODE, Settings.ALIGNMENT_THREADS,
+				 IrisSettings.MINIMAP_PATH, IrisSettings.MINIMAP_MODE, IrisSettings.ALIGNMENT_THREADS,
 				 genomeSample, minimapIn, minimapOut);
 		ArrayList<String> fullMinimapCommand = new ArrayList<String>();
 		for(String s : minimapCommand.split(" ")) fullMinimapCommand.add(s);

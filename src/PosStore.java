@@ -9,7 +9,7 @@ public class PosStore {
 	{
 		positions = new HashMap<String, TreeMap<Place, Long>>();
 		VcfEntryIterator vei = new VcfEntryIterator(filename);
-		for(VcfEntry cur : vei)
+		for(IrisVcfEntry cur : vei)
 		{
 			String type = cur.getType();
 			String chr = cur.getChromosome();

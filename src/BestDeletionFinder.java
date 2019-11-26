@@ -32,7 +32,7 @@ public static NewSequenceMap.UpdatedEntry findBestDeletionFromOffset(ArrayList<S
 			int length = candidate.seq.length();
 			
 			// Throw out short and far away deletions
-			if(distance > Settings.INSERTION_MAX_DIST || length < Settings.INSERTION_MIN_LENGTH)
+			if(distance > IrisSettings.INSERTION_MAX_DIST || length < IrisSettings.INSERTION_MIN_LENGTH)
 			{
 				continue;
 			}

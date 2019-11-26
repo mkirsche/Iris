@@ -22,7 +22,7 @@ public class GenomeQuery {
 	 */
 	void testSamtoolsInstalled() throws Exception
 	{
-		String samtoolsTestCommand = Settings.SAMTOOLS_PATH;
+		String samtoolsTestCommand = IrisSettings.SAMTOOLS_PATH;
 		Process child = Runtime.getRuntime().exec(samtoolsTestCommand);
         int seqExit = child.waitFor();
 		
@@ -31,7 +31,7 @@ public class GenomeQuery {
         if(seqExit > 1)
         {
         	throw new Exception("samtools produced bad exit code (" 
-        			+ seqExit + ") - perhaps it is not on your path: " + Settings.SAMTOOLS_PATH);
+        			+ seqExit + ") - perhaps it is not on your path: " + IrisSettings.SAMTOOLS_PATH);
         }
 	}
 	
@@ -41,7 +41,7 @@ public class GenomeQuery {
 		{
 			return "";
 		}
-		String faidxCommand = String.format(Settings.SAMTOOLS_PATH + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
+		String faidxCommand = String.format(IrisSettings.SAMTOOLS_PATH + " faidx %s %s:%d-%d", filename, chr, startPos, endPos);
 		Process child = Runtime.getRuntime().exec(faidxCommand);
         InputStream seqStream = child.getInputStream();
 		Scanner seqInput = new Scanner(seqStream);

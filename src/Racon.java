@@ -11,12 +11,12 @@ public class Racon {
 	
 	static String getDraft(String oldSeq, GenomeQuery gq, String id) throws Exception
 	{
-		String type = VcfEntry.getTypeFromKey(id);
-		long pos = VcfEntry.getPosFromKey(id);
-		String chr = VcfEntry.getChrFromKey(id);
+		String type = IrisVcfEntry.getTypeFromKey(id);
+		long pos = IrisVcfEntry.getPosFromKey(id);
+		String chr = IrisVcfEntry.getChrFromKey(id);
 		
-		long start = Math.max(1, pos - Settings.RACON_BUFFER);
-		long end = pos + Settings.RACON_BUFFER;
+		long start = Math.max(1, pos - IrisSettings.RACON_BUFFER);
+		long end = pos + IrisSettings.RACON_BUFFER;
 		
 		if(type.equals("INS"))
 		{
@@ -59,18 +59,18 @@ public class Racon {
 		String raconOutFn = id + ".racon.out";
 		String draft = getDraft(oldSeq, gq, id);
 		writeRaconInput(reads, raconInAll, raconInSingle, raconInAlign, draft);
-		int numRuns = Settings.RACON_ITERS;
+		int numRuns = IrisSettings.RACON_ITERS;
 		executeRacon(raconInAll, raconInSingle, raconInAlign, raconOutFn, numRuns);
 		ArrayList<String> res = parseRaconOutput(raconOutFn);
-		if(Settings.CLEAN_INTERMEDIATE_FILES)
+		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(raconInAll).delete();
 			new File(raconInSingle).delete();
 			new File(raconInAlign).delete();
 			new File(raconOutFn).delete();
-			if(Settings.RACON_ITERS > 1)
+			if(IrisSettings.RACON_ITERS > 1)
 			{
-				for(int i = 2; i<=Settings.RACON_ITERS; i++)
+				for(int i = 2; i<=IrisSettings.RACON_ITERS; i++)
 				{
 					new File(raconOutFn + "_" + i + ".fa").delete();
 					new File(raconOutFn + "_" + i + ".sam").delete();
@@ -136,7 +136,7 @@ public class Racon {
 		}
 		String fsCommand = String.format(
 				 "%s %s %s %s", 
-				 Settings.RACON_PATH, raconInAll, raconInAlignments, raconInSingle);
+				 IrisSettings.RACON_PATH, raconInAll, raconInAlignments, raconInSingle);
 		
 		ArrayList<String> fullFsCommand = new ArrayList<String>();
 		for(String s : fsCommand.split(" ")) fullFsCommand.add(s);
