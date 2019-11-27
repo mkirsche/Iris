@@ -247,7 +247,7 @@ public class IrisVcfEntry implements Comparable<IrisVcfEntry> {
 				return semitoken.substring(1 + equalIndex);
 			}
 		}
-		throw new Exception("Trying to access VCF INFO field which is not found: " + field);
+		return "";
 	}
 	
 	public boolean hasInfoField(String fieldName)
