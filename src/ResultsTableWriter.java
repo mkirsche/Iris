@@ -15,7 +15,7 @@ public class ResultsTableWriter {
 		out.println(TableEntry.makeHeader());
 	}
 	
-	void printEntry(IrisVcfEntry oldEntry, GenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
+	void printEntry(IrisVcfEntry oldEntry, IrisGenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
 	{
 		out.println(new TableEntry(oldEntry, gq, newEntry));
 	}
@@ -61,7 +61,7 @@ public class ResultsTableWriter {
 		int newLength;
 		int editDistance;
 		
-		TableEntry(IrisVcfEntry oldEntry, GenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
+		TableEntry(IrisVcfEntry oldEntry, IrisGenomeQuery gq, NewSequenceMap.UpdatedEntry newEntry) throws Exception
 		{
 			chromosome = oldEntry.getChromosome();
 			originalPosition = oldEntry.getPos();

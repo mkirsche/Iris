@@ -12,7 +12,7 @@ public class VcfEditor {
 	String newFile;
 	String tableFile;
 	NewSequenceMap nsm;
-	GenomeQuery gq;
+	IrisGenomeQuery gq;
 	
 	/*
 	 * oldFile is the original VCF files produced by Sniffles
@@ -20,7 +20,7 @@ public class VcfEditor {
 	 * nsm is the map from variant key to new sequence/position
 	 * gq is the wrapper around samtools faidx for getting sequences from the original genome
 	 */
-	VcfEditor(String oldFile, String newFile, String tableFile, NewSequenceMap nsm, GenomeQuery gq) throws Exception
+	VcfEditor(String oldFile, String newFile, String tableFile, NewSequenceMap nsm, IrisGenomeQuery gq) throws Exception
 	{
 		this.oldFile = oldFile;
 		if(!(new File(oldFile)).exists()) {

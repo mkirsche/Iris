@@ -12,7 +12,7 @@ public class AlignConsensus {
 	/*
 	 * Given the assembled sequences, align them to a region of the reference with ngmlr
 	 */
-	static ArrayList<String> getConsensusAlignmentRecords(String id, ArrayList<String> consensusSequences, GenomeQuery gq) throws Exception
+	static ArrayList<String> getConsensusAlignmentRecords(String id, ArrayList<String> consensusSequences, IrisGenomeQuery gq) throws Exception
 	{
 		String alignInFn = id + ".align.in";
 		String alignOutFn = id + ".align.out";
@@ -47,7 +47,7 @@ public class AlignConsensus {
 		return res;
 	}
 	
-	static void writeGenomeSample(String id, String gsFn, GenomeQuery gq) throws Exception
+	static void writeGenomeSample(String id, String gsFn, IrisGenomeQuery gq) throws Exception
 	{
 		String chr = IrisVcfEntry.getChrFromKey(id);
 		long pos = IrisVcfEntry.getPosFromKey(id);

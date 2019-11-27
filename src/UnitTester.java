@@ -57,7 +57,7 @@ public class UnitTester {
 		out.println(genomeSeq);
 		out.close();
 		
-		GenomeQuery gq = new GenomeQuery("sample.fa");
+		IrisGenomeQuery gq = new IrisGenomeQuery("sample.fa");
 		
 		// Now produce old VCF file
 		String oldVcf = "sample.vcf";

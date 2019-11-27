@@ -2,12 +2,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Scanner;
 
-public class GenomeQuery {
+public class IrisGenomeQuery {
 	String filename;
 	
 	// Assume that samtools is on the user's path
 	
-	GenomeQuery(String filename) throws Exception
+	IrisGenomeQuery(String filename) throws Exception
 	{
 		testSamtoolsInstalled();
 		boolean validFile = new File(filename).exists();

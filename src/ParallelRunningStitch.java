@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ParallelRunningStitch {
-	GenomeQuery gq;
+	IrisGenomeQuery gq;
 	SupportingReadMap readMap;
 	NewSequenceMap results;
 	IntermediateResultsStore irs;
@@ -17,7 +17,7 @@ public class ParallelRunningStitch {
 	AtomicInteger variantsWithErrors = new AtomicInteger(0);
 	ConcurrentLinkedQueue<Integer> todo;
 	
-	ParallelRunningStitch(SupportingReadMap readMap, int numThreads, GenomeQuery gq) throws Exception
+	ParallelRunningStitch(SupportingReadMap readMap, int numThreads, IrisGenomeQuery gq) throws Exception
 	{
 		this.gq = gq;
 		this.readMap = readMap;

@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class Racon {
 	
-	static String getDraft(String oldSeq, GenomeQuery gq, String id) throws Exception
+	static String getDraft(String oldSeq, IrisGenomeQuery gq, String id) throws Exception
 	{
 		String type = IrisVcfEntry.getTypeFromKey(id);
 		long pos = IrisVcfEntry.getPosFromKey(id);
@@ -46,7 +46,7 @@ public class Racon {
 		return true;
 	}
 	
-	static ArrayList<String> getConsensusSequences(String id, String oldSeq, GenomeQuery gq, ArrayList<String> reads) throws Exception
+	static ArrayList<String> getConsensusSequences(String id, String oldSeq, IrisGenomeQuery gq, ArrayList<String> reads) throws Exception
 	{
 		if(!isAlphanumeric(oldSeq))
 		{

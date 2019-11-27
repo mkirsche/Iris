@@ -16,7 +16,7 @@ public class EvaluateSimulatedAccuracy {
 	static double ID_THRESHOLD = 0.5;
 	static String OUTPUT_FILE = "scores.txt";
 	static String GENOME_FILE = "";
-	static GenomeQuery gq;
+	static IrisGenomeQuery gq;
 	static boolean PRINT_EXAMPLES = false;
 	static void usage()
 	{
@@ -215,7 +215,7 @@ public class EvaluateSimulatedAccuracy {
 				String oldCurSeq = curSeq;
 				if(GENOME_FILE.length() > 0)
 				{
-					if(gq == null) gq = new GenomeQuery(GENOME_FILE);
+					if(gq == null) gq = new IrisGenomeQuery(GENOME_FILE);
 					long start = Math.max(1, curPlace.pos - 10);
 					long end = curPlace.pos + 10;
 					String before = gq.genomeSubstring(curPlace.chr, start, curPlace.pos - 1);

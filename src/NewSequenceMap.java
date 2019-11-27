@@ -41,7 +41,7 @@ public class NewSequenceMap {
 		return map.get(key).pos;
 	}
 	
-	static UpdatedEntry fromReadNames(String key, HashMap<String, String> seqMap, ArrayList<String> names, GenomeQuery gq) throws Exception
+	static UpdatedEntry fromReadNames(String key, HashMap<String, String> seqMap, ArrayList<String> names, IrisGenomeQuery gq) throws Exception
 	{
 		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
 		Logger.log("Found " + readSeqs.size() + " relevant reads for " + key);

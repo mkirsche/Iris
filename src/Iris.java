@@ -9,7 +9,7 @@ static void runIris(String[] args) throws Exception
 	Logger.init(IrisSettings.LOG_OUT_FILE);
 	IrisSettings.parseArgs(args);
 	SupportingReadMap srm = new SupportingReadMap(IrisSettings.VCF_FILE);
-	GenomeQuery gq = new GenomeQuery(IrisSettings.GENOME_FILE);
+	IrisGenomeQuery gq = new IrisGenomeQuery(IrisSettings.GENOME_FILE);
 	
 	ParallelRunningStitch prs = new ParallelRunningStitch(srm, IrisSettings.THREADS, gq);
 	prs.run();
