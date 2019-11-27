@@ -23,7 +23,20 @@ public class IrisSettings {
 	static String RNAMES_FIELDNAME = "RNAMES";
 	
 	// External tool paths
-	static String WORKING_DIR = System.getProperty("java.class.path") + "/..";
+	static String getIrisWorkingDir()
+	{
+		String res = Iris.class.getResource("Iris.class").getPath();
+		if(res.contains("/"))
+		{
+			res = res.substring(0, res.lastIndexOf('/')) + "/..";
+		}
+		else
+		{
+			res = "..";
+		}
+		return res;
+	}
+	static String WORKING_DIR = getIrisWorkingDir();//System.getProperty("java.class.path") + "/..";
 	static String SAMTOOLS_PATH = WORKING_DIR + "/" + "external_scripts/samtools";
 	static String FALCONSENSE_PATH = WORKING_DIR + "/" + "external_scripts/falcon_sense";
 	static String NGMLR_PATH = WORKING_DIR + "/" + "external_scripts/ngmlr";
