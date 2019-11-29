@@ -3,4 +3,4 @@ if [ "$(uname -s)" = 'Linux' ]; then
 else
     BINDIR=$(dirname "$(readlink "$0" || echo "$(echo "$0" | sed -e 's,\\,/,g')")")
 fi
-javac -cp $BINDIR/src/junit.jar:BINDIR/src $BINDIR/src/*.java
+javac -cp BINDIR/src $BINDIR/src/*.java
