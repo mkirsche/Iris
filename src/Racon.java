@@ -53,10 +53,10 @@ public class Racon {
 			Logger.log("Could not run racon on " + id + " because of non-alphanumeric variant sequence: " + oldSeq);
 			return new ArrayList<String>();
 		}
-		String raconInAll = id + ".racon.fa";
-		String raconInSingle = id + ".racon.seq.fa";
-		String raconInAlign = id + ".racon.align.sam";
-		String raconOutFn = id + ".racon.out";
+		String raconInAll = IrisSettings.addOutDir(id + ".racon.fa");
+		String raconInSingle = IrisSettings.addOutDir(id + ".racon.seq.fa");
+		String raconInAlign = IrisSettings.addOutDir(id + ".racon.align.sam");
+		String raconOutFn = IrisSettings.addOutDir(id + ".racon.out");
 		String draft = getDraft(oldSeq, gq, id);
 		writeRaconInput(reads, raconInAll, raconInSingle, raconInAlign, draft);
 		int numRuns = IrisSettings.RACON_ITERS;

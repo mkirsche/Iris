@@ -14,8 +14,8 @@ public class FalconSense {
 	 */
 	static ArrayList<String> getConsensusSequences(String id, ArrayList<String> reads) throws Exception
 	{
-		String falconInFn = id + ".falcon.in";
-		String falconOutFn = id + ".falcon.out";
+		String falconInFn = IrisSettings.addOutDir(id + ".falcon.in");
+		String falconOutFn = IrisSettings.addOutDir(id + ".falcon.out");
 		int maxLength = writeFalconSenseInput(reads, falconInFn);
 		executeFalconSense(falconInFn, maxLength, falconOutFn);
 		ArrayList<String> res = parseFalconSenseOutput(falconOutFn);

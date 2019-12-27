@@ -1,3 +1,6 @@
+import java.io.File;
+import java.nio.file.Paths;
+
 /*
  * Holds settings such as input/output filenames and various parameters
  */
@@ -21,6 +24,7 @@ public class IrisSettings {
 	static String TABLE_OUT_FILE = "results.tsv";
 	static String INTERMEDIATE_RESULTS_FILE = "resultsstore.txt";
 	static String RNAMES_FIELDNAME = "RNAMES";
+	static String OUT_DIR = "";
 	
 	// External tool paths
 	static String getIrisWorkingDir()
@@ -89,11 +93,12 @@ public class IrisSettings {
 		System.out.println("  falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary");
 		System.out.println("  racon_path       (String)     - the path to racon if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
-		System.out.println("  genome_buffer    (int)   [100k] - the genome region on each side of the SV to align assembled reads to");
-		System.out.println("  min_ins_length   (int)   [30]   - the min length allowed for a refined insertion sequence");
-		System.out.println("  max_ins_dist     (int)   [100]  - the max distance a refined insertion call can be from its old position");
-		System.out.println("  max_out_length   (int)   [100k] - the max length of variant which will be output");
-		System.out.println("  max_len_change   (float) [0.25] - the max proportion by which a variant's length can change");
+		System.out.println("  out_dir          (String)     - the directory where intermediate files go");
+		System.out.println("  genome_buffer    (int)    [100k] - the genome region on each side of the SV to align assembled reads to");
+		System.out.println("  min_ins_length   (int)    [30]   - the min length allowed for a refined insertion sequence");
+		System.out.println("  max_ins_dist     (int)    [100]  - the max distance a refined insertion call can be from its old position");
+		System.out.println("  max_out_length   (int)    [100k] - the max length of variant which will be output");
+		System.out.println("  max_len_change   (float)  [0.25] - the max proportion by which a variant's length can change");
 		System.out.println("  --ngmlr                       - align with ngmlr instead of minimap");
 		System.out.println("  --falconsense                 - compute consensus with falconsense instead of racon");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
@@ -243,6 +248,10 @@ public class IrisSettings {
 				case "max_len_change":
 					MAX_LENGTH_CHANGE = Double.parseDouble(val);
 					break;
+				case "out_dir":
+					OUT_DIR = Paths.get("").toAbsolutePath().toString() + "/" + val;
+					File f = new File(OUT_DIR);
+					f.mkdir();
 				default:
 					break;
 			}
@@ -252,5 +261,23 @@ public class IrisSettings {
 			usage();
 			System.exit(1);
 		}
+		INTERMEDIATE_RESULTS_FILE = addOutDir(INTERMEDIATE_RESULTS_FILE);
+		TABLE_OUT_FILE = addOutDir(TABLE_OUT_FILE);
+		if(LOG_OUT_FILE.length() > 0)
+		{
+			LOG_OUT_FILE = addOutDir(LOG_OUT_FILE);
+		}
+	}
+	
+	/*
+	 * Adds the intermediate file output directory to the path of a file
+	 */
+	static String addOutDir(String fn)
+	{
+		if(OUT_DIR.length() > 0)
+		{
+			return OUT_DIR + "/" + fn;
+		}
+		else return fn;
 	}
 }

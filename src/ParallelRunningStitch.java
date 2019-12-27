@@ -101,10 +101,10 @@ public class ParallelRunningStitch {
 							File f;
 							
 							// Remove racon intermediate files
-							String raconInAll = variantKey + ".racon.fa";
-							String raconInSingle = variantKey + ".racon.seq.fa";
-							String raconInAlign = variantKey + ".racon.align.sam";
-							String raconOutFn = variantKey + ".racon.out";
+							String raconInAll = IrisSettings.addOutDir(variantKey + ".racon.fa");
+							String raconInSingle = IrisSettings.addOutDir(variantKey + ".racon.seq.fa");
+							String raconInAlign = IrisSettings.addOutDir(variantKey + ".racon.align.sam");
+							String raconOutFn = IrisSettings.addOutDir(variantKey + ".racon.out");
 							if((f = new File(raconInAll)).exists()) f.delete();
 							if((f = new File(raconInSingle)).exists()) f.delete();
 							if((f = new File(raconInAlign)).exists()) f.delete();
@@ -121,15 +121,15 @@ public class ParallelRunningStitch {
 							}
 							
 							// Remove falconsense intermediate files
-							String falconInFn = variantKey + ".falcon.in";
-							String falconOutFn = variantKey + ".falcon.out";
+							String falconInFn = IrisSettings.addOutDir(variantKey + ".falcon.in");
+							String falconOutFn = IrisSettings.addOutDir(variantKey + ".falcon.out");
 							if((f=new File(falconInFn)).exists()) f.delete();
 							if((f=new File(falconOutFn)).exists()) f.delete();
 							
 							// Remove alignment files
-							String alignInFn = variantKey + ".align.in";
-							String alignOutFn = variantKey + ".align.out";
-							String genomeSampleFn = variantKey + ".region.fa";
+							String alignInFn = IrisSettings.addOutDir(variantKey + ".align.in");
+							String alignOutFn = IrisSettings.addOutDir(variantKey + ".align.out");
+							String genomeSampleFn = IrisSettings.addOutDir(variantKey + ".region.fa");
 							if((f=new File(alignInFn)).exists()) f.delete();
 							if((f=new File(alignOutFn)).exists()) f.delete();
 							if((f=new File(genomeSampleFn)).exists()) f.delete();
@@ -137,9 +137,9 @@ public class ParallelRunningStitch {
 							if((f=new File(genomeSampleFn + "-ht-13-2.2.ngm")).exists()) f.delete();
 							
 							// Remove read extraction files
-							String samFileName = variantKey + ".sam";
-							String bamFileName = variantKey + ".bam";
-							String fastqFileName = variantKey + ".fastq";
+							String samFileName = IrisSettings.addOutDir(variantKey + ".sam");
+							String bamFileName = IrisSettings.addOutDir(variantKey + ".bam");
+							String fastqFileName = IrisSettings.addOutDir(variantKey + ".fastq");
 							if((f=new File(samFileName)).exists()) f.delete();
 							if((f=new File(bamFileName)).exists()) f.delete();
 							if((f=new File(fastqFileName)).exists()) f.delete();

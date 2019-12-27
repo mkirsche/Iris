@@ -14,9 +14,9 @@ public class AlignConsensus {
 	 */
 	static ArrayList<String> getConsensusAlignmentRecords(String id, ArrayList<String> consensusSequences, IrisGenomeQuery gq) throws Exception
 	{
-		String alignInFn = id + ".align.in";
-		String alignOutFn = id + ".align.out";
-		String genomeSampleFn = id + ".region.fa";
+		String alignInFn = IrisSettings.addOutDir(id + ".align.in");
+		String alignOutFn = IrisSettings.addOutDir(id + ".align.out");
+		String genomeSampleFn = IrisSettings.addOutDir(id + ".region.fa");
 		writeNgmlrInput(consensusSequences, alignInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
 		

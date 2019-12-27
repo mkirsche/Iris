@@ -10,9 +10,9 @@ public class ReadShirring {
 	static ArrayList<String> getReads(String key, ArrayList<String> readNames) throws Exception
 	{
 		String readFile = IrisSettings.READS_FILE;
-		String samFileName = key + ".sam";
-		String bamFileName = key + ".bam";
-		String fastqFileName = key + ".fastq";
+		String samFileName = IrisSettings.addOutDir(key + ".sam");
+		String bamFileName = IrisSettings.addOutDir(key + ".bam");
+		String fastqFileName = IrisSettings.addOutDir(key + ".fastq");
 		
 		// Handle case when read file is actually a list of files
 		ArrayList<String> readFiles = new ArrayList<String>();
