@@ -98,11 +98,13 @@ public class ParallelRunningStitch {
 						// Remove Racon's files in the case of a crash since there can be many of them
 						if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 						{
+							File f;
+							
+							// Remove racon intermediate files
 							String raconInAll = variantKey + ".racon.fa";
 							String raconInSingle = variantKey + ".racon.seq.fa";
 							String raconInAlign = variantKey + ".racon.align.sam";
 							String raconOutFn = variantKey + ".racon.out";
-							File f;
 							if((f = new File(raconInAll)).exists()) f.delete();
 							if((f = new File(raconInSingle)).exists()) f.delete();
 							if((f = new File(raconInAlign)).exists()) f.delete();
@@ -117,6 +119,30 @@ public class ParallelRunningStitch {
 									if((f = new File(outName)).exists()) f.delete();
 								}
 							}
+							
+							// Remove falconsense intermediate files
+							String falconInFn = variantKey + ".falcon.in";
+							String falconOutFn = variantKey + ".falcon.out";
+							if((f=new File(falconInFn)).exists()) f.delete();
+							if((f=new File(falconOutFn)).exists()) f.delete();
+							
+							// Remove alignment files
+							String alignInFn = variantKey + ".align.in";
+							String alignOutFn = variantKey + ".align.out";
+							String genomeSampleFn = variantKey + ".region.fa";
+							if((f=new File(alignInFn)).exists()) f.delete();
+							if((f=new File(alignOutFn)).exists()) f.delete();
+							if((f=new File(genomeSampleFn)).exists()) f.delete();
+							if((f=new File(genomeSampleFn + "-enc.2.ngm")).exists()) f.delete();
+							if((f=new File(genomeSampleFn + "-ht-13-2.2.ngm")).exists()) f.delete();
+							
+							// Remove read extraction files
+							String samFileName = variantKey + ".sam";
+							String bamFileName = variantKey + ".bam";
+							String fastqFileName = variantKey + ".fastq";
+							if((f=new File(samFileName)).exists()) f.delete();
+							if((f=new File(bamFileName)).exists()) f.delete();
+							if((f=new File(fastqFileName)).exists()) f.delete();
 						}
 						
 						Logger.log("Found error in " + variantKey);
