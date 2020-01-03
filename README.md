@@ -62,11 +62,12 @@ Optional args:
   falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary
   racon_path       (String)     - the path to racon if not using included binary
   log_out          (String)     - the name of the log file to be produced
-  genome_buffer    (int)   [100k] - the genome region on each side of the SV to align assembled reads to
-  min_ins_length   (int)   [30]   - the min length allowed for a refined insertion sequence
-  max_ins_dist     (int)   [100]  - the max distance a refined insertion call can be from its old position
-  max_out_length   (int)   [100k] - the max length of variant which will be output
-  max_len_change   (float) [0.25] - the max proportion by which a variant's length can change
+  out_dir          (String)     - the directory where intermediate files go
+  genome_buffer    (int)    [100k] - the genome region on each side of the SV to align assembled reads to
+  min_ins_length   (int)    [30]   - the min length allowed for a refined insertion sequence
+  max_ins_dist     (int)    [100]  - the max distance a refined insertion call can be from its old position
+  max_out_length   (int)    [100k] - the max length of variant which will be output
+  max_len_change   (float)  [0.25] - the max proportion by which a variant's length can change
   --ngmlr                       - align with ngmlr instead of minimap
   --falconsense                 - compute consensus with falconsense instead of racon
   --keep_files                  - don't remove intermediate files - used for debugging
