@@ -1,4 +1,4 @@
-# IRIS: Implement for Refining Insertion Sequences
+# Iris: Implement for Refining Insertion Sequences
 
 Version 1.0.0
 
