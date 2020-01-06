@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /*
  * Methods for handling VCF v4.2 entries for structural variants
@@ -120,11 +122,11 @@ public class IrisVcfEntry implements Comparable<IrisVcfEntry> {
 				// Special case if this is the first INFO field
 				if(tabTokens[7].startsWith(semitoken))
 				{
-					tabTokens[7] = tabTokens[7].replaceFirst(semitoken, updatedToken);
+					tabTokens[7] = tabTokens[7].replaceFirst(Pattern.quote(semitoken), Matcher.quoteReplacement(updatedToken));
 				}
 				else
 				{
-					tabTokens[7] = tabTokens[7].replaceAll(";" + semitoken, ";" + updatedToken);
+					tabTokens[7] = tabTokens[7].replace(";" + semitoken, ";" + updatedToken);
 				}
 				return;
 			}
