@@ -67,6 +67,15 @@ public class VcfEditor {
 		return false;
 	}
 	
+	boolean requiresSeq(String type)
+	{
+		if(type.equals("INS"))
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	/*
 	 * Updates the REF and ALT sequences for a variant by adding appropriate padding 
 	 */
@@ -149,6 +158,10 @@ public class VcfEditor {
 						long newPos = nsm.getPos(key);
 						
 						ve.setPos(newPos);
+						if(ve.hasInfoField("END"))
+						{
+							ve.setInfo("END", ve.getPos() + "");
+						}
 						ve.updateInsertionSequence(newSeq);
 						updateBeforeAfter(ve);
 						
@@ -172,7 +185,7 @@ public class VcfEditor {
 				{
 					ve.setInfo("IRIS_REFINED", "0");
 					// When there is no sequence, don't change REF/ALT
-					if(ve.getSeq().length() == 0)
+					if(ve.getSeq().length() == 0 && requiresSeq(ve.getType()))
 					{
 						out.println(ve);
 						continue;
@@ -187,6 +200,11 @@ public class VcfEditor {
 							ve.setAlt(seq);
 							updateBeforeAfter(ve);
 						}
+						ve.setLength(seq.length());
+						if(ve.hasInfoField("END"))
+						{
+							ve.setInfo("END", ve.getPos() + "");
+						}
 					}
 					else if(ve.getType().equals("DEL"))
 					{
@@ -194,7 +212,7 @@ public class VcfEditor {
 						String chr = ve.getChromosome();
 						// Fix off-by-one in indexing
 						long pos = ve.getPos() + 1;
-						ve.setRef(gq.genomeSubstring(chr, pos, pos + Math.abs(ve.getLength()) - 1));
+						ve.setRef(gq.genomeSubstring(chr, pos, pos + Math.abs(ve.getLength())));
 						ve.setAlt("");
 						updateBeforeAfter(ve);
 					}

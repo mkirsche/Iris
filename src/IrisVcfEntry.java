@@ -192,10 +192,20 @@ public class IrisVcfEntry implements Comparable<IrisVcfEntry> {
 		}
 		if(ref.equals("X") || ref.equals("N"))
 		{
+			// Handle cases where the true padding base is N
+			if(alt.startsWith(ref))
+			{
+				return alt.substring(1);
+			}
 			return alt;
 		}
 		else if(alt.equals("X") || ref.equals("N"))
 		{
+			// Handle cases where the true padding base is N
+			if(ref.startsWith(alt))
+			{
+				return ref.substring(1);
+			}
 			return ref;
 		}
 		else if(type.equals("INS"))
