@@ -94,7 +94,7 @@ public class VcfEditor {
 		PrintWriter out = new PrintWriter(new File(newFile));
 		ResultsTableWriter tableOut = new ResultsTableWriter(tableFile);
 		
-		VcfHeader header = new VcfHeader();
+		IrisVcfHeader header = new IrisVcfHeader();
 		boolean headerPrinted = false;
 		
 		while(input.hasNext())

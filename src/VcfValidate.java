@@ -14,7 +14,7 @@ public class VcfValidate
 		String fn = "/home/mkirsche/splicetest/hg002_crossstitch.refined.vcf";
 		Scanner input = new Scanner(new FileInputStream(new File(fn)));
 		
-		VcfHeader header = new VcfHeader();
+		IrisVcfHeader header = new IrisVcfHeader();
 		
 		// Deletion statistics
 		int consistentDeletions = 0;
