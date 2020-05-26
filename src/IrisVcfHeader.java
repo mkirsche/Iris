@@ -2,7 +2,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class VcfHeader {
+public class IrisVcfHeader {
 	
 	// List of all lines in the header
 	ArrayList<String> lines;
@@ -13,7 +13,7 @@ public class VcfHeader {
 	int lastInfoFieldIndex;
 	
 	// Constructor - just initializes the data structures
-	VcfHeader()
+	IrisVcfHeader()
 	{
 		lines = new ArrayList<String>();
 		infoFields = new HashSet<String>();
