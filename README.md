@@ -1,6 +1,6 @@
 # Iris: Implement for Refining Insertion Sequences
 
-Version 1.0.1
+Version 1.0.2
 
 A module which corrects the sequences of structural variant calls (currently only insertions).  It uses FalconSense to obtain consensus sequences of the reads surrounding each variant and aligns these sequences back to the reference at the insertion site, resulting in an insertion which takes into account the aggregate information of all supporting reads.
 
