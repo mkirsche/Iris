@@ -270,7 +270,7 @@ public class IrisSettings {
 		if(VCF_FILE.length() == 0 || GENOME_FILE.length() == 0 || VCF_OUT_FILE.length() == 0 || READS_FILE.length() == 0)
 		{
 			usage();
-			System.exit(1);
+			System.exit(0);
 		}
 		INTERMEDIATE_RESULTS_FILE = addOutDir(INTERMEDIATE_RESULTS_FILE);
 		TABLE_OUT_FILE = addOutDir(TABLE_OUT_FILE);
