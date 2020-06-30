@@ -60,6 +60,7 @@ public class IrisSettings {
 	
 	// Alignment options
 	static boolean USE_NGMLR = false;
+	static boolean HELP = false;
 	static int GENOME_REGION_BUFFER = 100000;
 	static String MINIMAP_MODE = "map-ont";
 	
@@ -73,7 +74,7 @@ public class IrisSettings {
 	static void usage()
 	{
 		System.out.println();
-		System.out.println("Iris version 1.0.2");
+		System.out.println("Iris version 1.0.3");
 		System.out.println("Usage: java Iris [args]");
 		System.out.println("  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf ");
 		System.out.println("      reads_in=reads.bam vcf_out=refined.vcf");
@@ -175,6 +176,10 @@ public class IrisSettings {
 				{
 					KEEP_LONG_VARIANTS = true;
 				}
+				else if(args[i].equalsIgnoreCase("-h") || args[i].toLowerCase().endsWith("-help"))
+				{
+					HELP = true;
+				}
 				continue;
 			}
 			int equalIdx = args[i].indexOf('=');
@@ -256,6 +261,11 @@ public class IrisSettings {
 				default:
 					break;
 			}
+		}
+		if(HELP)
+		{
+			usage();
+			System.exit(0);
 		}
 		if(VCF_FILE.length() == 0 || GENOME_FILE.length() == 0 || VCF_OUT_FILE.length() == 0 || READS_FILE.length() == 0)
 		{
