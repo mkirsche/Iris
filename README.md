@@ -81,4 +81,5 @@ Optional args:
 ## Other Notes
 
 * Very long variants (longer than 100 kbp) will be ignored, resulting in an output file which has fewer entries than the input VCF file.  To prevent this, use the --keep_long_variants flag above.  Since adding the sequences of these variants may cause a very large output file, the original VCF entry will be used, which may be inconsistent with the other output entries if the input did not conform to proper VCF format.
+* The input VCF must include an RNAMES INFO field for each variant which indicates a comma-separated list of reads supporting the presence of the variant.  When calling SVs with Sniffles, this is enabled through the -n parameter, which we recommend setting to -1.
 
