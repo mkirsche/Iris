@@ -6,7 +6,7 @@ import java.util.Scanner;
 /*
  * Gathering reads together to get a consensus sequence
  */
-public class ReadShirring {
+public class ReadGathering {
 	static ArrayList<String> getReads(String key, ArrayList<String> readNames) throws Exception
 	{
 		String readFile = IrisSettings.READS_FILE;

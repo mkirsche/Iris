@@ -43,21 +43,14 @@ public class NewSequenceMap {
 	
 	static UpdatedEntry fromReadNames(String key, HashMap<String, String> seqMap, ArrayList<String> names, IrisGenomeQuery gq) throws Exception
 	{
-		ArrayList<String> readSeqs = ReadShirring.getReads(key, names);
+		ArrayList<String> readSeqs = ReadGathering.getReads(key, names);
 		Logger.log("Found " + readSeqs.size() + " relevant reads for " + key);
         if(readSeqs.size() == 0)
         {
             return null;
         }
 		ArrayList<String> consensusSequences;
-		if(IrisSettings.USE_FALCONSENSE)
-		{
-			consensusSequences = FalconSense.getConsensusSequences(key, readSeqs);
-		}
-		else
-		{
-			consensusSequences = Racon.getConsensusSequences(key, seqMap.get(key), gq, readSeqs);
-		}
+		consensusSequences = Racon.getConsensusSequences(key, seqMap.get(key), gq, readSeqs);
 		Logger.log("Found " + consensusSequences.size() + " consensus sequences for " + key);
 		if(consensusSequences.size() == 0)
 		{

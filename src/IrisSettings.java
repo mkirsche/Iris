@@ -42,24 +42,14 @@ public class IrisSettings {
 	}
 	static String WORKING_DIR = getIrisWorkingDir();//System.getProperty("java.class.path") + "/..";
 	static String SAMTOOLS_PATH = WORKING_DIR + "/" + "external_scripts/samtools";
-	static String FALCONSENSE_PATH = WORKING_DIR + "/" + "external_scripts/falcon_sense";
-	static String NGMLR_PATH = WORKING_DIR + "/" + "external_scripts/ngmlr";
 	static String MINIMAP_PATH = WORKING_DIR + "/" + "external_scripts/minimap2";
 	static String RACON_PATH = WORKING_DIR + "/" + "external_scripts/racon";
 	
 	// Consensus options
-	static double FALCONSENSE_MIN_IDT = 0.7;
-	static int FALCONSENSE_MIN_LEN = 500;
-	static int FALCONSENSE_MAX_READ_LEN = 1234567;
-	static int FALCONSENSE_MIN_OVL_LEN = 250;
-	static int FALCONSENSE_MIN_COV = 2;
-	static int FALCONSENSE_N_CORE = 1;
-	static boolean USE_FALCONSENSE = false;
 	static int RACON_BUFFER = 1000;
 	static int RACON_ITERS = 1;
 	
 	// Alignment options
-	static boolean USE_NGMLR = false;
 	static boolean HELP = false;
 	static int GENOME_REGION_BUFFER = 100000;
 	static String MINIMAP_MODE = "map-ont";
@@ -90,9 +80,7 @@ public class IrisSettings {
 		System.out.println("  padding_before   (int) [1]    - the number of bases to output before the variant in REF/ALT fields");
 		System.out.println("  padding_after    (int) [0]    - the number of bases to output after the variant in REF/ALT fields");
 		System.out.println("  samtools_path    (String)     - the path to samtools if not using included binary");
-		System.out.println("  ngmlr_path       (String)     - the path to ngmlr if using ngmlr and not using included binary");
 		System.out.println("  minimap_path     (String)     - the path to minimap if using minimap and not using included binary");
-		System.out.println("  falconsense_path (String)     - the path to falconsense if using falconsense and not using included binary");
 		System.out.println("  racon_path       (String)     - the path to racon if not using included binary");
 		System.out.println("  log_out          (String)     - the name of the log file to be produced");
 		System.out.println("  out_dir          (String)     - the directory where intermediate files go");
@@ -101,13 +89,12 @@ public class IrisSettings {
 		System.out.println("  max_ins_dist     (int)    [100]  - the max distance a refined insertion call can be from its old position");
 		System.out.println("  max_out_length   (int)    [100k] - the max length of variant which will be output");
 		System.out.println("  max_len_change   (float)  [0.25] - the max proportion by which a variant's length can change");
-		System.out.println("  --ngmlr                       - align with ngmlr instead of minimap");
-		System.out.println("  --falconsense                 - compute consensus with falconsense instead of racon");
 		System.out.println("  --keep_files                  - don't remove intermediate files - used for debugging");
 		System.out.println("  --also_deletions              - also try to refine deletion positions/lengths");
 		System.out.println("  --resume                      - use the results already computed from a previously terminated run");
-		System.out.println("  --pacbio                      - if using minimap as the aligner, run in pacbio mode");
-		System.out.println("  --rerunracon                  - if using racon for consensus, run it twice");
+		System.out.println("  --pacbio                      - run minimap alignment in pacbio mode");
+		System.out.println("  --hifi                        - run minimap alignment in hifi mode");
+		System.out.println("  --rerunracon                  - run racon twice for additional polishing");
 		System.out.println("  --keep_long_variants          - output original VCF line for very long variants instead of ignoring them");
 		System.out.println();
 	}
@@ -145,14 +132,6 @@ public class IrisSettings {
 				{
 					RESUME = true;
 				}
-				else if(args[i].endsWith("ngmlr"))
-				{
-					USE_NGMLR = true;
-				}
-				else if(args[i].endsWith("falconsense"))
-				{
-					USE_FALCONSENSE = true;
-				}
 				else if(args[i].endsWith("keep_files"))
 				{
 					CLEAN_INTERMEDIATE_FILES = false;
@@ -160,6 +139,10 @@ public class IrisSettings {
 				else if(args[i].endsWith("pacbio"))
 				{
 					MINIMAP_MODE = "map-pb";
+				}
+				else if(args[i].endsWith("hifi"))
+				{
+					MINIMAP_MODE = "asm5";
 				}
 				else if(args[i].endsWith("also_deletions"))
 				{
@@ -215,14 +198,8 @@ public class IrisSettings {
 				case "samtools_path":
 					SAMTOOLS_PATH = val;
 					break;
-				case "ngmlr_path":
-					NGMLR_PATH = val;
-					break;
 				case "minimap_path":
 					MINIMAP_PATH = val;
-					break;
-				case "falconsense_path":
-					FALCONSENSE_PATH = val;
 					break;
 				case "racon_path":
 					RACON_PATH = val;

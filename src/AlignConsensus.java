@@ -17,32 +17,18 @@ public class AlignConsensus {
 		String alignInFn = IrisSettings.addOutDir(id + ".align.in");
 		String alignOutFn = IrisSettings.addOutDir(id + ".align.out");
 		String genomeSampleFn = IrisSettings.addOutDir(id + ".region.fa");
-		writeNgmlrInput(consensusSequences, alignInFn);
+		writeMinimapInput(consensusSequences, alignInFn);
 		writeGenomeSample(id, genomeSampleFn, gq);
 		
-		if(IrisSettings.USE_NGMLR)
-		{
-			executeNgmlr(alignInFn, genomeSampleFn, alignOutFn);
-		}
-		else
-		{
-			executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
-		}
-		ArrayList<String> res = getNgmlrAlignmentStrings(alignOutFn);
+		executeMinimap(alignInFn, genomeSampleFn, alignOutFn);
+		
+		ArrayList<String> res = getMinimapAlignmentStrings(alignOutFn);
+		
 		if(IrisSettings.CLEAN_INTERMEDIATE_FILES)
 		{
 			new File(alignInFn).delete();
 			new File(alignOutFn).delete();
 			new File(genomeSampleFn).delete();
-			
-			if(IrisSettings.USE_NGMLR)
-			{
-				new File(genomeSampleFn + "-enc.2.ngm").delete();
-			
-				// Note: 13 here is the default kmer length used in ngmlr's indexing - change if default is not used
-				new File(genomeSampleFn + "-ht-13-2.2.ngm").delete();
-			}
-			
 		}
 		return res;
 	}
@@ -63,9 +49,9 @@ public class AlignConsensus {
 	/*
 	 * Given the assembled sequences, write them in FASTA format so they can be processed by ngmlr
 	 */
-	static void writeNgmlrInput(ArrayList<String> seqs, String ngmlrInputFileName) throws Exception
+	static void writeMinimapInput(ArrayList<String> seqs, String minimapInputFileName) throws Exception
 	{
-		PrintWriter out = new PrintWriter(new File(ngmlrInputFileName));
+		PrintWriter out = new PrintWriter(new File(minimapInputFileName));
 		int n = seqs.size();
 		for(int i = 0; i<n; i++)
 		{
@@ -75,28 +61,7 @@ public class AlignConsensus {
 	}
 	
 	/*
-	 * Run ngmlr through the command line using parameters from Settings
-	 */
-	static void executeNgmlr(String ngmlrIn, String genomeSample, String ngmlrOut) throws Exception
-	{
-		String ngmlrCommand = String.format(
-				 "%s -t %d -r %s -q %s -o %s", 
-				 IrisSettings.NGMLR_PATH, IrisSettings.ALIGNMENT_THREADS,
-				 genomeSample, ngmlrIn, ngmlrOut);
-		ArrayList<String> fullNgmlrCommand = new ArrayList<String>();
-		for(String s : ngmlrCommand.split(" ")) fullNgmlrCommand.add(s);
-		Process child = new ProcessBuilder()
-				.command(fullNgmlrCommand)
-				.start();
-		int p = child.waitFor();
-		if(p != 0)
-		{
-			throw new Exception("error running ngmlr on " + ngmlrIn);
-		}
-	}
-	
-	/*
-	 * Run ngmlr through the command line using parameters from Settings
+	 * Run minimap2 through the command line using parameters from Settings
 	 */
 	static void executeMinimap(String minimapIn, String genomeSample, String minimapOut) throws Exception
 	{
@@ -117,14 +82,14 @@ public class AlignConsensus {
 	}
 	
 	/*
-	 * Given the output produced from ngmlr, get all of the alignment records
+	 * Given the output produced from minimap, get all of the alignment records
 	 */
-	static ArrayList<String> getNgmlrAlignmentStrings(String ngmlrOutputFileName) throws Exception
+	static ArrayList<String> getMinimapAlignmentStrings(String minimapOutputFileName) throws Exception
 	{
-		File toRead = new File(ngmlrOutputFileName);
+		File toRead = new File(minimapOutputFileName);
 		if(!toRead.exists())
 		{
-			throw new Exception("could not find ngmlr output file: " + ngmlrOutputFileName);
+			throw new Exception("could not find minimap output file: " + minimapOutputFileName);
 		}
 		
 		ArrayList<String> alignmentRecords = new ArrayList<String>();
