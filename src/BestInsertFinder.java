@@ -8,7 +8,7 @@ public class BestInsertFinder {
  * Finds the best insertion given a variant ID and list of SAM alignment records of the assembled insertion sequence
  * back to a portion of the reference genome
  */
-public static  NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<String> alignmentRecords) throws Exception
+public static NewSequenceMap.UpdatedEntry findBestInsert(String id, ArrayList<String> alignmentRecords) throws Exception
 {
 	return findBestInsertFromOffset(alignmentRecords, getExpectedOffset(id));
 }
@@ -152,7 +152,7 @@ static ArrayList<NewSequenceMap.UpdatedEntry> getSVsByType(String record, char t
 		return res;
 	}
 	
-	int refPos = Integer.parseInt(samFields[3])-1;
+	int refPos = Integer.parseInt(samFields[3]);
 	int queryPos = 0;
 	int segmentLength = 0;
 	

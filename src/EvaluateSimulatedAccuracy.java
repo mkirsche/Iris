@@ -43,7 +43,7 @@ public class EvaluateSimulatedAccuracy {
 			String seq = input.nextLine();
 			String[] split = name.split("_");
 			String chromosome = split[0];
-			long pos = Long.parseLong(split[1]);
+			long pos = Long.parseLong(split[1]) + 1;
 			res.put(new PosStore.Place(chromosome, pos), seq);
 		}
 		input.close();
