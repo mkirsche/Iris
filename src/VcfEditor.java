@@ -44,14 +44,19 @@ public class VcfEditor {
 		{
 			long start = pos - IrisSettings.VCF_PADDING_BEFORE;
 			long end = pos + IrisSettings.VCF_PADDING_AFTER - 1;
-			String res = gq.genomeSubstring(chr, start, end);
+			String res = "";
+			try {
+				res = gq.genomeSubstring(chr, start, end);
+			} catch (Exception e) {
+				return "";
+			}
 			return res;
 		}
 		else
 		{
 			long start1 = pos - IrisSettings.VCF_PADDING_BEFORE;
 			long end1 = pos - 1;
-			long start2 = pos + ve.getLength();
+			long start2 = pos + Math.abs(ve.getLength());
 			long end2 = start2 + IrisSettings.VCF_PADDING_AFTER - 1;
 			String res = gq.genomeSubstring(chr, start1, end1) + gq.genomeSubstring(chr, start2, end2);
 			return res;
@@ -82,10 +87,17 @@ public class VcfEditor {
 	void updateBeforeAfter(IrisVcfEntry ve) throws Exception
 	{
 		String beforeAfter = getBeforeAfter(ve);
-		ve.setRef(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
+		if(beforeAfter.length() > 0)
+		{
+			ve.setRef(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
 				+ ve.getRef() + beforeAfter.substring(IrisSettings.VCF_PADDING_BEFORE));
-		ve.setAlt(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
+			ve.setAlt(beforeAfter.substring(0, IrisSettings.VCF_PADDING_BEFORE) 
 				+ ve.getAlt() + beforeAfter.substring(IrisSettings.VCF_PADDING_BEFORE));
+		}
+		else
+		{
+			ve.setRef("N");
+		}
 	}
 	
 	void run() throws Exception
