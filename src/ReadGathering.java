@@ -66,6 +66,23 @@ public class ReadGathering {
 		for(int i = 0; i<readFiles.size(); i++)
 		{
 			String readFile = readFiles.get(i);
+
+			if(!new File(readFiles.get(i) + ".bai").exists())
+			{
+				String samtoolsCommand = String.format("%s index %s", 
+						IrisSettings.SAMTOOLS_PATH,
+						readFile);
+				
+				// Use bin/sh because pipes will not work when called directly
+				String[] fullSamtoolsCommmand = new String[] {"/bin/sh", "-c", samtoolsCommand};
+				Process child = Runtime.getRuntime().exec(fullSamtoolsCommmand);
+				int p = child.waitFor();
+				if(p != 0)
+				{
+					throw new Exception("running samtools index on " + readFile + " failed: " + samtoolsCommand);
+				}
+			}
+			
 			String samtoolsCommand = String.format("%s view " 
 				+ (i == 0 ? "-h " : "") + "%s %s:%d-%d | grep -E %s " + (i == 0 ? ">" : ">>") + " %s", 
 					IrisSettings.SAMTOOLS_PATH,
