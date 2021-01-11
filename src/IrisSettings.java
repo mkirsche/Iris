@@ -64,7 +64,7 @@ public class IrisSettings {
 	static void usage()
 	{
 		System.out.println();
-		System.out.println("Iris version 1.0.3");
+		System.out.println("Iris version 1.0.4");
 		System.out.println("Usage: java Iris [args]");
 		System.out.println("  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf ");
 		System.out.println("      reads_in=reads.bam vcf_out=refined.vcf");
