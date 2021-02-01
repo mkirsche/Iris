@@ -306,15 +306,17 @@ public class IrisVcfEntry implements Comparable<IrisVcfEntry> {
 		}
 	}
 	
+	static final String chrNameReplacement = "_chrnamecolon_";
+	
 	public String getKey() throws Exception
 	{
-		return getChromosome() + ":" + getPos() + ":" + getType() + ":" + getId();
+		return getChromosome().replaceAll(":", chrNameReplacement) + ":" + getPos() + ":" + getType() + ":" + getId();
 	}
 	
 	static String getChrFromKey(String key)
 	{
 		String[] tokens = key.split(":");
-		return tokens[0];
+		return tokens[0].replaceAll(chrNameReplacement, ":");
 	}
 	
 	static long getPosFromKey(String key)
