@@ -187,11 +187,17 @@ public class EvaluateSimulatedAccuracy {
 		ArrayList<Double> sequenceIdentities = new ArrayList<Double>();
 		
 		int countLong = 0;
-		
+		int countUnresolved = 0;
 		for(IrisVcfEntry cur : vei)
 		{
 			if(!cur.getType().equals("INS"))
 			{
+				continue;
+			}
+			
+			if(cur.tabTokens[6].equals("UNRESOLVED"))
+			{
+				countUnresolved++;
 				continue;
 			}
 			
@@ -254,6 +260,7 @@ public class EvaluateSimulatedAccuracy {
 		int falseNegatives = truth.size();
 		
 		System.out.println("Insertions over 100kbp: " + countLong);
+		System.out.println("Unresolved insertions: " + countUnresolved);
 		
 		System.out.println("False positives: " + falsePositives);
 		System.out.println("False negatives: " + falseNegatives);
