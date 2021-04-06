@@ -186,6 +186,12 @@ public class EvaluateSimulatedAccuracy {
 		ArrayList<Long> editDistances = new ArrayList<Long>();
 		ArrayList<Double> sequenceIdentities = new ArrayList<Double>();
 		
+		ArrayList<Double> shortSeqId = new ArrayList<Double>();
+		ArrayList<Double> mediumSeqId = new ArrayList<Double>();
+		ArrayList<Double> largeSeqId = new ArrayList<Double>();
+		
+		int shortSame = 0, mediumSame = 0, largeSame = 0;
+		
 		int countLong = 0;
 		int countUnresolved = 0;
 		for(IrisVcfEntry cur : vei)
@@ -203,7 +209,7 @@ public class EvaluateSimulatedAccuracy {
 			
 			PosStore.Place curPlace = new PosStore.Place(cur.getChromosome(), cur.getPos());
 			String curSeq = cur.getSeq();
-			if(Math.abs(cur.getLength()) > 100000)
+			if(curSeq.length() == 0 || Math.abs(cur.getLength()) > 100000)
 			{
 				countLong++;
 				continue;
@@ -240,10 +246,6 @@ public class EvaluateSimulatedAccuracy {
 					falsePositives++;
 					continue;
 				}
-				if(PRINT_EXAMPLES && seqIdentity > .5 && seqIdentity < .8 && cur.getChromosome().contains("22"))
-				{
-					System.out.println(cur.getChromosome()+" "+cur.getPos()+" "+truthKey.pos+" "+seqIdentity+" "+oldCurSeq.length()+" "+trueSeq.length()+" "+oldCurSeq+" "+trueSeq);
-				}
 				truth.remove(truthKey);
 				
 				long dist = Math.abs(curPlace.pos - truthKey.pos);
@@ -252,6 +254,28 @@ public class EvaluateSimulatedAccuracy {
 				editDistances.add((long)editDistance);
 				sequenceIdentities.add(seqIdentity);
 				out.println(seqIdentity);
+				
+				if(trueSeq.length() < 500)
+				{
+				    if(cur.getChromosome().equals("chr22") && seqIdentity < .6)
+				    {
+				        System.out.println(truthKey.pos+"\n"+curPlace.pos);
+				    	System.out.println(trueSeq+"\n"+curSeq);
+				    	System.out.println(seqIdentity + "\n");
+				    }
+					shortSeqId.add(seqIdentity);
+					if(cur.getInfo("IRIS_REFINED").equals("0")) shortSame++;
+				}
+				else if(trueSeq.length() < 2000)
+				{
+					mediumSeqId.add(seqIdentity);
+					if(cur.getInfo("IRIS_REFINED").equals("0")) mediumSame++;
+				}
+				else
+				{
+					largeSeqId.add(seqIdentity);
+					if(cur.getInfo("IRIS_REFINED").equals("0")) largeSame++;
+				}
 			}
 			
 			
@@ -268,6 +292,19 @@ public class EvaluateSimulatedAccuracy {
 		System.out.println("Average genomic distance: " + average(distances));
 		System.out.println("Average sequence edit distance: " + average(editDistances));
 		System.out.println("Average sequence identity: " + floatAverage(sequenceIdentities));
+		
+		ArrayList<Double>[] toPrint = new ArrayList[]{shortSeqId, mediumSeqId, largeSeqId};
+		String[] names = new String[]{"Small", "Medium", "Large"};
+		int[] same = new int[]{shortSame, mediumSame, largeSame};
+		for(int i = 0; i<3; i++)
+		{
+			System.out.println(names[i]);
+			System.out.println("  Count: " + toPrint[i].size());
+			double total = 0;
+			for(double d : toPrint[i]) total += d;
+			System.out.println("  Average Sequence Identity: " + total / toPrint[i].size());
+			System.out.println("  Unchanged: " + same[i]);
+		}
 		
 		out.close();
 		
