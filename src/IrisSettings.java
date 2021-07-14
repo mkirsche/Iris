@@ -1,4 +1,5 @@
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /*
@@ -64,7 +65,7 @@ public class IrisSettings {
 	static void usage()
 	{
 		System.out.println();
-		System.out.println("Iris version 1.0.4");
+		System.out.println("Iris version 1.0.5");
 		System.out.println("Usage: java Iris [args]");
 		System.out.println("  Example: java Iris genome_in=genome.fa vcf_in=sniffles.vcf ");
 		System.out.println("      reads_in=reads.bam vcf_out=refined.vcf");
@@ -232,7 +233,13 @@ public class IrisSettings {
 					MAX_LENGTH_CHANGE = Double.parseDouble(val);
 					break;
 				case "out_dir":
-					OUT_DIR = Paths.get("").toAbsolutePath().toString() + "/" + val;
+					
+					OUT_DIR = val;
+					if(!OUT_DIR.startsWith("/"))
+					{
+						Path currentRelativePath = Paths.get("");
+						OUT_DIR = currentRelativePath.toAbsolutePath().toString() + "/" + OUT_DIR;
+					}
 					File f = new File(OUT_DIR);
 					f.mkdir();
 				default:
